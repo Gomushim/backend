@@ -1,4 +1,4 @@
-package gomushin.backend.core.jwt.infrastructrue
+package gomushin.backend.core.jwt.infrastructure
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
