@@ -44,7 +44,7 @@ class JwtAuthenticationFilter(
     private fun resolveToken(request: HttpServletRequest): String {
         val authHeader = request.getHeader(AUTHORIZATION_HEADER)
         if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
-            return authHeader.substring(7)
+            return authHeader.substring(BEARER_PREFIX.length)
         }
         return ""
     }
