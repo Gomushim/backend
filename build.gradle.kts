@@ -41,6 +41,20 @@ dependencies {
     // logging
     implementation("io.github.microutils:kotlin-logging:2.0.11")
 
+    //security
+    implementation("org.springframework.boot:spring-boot-starter-security")
+
+    //jwt
+    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+    implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
+    implementation("io.jsonwebtoken:jjwt-jackson:0.12.6")
+
+    // oauth2
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+
+    // configuration processor
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
     implementation("org.springframework.boot:spring-boot-starter-validation")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
