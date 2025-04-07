@@ -1,8 +1,10 @@
 package gomushin.backend.core.configuration.security
 
-import gomushin.backend.core.jwt.JwtTokenProvider
-import gomushin.backend.core.CustomUserDetailsService
+import gomushin.backend.core.oauth.handler.CustomSuccessHandler
 import gomushin.backend.core.infrastructure.filter.JwtAuthenticationFilter
+import gomushin.backend.core.jwt.JwtTokenProvider
+import gomushin.backend.core.oauth.service.CustomOAuth2UserService
+import gomushin.backend.core.service.CustomUserDetailsService
 import gomushin.backend.member.domain.repository.MemberRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -19,7 +21,10 @@ class SecurityConfiguration(
 ) {
 
     @Bean
-    fun filterChain(http: HttpSecurity, corsConfiguration: CustomCorsConfiguration): SecurityFilterChain {
+    fun filterChain(
+        http: HttpSecurity, corsConfiguration: CustomCorsConfiguration,
+        customOAuth2UserService: CustomOAuth2UserService
+    ): SecurityFilterChain {
         http
             .csrf {
                 it.disable()
@@ -29,8 +34,23 @@ class SecurityConfiguration(
                     corsConfiguration.corsConfigurationSource()
                 )
             }
+            .formLogin {
+                it.disable()
+            }
+            .httpBasic {
+                it.disable()
+            }
+            .oauth2Login { oAuth2LoginConfigurer ->
+                oAuth2LoginConfigurer
+                    .userInfoEndpoint { userInfoEndpointConfigurer ->
+                        userInfoEndpointConfigurer
+                            .userService(customOAuth2UserService)
+                    }
+                    .successHandler(CustomSuccessHandler(jwtTokenProvider, memberRepository))
+            }
             .authorizeHttpRequests {
                 it.requestMatchers(
+                    "/",
                     "/v1/auth/**",
                     "/v1/oauth/**",
                     "/swagger-ui.html",
@@ -51,14 +71,9 @@ class SecurityConfiguration(
                         memberRepository
                     )
                 ),
-                UsernamePasswordAuthenticationFilter::class.java
+                UsernamePasswordAuthenticationFilter::
+                class.java
             )
-            .formLogin {
-                it.disable()
-            }
-            .httpBasic {
-                it.disable()
-            }
         return http.build()
     }
 }
