@@ -33,6 +33,8 @@ class JwtAuthenticationFilter(
                 applyAuthentication(accessToken)
             }
         }
+
+        filterChain.doFilter(request, response)
     }
 
     private fun applyAuthentication(token: String) {

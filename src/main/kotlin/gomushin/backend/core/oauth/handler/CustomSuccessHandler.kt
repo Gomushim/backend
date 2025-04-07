@@ -1,5 +1,6 @@
 package gomushin.backend.core.oauth.handler
 
+import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.core.jwt.JwtTokenProvider
 import gomushin.backend.core.oauth.CustomOAuth2User
 import gomushin.backend.member.domain.entity.Member
@@ -25,19 +26,24 @@ class CustomSuccessHandler(
         response: HttpServletResponse?,
         authentication: Authentication
     ) {
-        val oAuth2User = authentication.principal as CustomOAuth2User
-        var accessToken = ""
-        getMemberByEmail(oAuth2User.getEmail())?.let {
-            accessToken = jwtTokenProvider.provideAccessToken(it.id)
-        } ?: run {
-            accessToken = jwtTokenProvider.provideAccessToken(oAuth2User.getUserId())
+        val principal = authentication.principal
+
+        if (principal !is CustomOAuth2User) {
+            throw BadRequestException("sarangggun.oauth.invalid-principal")
         }
 
-        response!!.addCookie(creatCookie("access_token", accessToken))
+        var accessToken = ""
+        getMemberByEmail(principal.getEmail())?.let {
+            accessToken = jwtTokenProvider.provideAccessToken(it.id)
+        } ?: run {
+            accessToken = jwtTokenProvider.provideAccessToken(principal.getUserId())
+        }
+
+        response!!.addCookie(createCookie("access_token", accessToken))
         response.sendRedirect("http://localhost:8080") // TODO: 프론트엔드 주소로 변경 , 환경변수 처리
     }
 
-    private fun creatCookie(key: String, value: String): Cookie {
+    private fun createCookie(key: String, value: String): Cookie {
         val cookie = Cookie(key, value)
         cookie.path = "/"
         cookie.isHttpOnly = true
