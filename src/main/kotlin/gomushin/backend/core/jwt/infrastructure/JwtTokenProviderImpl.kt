@@ -41,7 +41,6 @@ class JwtTokenProviderImpl(
                 is UnsupportedJwtException,
                 is MalformedJwtException,
                 is IllegalArgumentException -> return false
-
                 else -> throw e
             }
         }
@@ -65,29 +64,4 @@ class JwtTokenProviderImpl(
     fun getSubject(token: String): String {
         return Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).payload.subject
     }
-
-//    private fun getClaimsFromToken(token: String): Claims {
-//        try {
-//            return Jwts.parserBuilder()
-//                .setSigningKey(SECRET_KEY)
-//                .build()
-//                .parseClaimsJws(token)
-//                .body
-//        } catch (e: ExpiredJwtException) {
-//            logger.warn("만료된 JWT 토큰입니다: {}", e.message)
-//            throw e
-//        } catch (e: UnsupportedJwtException) {
-//            logger.warn("지원되지 않는 JWT 토큰입니다: {}", e.message)
-//            throw e
-//        } catch (e: MalformedJwtException) {
-//            logger.warn("잘못된 형식의 JWT 토큰입니다: {}", e.message)
-//            throw e
-//        } catch (e: io.jsonwebtoken.security.SignatureException) {
-//            logger.warn("유효하지 않은 JWT 서명입니다: {}", e.message)
-//            throw e
-//        } catch (e: Exception) {
-//            logger.error("JWT 토큰 파싱 중 오류 발생: {}", e.message, e)
-//            throw e
-//        }
-//    }
 }
