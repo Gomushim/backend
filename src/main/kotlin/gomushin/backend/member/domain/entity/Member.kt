@@ -11,12 +11,12 @@ class Member(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 
-    val name: String,
+    var name: String,
 
     @Column(unique = true)
-    val email: String,
+    var email: String,
 
-    val profileImageUrl: String,
+    var profileImageUrl: String?,
 
     @Enumerated(EnumType.STRING)
     val provider: Provider,
