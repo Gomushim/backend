@@ -27,5 +27,4 @@ class CustomOAuth2User(
     fun getUserId(): Long {
         return userDto.userId
     }
-
 }
