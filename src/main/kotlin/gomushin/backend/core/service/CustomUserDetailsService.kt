@@ -1,5 +1,6 @@
-package gomushin.backend.core
+package gomushin.backend.core.service
 
+import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.repository.MemberRepository
