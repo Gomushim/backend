@@ -1,6 +1,7 @@
 package gomushin.backend.core.oauth.dto
 
-import org.apache.coyote.BadRequestException
+import gomushin.backend.core.infrastructure.exception.BadRequestException
+
 
 class KakaoResponse(private val attributes: Map<String, Any>) : OAuth2Response {
     override fun getProviderId(): String {
