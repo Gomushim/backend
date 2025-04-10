@@ -41,6 +41,10 @@ dependencies {
     // logging
     implementation("io.github.microutils:kotlin-logging:2.0.11")
 
+    // redis
+    implementation("org.springframework.boot:spring-boot-starter-data-redis:3.3.10")
+    implementation("org.redisson:redisson:3.44.0")
+
     //security
     implementation("org.springframework.boot:spring-boot-starter-security")
 
