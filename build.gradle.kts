@@ -1,7 +1,8 @@
 plugins {
-    kotlin("jvm") version "1.9.25"
-    kotlin("plugin.spring") version "1.9.25"
-    kotlin("plugin.jpa") version "1.9.25"
+    kotlin("jvm") version "2.1.0"
+    kotlin("plugin.spring") version "2.1.0"
+    kotlin("plugin.jpa") version "2.1.0"
+    kotlin("plugin.allopen") version "2.1.0"
     id("org.springframework.boot") version "3.4.3"
     id("io.spring.dependency-management") version "1.1.7"
 }
@@ -41,6 +42,10 @@ dependencies {
     // logging
     implementation("io.github.microutils:kotlin-logging:2.0.11")
 
+    // cache
+    implementation("org.springframework.boot:spring-boot-starter-cache:3.3.10")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+
     // redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis:3.3.10")
     implementation("org.redisson:redisson:3.44.0")
@@ -73,8 +78,9 @@ kotlin {
 
 allOpen {
     annotation("jakarta.persistence.Entity")
-    annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("org.springframework.stereotype.Component")
 }
 
 tasks.withType<Test> {
