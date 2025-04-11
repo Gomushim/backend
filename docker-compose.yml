@@ -2,8 +2,6 @@ services:
   blue:
     image: "${NCP_CONTAINER_REGISTRY}/cnergy-backend:${GITHUB_SHA}"
     container_name: sarang-backend-blue
-    env_file:
-      - .env
     environment:
       TZ: Asia/Seoul
     ports:
@@ -14,8 +12,6 @@ services:
   green:
     image: "${NCP_CONTAINER_REGISTRY}/cnergy-backend:${GITHUB_SHA}"
     container_name: sarang-backend-green
-    env_file:
-      - .env
     environment:
       TZ: Asia/Seoul
     ports:
