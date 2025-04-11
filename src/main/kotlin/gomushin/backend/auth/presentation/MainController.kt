@@ -13,4 +13,9 @@ class MainController {
         return "곰신 서버"
     }
 
+    @GetMapping("/health")
+    fun healthCheck() : String {
+        return "OK"
+    }
+
 }
