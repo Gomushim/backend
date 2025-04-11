@@ -12,6 +12,11 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.NCP_SSH_PRIVATE_KEY }}
+
       - name: Gradle 캐시 적용
         uses: actions/cache@v3
         with:
@@ -68,6 +73,9 @@ jobs:
           push: true
           tags: ${{ secrets.NCP_CONTAINER_REGISTRY }}/sarang-backend:${{ github.sha }}
           platforms: linux/amd64,linux/arm64
+
+      - name: Docker Compose 파일 NCP 서버로 전송
+        run: scp -o StrictHostKeyChecking=no -P ${{ secrets.NCP_PORT }} docker-compose.yml ${{ secrets.NCP_USERNAME }}@${{ secrets.NCP_HOST }}:./
 
       - name: NCP 접속 후 이미지 다운로드 및 배포
         if: success()
