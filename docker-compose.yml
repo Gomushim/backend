@@ -1,6 +1,6 @@
 services:
   blue:
-    image: "${NCP_CONTAINER_REGISTRY}/cnergy-backend:${GITHUB_SHA}"
+    image: "${NCP_CONTAINER_REGISTRY}/sarang-backend:${GITHUB_SHA}"
     container_name: sarang-backend-blue
     environment:
       TZ: Asia/Seoul
@@ -10,7 +10,7 @@ services:
       - sarang-backend-network
 
   green:
-    image: "${NCP_CONTAINER_REGISTRY}/cnergy-backend:${GITHUB_SHA}"
+    image: "${NCP_CONTAINER_REGISTRY}/sarang-backend:${GITHUB_SHA}"
     container_name: sarang-backend-green
     environment:
       TZ: Asia/Seoul
