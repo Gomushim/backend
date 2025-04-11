@@ -22,3 +22,7 @@ services:
       - '8081:8080'
     networks:
       - sarang-backend-network
+
+networks:
+  cnergy-backend-network:
+    driver: bridge
