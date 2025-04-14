@@ -7,6 +7,7 @@ import gomushin.backend.core.oauth.CustomOAuth2User
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.repository.MemberRepository
 import gomushin.backend.member.domain.value.Provider
+import gomushin.backend.member.domain.value.Role
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.OAuth2User
@@ -32,7 +33,7 @@ class CustomOAuth2UserService(
 
         getMemberByEmail(email)?.let {
             it.email = oAuth2Response.getEmail()
-            it.name = oAuth2Response.getName()
+            it.nickname = oAuth2Response.getName()
             it.profileImageUrl = oAuth2Response.getProfileImage()
 
             val savedMember = memberRepository.save(it)
@@ -42,7 +43,7 @@ class CustomOAuth2UserService(
                 name = oAuth2Response.getName(),
                 email = oAuth2Response.getEmail(),
                 profileImage = oAuth2Response.getProfileImage(),
-                role = "ROLE_USER",
+                role = Role.MEMBER.name,
                 registrationId = registrationId,
                 userId = savedMember.id,
             )
@@ -50,7 +51,7 @@ class CustomOAuth2UserService(
             return CustomOAuth2User(userDto)
         } ?: run {
             val newMember = Member.create(
-                name = oAuth2Response.getName(),
+                nickname = oAuth2Response.getName(),
                 email = oAuth2Response.getEmail(),
                 profileImageUrl = oAuth2Response.getProfileImage(),
                 provider = Provider.getProviderByValue(registrationId)
@@ -63,7 +64,7 @@ class CustomOAuth2UserService(
                 name = oAuth2Response.getName(),
                 email = oAuth2Response.getEmail(),
                 profileImage = oAuth2Response.getProfileImage(),
-                role = "ROLE_USER",
+                role = Role.MEMBER.name,
                 registrationId = registrationId,
                 userId = savedMember.id,
             )
