@@ -34,7 +34,7 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java:8.0.33")
 
     // swagger
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.1")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
 
     // mail
     implementation("org.springframework.boot:spring-boot-starter-mail")
