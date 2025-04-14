@@ -1,8 +1,8 @@
 package gomushin.backend.core.configuration.security
 
-import gomushin.backend.core.oauth.handler.CustomSuccessHandler
 import gomushin.backend.core.infrastructure.filter.JwtAuthenticationFilter
 import gomushin.backend.core.jwt.JwtTokenProvider
+import gomushin.backend.core.oauth.handler.CustomSuccessHandler
 import gomushin.backend.core.oauth.service.CustomOAuth2UserService
 import gomushin.backend.core.service.CustomUserDetailsService
 import gomushin.backend.member.domain.repository.MemberRepository
@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 class SecurityConfiguration(
     private val jwtTokenProvider: JwtTokenProvider,
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
 ) {
 
     @Bean
@@ -67,6 +67,8 @@ class SecurityConfiguration(
                     "/favicon.ico",
                     "/error"
                 ).permitAll()
+                it.requestMatchers("/v1/member/onboarding").hasRole("GUEST")
+                it.anyRequest().authenticated()
             }
             .addFilterBefore(
                 JwtAuthenticationFilter(
