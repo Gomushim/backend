@@ -17,9 +17,12 @@ class JwtAuthenticationFilter(
 ) : OncePerRequestFilter() {
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
-        return request.requestURI.contains("/v1/auth") || request.requestURI.contains("/v1/oauth") || request.requestURI.contains(
-            "/swagger"
-        ) || request.requestURI.contains("/v3/api-docs") || request.requestURI.contains("/api-docs")
+        val excludedPaths = listOf(
+            "/v1/auth", "/v1/oauth", "/swagger", "/v3/api-docs", "/api-docs"
+        )
+        return excludedPaths.any { path ->
+            request.requestURI.startsWith(path) || request.requestURI == path
+        }
     }
 
     override fun doFilterInternal(

@@ -17,7 +17,6 @@ class OnboardingController(
     private val onboardingFacade: OnboardingFacade,
 ) {
 
-
     @PostMapping(ApiPath.ONBOARDING)
     @Operation(summary = "온보딩", description = "onboarding")
     fun onboarding(
