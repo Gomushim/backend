@@ -54,7 +54,7 @@ class CustomOAuth2UserService(
                 nickname = oAuth2Response.getName(),
                 email = oAuth2Response.getEmail(),
                 profileImageUrl = oAuth2Response.getProfileImage(),
-                provider = Provider.getProviderByValue(registrationId)
+                provider = Provider.getProviderByValue(registrationId),
             )
 
             val savedMember = memberRepository.save(newMember)
