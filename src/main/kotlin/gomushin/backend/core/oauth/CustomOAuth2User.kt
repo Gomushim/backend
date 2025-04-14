@@ -27,4 +27,8 @@ class CustomOAuth2User(
     fun getUserId(): Long {
         return userDto.userId
     }
+
+    fun getRole() : String {
+        return userDto.role
+    }
 }

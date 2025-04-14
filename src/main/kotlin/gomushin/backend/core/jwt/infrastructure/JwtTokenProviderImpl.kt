@@ -22,8 +22,8 @@ class JwtTokenProviderImpl(
     val ACCESS_TOKEN_EXPIRATION = jwtProperties.accessTokenExpiration
     val REFRESH_TOKEN_EXPIRATION = jwtProperties.refreshTokenExpiration
 
-    override fun provideAccessToken(userId: Long): String {
-        return createToken(userId, ACCESS_TOKEN_EXPIRATION, Type.ACCESS)
+    override fun provideAccessToken(userId: Long, role: String): String {
+        return createToken(userId, role, ACCESS_TOKEN_EXPIRATION, Type.ACCESS)
     }
 
     override fun getMemberIdFromToken(token: String): Long {
@@ -41,12 +41,13 @@ class JwtTokenProviderImpl(
                 is UnsupportedJwtException,
                 is MalformedJwtException,
                 is IllegalArgumentException -> return false
+
                 else -> throw e
             }
         }
     }
 
-    private fun createToken(userId: Long, expiration: Long, type: Type): String {
+    private fun createToken(userId: Long, role: String, expiration: Long, type: Type): String {
         val expirationMs = expiration * 60 * 1000
         val expiryDate = Date(System.currentTimeMillis() + expirationMs)
 
@@ -55,6 +56,7 @@ class JwtTokenProviderImpl(
             .audience().add(AUDIENCE).and()
             .subject(userId.toString())
             .claim("type", type.name)
+            .claim("role", role)
             .issuedAt(Date())
             .expiration(expiryDate)
             .signWith(SECRET_KEY)

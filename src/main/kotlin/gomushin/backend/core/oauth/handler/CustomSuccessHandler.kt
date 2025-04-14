@@ -34,13 +34,13 @@ class CustomSuccessHandler(
 
         var accessToken = ""
         getMemberByEmail(principal.getEmail())?.let {
-            accessToken = jwtTokenProvider.provideAccessToken(it.id)
+            accessToken = jwtTokenProvider.provideAccessToken(it.id, it.role.name)
         } ?: run {
-            accessToken = jwtTokenProvider.provideAccessToken(principal.getUserId())
+            accessToken = jwtTokenProvider.provideAccessToken(principal.getUserId(), principal.getRole())
         }
 
         response!!.addCookie(createCookie("access_token", accessToken))
-        response.sendRedirect("http://localhost:8080") // TODO: 프론트엔드 주소로 변경 , 환경변수 처리
+        response.sendRedirect("https://frontend-sarang.vercel.app")
     }
 
     private fun createCookie(key: String, value: String): Cookie {
