@@ -68,7 +68,7 @@ class SecurityConfiguration(
                     "/error"
                 ).permitAll()
                 it.requestMatchers("/v1/member/onboarding").hasRole("GUEST")
-                it.anyRequest().authenticated()
+                it.anyRequest().hasRole("MEMBER")
             }
             .addFilterBefore(
                 JwtAuthenticationFilter(
