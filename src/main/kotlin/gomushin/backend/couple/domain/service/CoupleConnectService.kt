@@ -23,7 +23,6 @@ class CoupleConnectService(
     }
 
     fun generateCoupleCode(userId: Long): String {
-        delete(userId.toString())
         val coupleCode = CoupleCodeGeneratorUtil.generateCoupleCode()
         val key = getCoupleCodeKey(coupleCode)
         redisTemplate.opsForValue().set(key, userId.toString(), CODE_DURATION)
@@ -38,14 +37,18 @@ class CoupleConnectService(
         if (invitorId == userId) {
             throw BadRequestException("sarangggun.couple.couple-code-same")
         }
-        delete(key)
 
         val couple = Couple.of(
             invitorId,
             userId,
         )
 
+        if (isAlreadyConnected(userId) || isAlreadyConnected(invitorId)) {
+            throw BadRequestException("sarangggun.couple.already-connected")
+        }
+
         save(couple)
+        delete(key)
     }
 
     @Transactional
@@ -57,18 +60,29 @@ class CoupleConnectService(
 
     @Transactional
     fun updateCoupleStatus(userId: Long) {
-        memberRepository.findById(userId).get().updateCoupleStatus()
+        val member = memberRepository.findById(userId).orElseThrow {
+            BadRequestException("sarangggun.member.not-found")
+        }
+        member.updateCoupleStatus()
     }
 
-    fun getCoupleCodeOrNull(key: String): Long? {
+    private fun getCoupleCodeOrNull(key: String): Long? {
         return redisTemplate.opsForValue().get(key)?.toLongOrNull()
     }
 
-    fun delete(key: String) {
+    private fun delete(key: String) {
         redisTemplate.delete(key)
     }
 
-    fun getCoupleCodeKey(code: String): String {
+    private fun getCoupleCodeKey(code: String): String {
         return "$COUPLE_CODE_PREFIX$code"
+    }
+
+    private fun isAlreadyConnected(userId: Long): Boolean {
+        val member = memberRepository.findById(userId).orElseThrow {
+            BadRequestException("sarangggun.member.not-found")
+        }
+
+        return member.isCouple > 0
     }
 }
