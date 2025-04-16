@@ -33,7 +33,7 @@ class CustomOAuth2UserService(
 
         getMemberByEmail(email)?.let {
             it.email = oAuth2Response.getEmail()
-            it.nickname = oAuth2Response.getName()
+            it.name = oAuth2Response.getName()
             it.profileImageUrl = oAuth2Response.getProfileImage()
 
             val savedMember = memberRepository.save(it)
@@ -51,6 +51,7 @@ class CustomOAuth2UserService(
             return CustomOAuth2User(userDto)
         } ?: run {
             val newMember = Member.create(
+                name = oAuth2Response.getName(),
                 nickname = oAuth2Response.getName(),
                 email = oAuth2Response.getEmail(),
                 profileImageUrl = oAuth2Response.getProfileImage(),

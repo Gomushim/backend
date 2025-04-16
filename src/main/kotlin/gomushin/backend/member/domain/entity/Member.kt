@@ -13,6 +13,9 @@ class Member(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L,
 
+    @Column(name = "name", nullable = false)
+    var name: String,
+
     @Column(name = "nickname", nullable = false)
     var nickname: String,
 
@@ -32,20 +35,30 @@ class Member(
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     var role: Role = Role.GUEST,
-) : BaseEntity() {
+
+    @Column(name = "is_couple", nullable = false)
+    var isCouple: Long = 0L,
+
+    ) : BaseEntity() {
     companion object {
         fun create(
-            nickname: String,
+            name: String,
+            nickname: String?,
             email: String,
             profileImageUrl: String?,
             provider: Provider
         ): Member {
             return Member(
-                nickname = nickname,
+                name = name,
+                nickname = nickname ?: name,
                 email = email,
                 profileImageUrl = profileImageUrl ?: "",
                 provider = provider,
             )
         }
+    }
+
+    fun updateCoupleStatus() {
+        this.isCouple = if (this.isCouple == 0L) 1L else 0L
     }
 }
