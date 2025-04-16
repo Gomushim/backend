@@ -40,7 +40,8 @@ class CustomSuccessHandler(
         }
 
         response!!.addCookie(createCookie("access_token", accessToken))
-        response.sendRedirect("https://frontend-sarang.vercel.app")
+//        response.sendRedirect("https://frontend-sarang.vercel.app")
+        response.sendRedirect("http://localhost:8080")
     }
 
     private fun createCookie(key: String, value: String): Cookie {
