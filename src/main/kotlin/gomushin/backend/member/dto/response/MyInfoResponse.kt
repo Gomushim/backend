@@ -4,7 +4,7 @@ import gomushin.backend.member.domain.entity.Member
 
 data class MyInfoResponse(
     val nickname: String,
-    val isCouple: Long,
+    val isCouple: Boolean,
 ) {
     companion object {
         fun of(member: Member) = MyInfoResponse(
