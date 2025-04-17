@@ -39,14 +39,12 @@ class MemberInfoFacadeTest {
             birthDate = null,
             profileImageUrl = null,
             provider = Provider.KAKAO,
-            role = Role.GUEST,
+            role = Role.MEMBER,
         )
 
-        val authorities = mutableListOf<GrantedAuthority>(SimpleGrantedAuthority("ROLE_GUEST"))
         customUserDetails = mock(CustomUserDetails::class.java)
 
         `when`(customUserDetails.getId()).thenReturn(1L)
-        `when`(customUserDetails.authorities).thenReturn(authorities)
 
     }
 
@@ -59,6 +57,6 @@ class MemberInfoFacadeTest {
         val result = memberInfoFacade.getMemberInfo(customUserDetails)
         // then
         verify(memberInfoService).getById(1L)
-        assertEquals(member.nickname, (result as MyInfoResponse).nickname)
+        assertEquals(member.nickname, result.nickname)
     }
 }
