@@ -36,7 +36,7 @@ jobs:
       - name: YML 파일 세팅
         env:
           APPLICATION_PROPERTIES: ${{ secrets.APPLICATION_PROPERTIES }}
-          # TEST_APPLICATION_PROPERTIES: ${{ secrets.TEST_APPLICATION_PROPERTIES }}
+          TEST_APPLICATION_PROPERTIES: ${{ secrets.TEST_APPLICATION_PROPERTIES }}
         run: |
           cd ./src
           rm -rf main/resources/application.yml
