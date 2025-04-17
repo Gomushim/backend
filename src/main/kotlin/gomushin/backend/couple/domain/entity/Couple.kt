@@ -20,9 +20,6 @@ class Couple(
     @Column(name = "relationship_start_date")
     var relationshipStartDate: LocalDate? = null,
 
-    @Column(name = "relationship_end_date")
-    var relationshipEndDate: LocalDate? = null,
-
     @Column(name = "military_start_date")
     var militaryStartDate: LocalDate? = null,
 
