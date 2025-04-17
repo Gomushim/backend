@@ -4,7 +4,7 @@ import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.repository.MemberRepository
 import gomushin.backend.member.domain.value.Provider
 import gomushin.backend.member.domain.value.Role
-import gomushin.backend.member.presentation.dto.request.OnboardingRequest
+import gomushin.backend.member.dto.request.OnboardingRequest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
@@ -30,6 +30,7 @@ class OnboardingServiceTest {
         val memberId = 1L
         val existingMember = Member(
             id = memberId,
+            name = "테스트",
             nickname = "원래 닉네임",
             email = "test@example.com",
             birthDate = LocalDate.of(1990, 1, 1),

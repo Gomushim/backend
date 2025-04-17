@@ -1,7 +1,7 @@
-package gomushin.backend.member.application
+package gomushin.backend.member.facade
 
 import gomushin.backend.member.domain.service.OnboardingService
-import gomushin.backend.member.presentation.dto.request.OnboardingRequest
+import gomushin.backend.member.dto.request.OnboardingRequest
 import org.springframework.stereotype.Component
 
 @Component

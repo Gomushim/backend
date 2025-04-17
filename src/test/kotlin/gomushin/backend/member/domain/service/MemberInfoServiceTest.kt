@@ -30,6 +30,7 @@ class MemberInfoServiceTest {
         val memberId = 1L
         val expectedMember = Member(
             id = 1L,
+            name = "테스트",
             nickname = "테스트 닉네임",
             email = "test@test.com",
             birthDate = null,
@@ -40,7 +41,7 @@ class MemberInfoServiceTest {
 
         // when
         `when`(memberRepository.findById(memberId)).thenReturn(Optional.of(expectedMember))
-        val result = memberInfoService.getGuestInfo(memberId)
+        val result = memberInfoService.getById(memberId)
 
         // then
         assertEquals(expectedMember, result)

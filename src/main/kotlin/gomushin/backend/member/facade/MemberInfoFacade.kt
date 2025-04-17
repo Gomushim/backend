@@ -1,8 +1,8 @@
-package gomushin.backend.member.application
+package gomushin.backend.member.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.member.domain.service.MemberInfoService
-import gomushin.backend.member.presentation.dto.response.MyInfoResponse
+import gomushin.backend.member.dto.response.MyInfoResponse
 import org.springframework.stereotype.Component
 
 @Component
