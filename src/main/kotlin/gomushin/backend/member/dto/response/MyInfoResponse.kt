@@ -1,4 +1,4 @@
-package gomushin.backend.member.presentation.dto.response
+package gomushin.backend.member.dto.response
 
 import gomushin.backend.member.domain.entity.Member
 

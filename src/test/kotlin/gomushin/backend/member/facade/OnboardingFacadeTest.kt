@@ -1,7 +1,7 @@
-package gomushin.backend.member.application
+package gomushin.backend.member.facade
 
 import gomushin.backend.member.domain.service.OnboardingService
-import gomushin.backend.member.presentation.dto.request.OnboardingRequest
+import gomushin.backend.member.dto.request.OnboardingRequest
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

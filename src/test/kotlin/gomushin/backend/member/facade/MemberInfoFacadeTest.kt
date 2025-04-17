@@ -1,11 +1,11 @@
-package gomushin.backend.member.application
+package gomushin.backend.member.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.service.MemberInfoService
 import gomushin.backend.member.domain.value.Provider
 import gomushin.backend.member.domain.value.Role
-import gomushin.backend.member.presentation.dto.response.GuestInfoResponse
+import gomushin.backend.member.dto.response.MyInfoResponse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -33,6 +33,7 @@ class MemberInfoFacadeTest {
     fun setUp() {
         member = Member(
             id = 1L,
+            name = "테스트",
             nickname = "테스트 닉네임",
             email = "test@test.com",
             birthDate = null,
@@ -53,11 +54,11 @@ class MemberInfoFacadeTest {
     @Test
     fun getMyInfo() {
         // given
-        `when`(memberInfoService.getGuestInfo(customUserDetails.getId())).thenReturn(member)
+        `when`(memberInfoService.getById(customUserDetails.getId())).thenReturn(member)
         // when
         val result = memberInfoFacade.getMemberInfo(customUserDetails)
         // then
-        verify(memberInfoService).getGuestInfo(1L)
-        assertEquals(member.nickname, (result as GuestInfoResponse).nickname)
+        verify(memberInfoService).getById(1L)
+        assertEquals(member.nickname, (result as MyInfoResponse).nickname)
     }
 }

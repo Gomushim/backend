@@ -2,8 +2,8 @@ package gomushin.backend.member.presentation
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.response.ApiResponse
-import gomushin.backend.member.application.OnboardingFacade
-import gomushin.backend.member.presentation.dto.request.OnboardingRequest
+import gomushin.backend.member.facade.OnboardingFacade
+import gomushin.backend.member.dto.request.OnboardingRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.core.annotation.AuthenticationPrincipal

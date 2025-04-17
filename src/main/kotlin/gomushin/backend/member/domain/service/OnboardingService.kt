@@ -3,7 +3,7 @@ package gomushin.backend.member.domain.service
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.member.domain.repository.MemberRepository
 import gomushin.backend.member.domain.value.Role
-import gomushin.backend.member.presentation.dto.request.OnboardingRequest
+import gomushin.backend.member.dto.request.OnboardingRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
