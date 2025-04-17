@@ -37,7 +37,7 @@ class Member(
     var role: Role = Role.GUEST,
 
     @Column(name = "is_couple", nullable = false)
-    var isCouple: Long = 0L,
+    var isCouple: Boolean = false,
 
     ) : BaseEntity() {
     companion object {
@@ -59,6 +59,6 @@ class Member(
     }
 
     fun updateCoupleStatus() {
-        this.isCouple = if (this.isCouple == 0L) 1L else 0L
+        this.isCouple = !this.isCouple
     }
 }

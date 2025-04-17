@@ -18,32 +18,32 @@ class CoupleConnectService(
 ) {
 
     companion object {
-        private val CODE_DURATION = Duration.ofMinutes(60)
+        private val COUPLE_CODE_DURATION = Duration.ofMinutes(60)
         private const val COUPLE_CODE_PREFIX = "COUPLE_CODE:"
     }
 
     fun generateCoupleCode(userId: Long): String {
         val coupleCode = CoupleCodeGeneratorUtil.generateCoupleCode()
         val key = getCoupleCodeKey(coupleCode)
-        redisTemplate.opsForValue().set(key, userId.toString(), CODE_DURATION)
+        redisTemplate.opsForValue().set(key, userId.toString(), COUPLE_CODE_DURATION)
         return coupleCode
     }
 
     @Transactional
-    fun connectCouple(userId: Long, coupleCode: String) {
+    fun connectCouple(inviteeId: Long, coupleCode: String) {
         val key = getCoupleCodeKey(coupleCode)
         val invitorId = getCoupleCodeOrNull(key)
             ?: throw BadRequestException("sarangggun.couple.invalid-couple-code")
-        if (invitorId == userId) {
+        if (invitorId == inviteeId) {
             throw BadRequestException("sarangggun.couple.couple-code-same")
         }
 
         val couple = Couple.of(
             invitorId,
-            userId,
+            inviteeId,
         )
 
-        if (isAlreadyConnected(userId) || isAlreadyConnected(invitorId)) {
+        if (isAlreadyConnected(inviteeId) || isAlreadyConnected(invitorId)) {
             throw BadRequestException("sarangggun.couple.already-connected")
         }
 
@@ -83,6 +83,6 @@ class CoupleConnectService(
             BadRequestException("sarangggun.member.not-found")
         }
 
-        return member.isCouple > 0
+        return member.isCouple
     }
 }
