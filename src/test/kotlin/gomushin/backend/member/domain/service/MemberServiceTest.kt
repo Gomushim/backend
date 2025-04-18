@@ -15,13 +15,13 @@ import java.util.*
 import kotlin.test.assertEquals
 
 @ExtendWith(MockitoExtension::class)
-class MemberInfoServiceTest {
+class MemberServiceTest {
 
     @Mock
     private lateinit var memberRepository: MemberRepository
 
     @InjectMocks
-    private lateinit var memberInfoService: MemberInfoService
+    private lateinit var memberService: MemberService
 
     @DisplayName("내 정보 조회 - [GUEST]")
     @Test
@@ -41,7 +41,7 @@ class MemberInfoServiceTest {
 
         // when
         `when`(memberRepository.findById(memberId)).thenReturn(Optional.of(expectedMember))
-        val result = memberInfoService.getById(memberId)
+        val result = memberService.getById(memberId)
 
         // then
         assertEquals(expectedMember, result)
