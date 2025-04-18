@@ -2,19 +2,19 @@ package gomushin.backend.couple.domain.service
 
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.couple.domain.entity.Couple
-import gomushin.backend.couple.domain.repository.CoupleRepository
-import gomushin.backend.member.domain.repository.MemberRepository
+import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.member.util.CoupleCodeGeneratorUtil
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
+import java.time.LocalDate
 
 @Service
 class CoupleConnectService(
     private val redisTemplate: StringRedisTemplate,
-    private val coupleRepository: CoupleRepository,
-    private val memberRepository: MemberRepository,
+    private val coupleService: CoupleService,
+    private val memberService: MemberService,
 ) {
 
     companion object {
@@ -30,7 +30,7 @@ class CoupleConnectService(
     }
 
     @Transactional
-    fun connectCouple(inviteeId: Long, coupleCode: String) {
+    fun connectCouple(inviteeId: Long, coupleCode: String): Couple {
         val key = getCoupleCodeKey(coupleCode)
         val invitorId = getCoupleCodeOrNull(key)
             ?: throw BadRequestException("sarangggun.couple.invalid-couple-code")
@@ -47,24 +47,49 @@ class CoupleConnectService(
             throw BadRequestException("sarangggun.couple.already-connected")
         }
 
-        save(couple)
+        val savedCouple = save(couple)
         delete(key)
+
+        return savedCouple
     }
 
     @Transactional
     fun save(couple: Couple): Couple {
         updateCoupleStatus(couple.invitorId)
         updateCoupleStatus(couple.inviteeId)
-        return coupleRepository.save(couple)
+        return coupleService.save(couple)
     }
 
     @Transactional
     fun updateCoupleStatus(userId: Long) {
-        val member = memberRepository.findById(userId).orElseThrow {
-            BadRequestException("sarangggun.member.not-found")
-        }
+        val member = memberService.getById(userId)
         member.updateCoupleStatus()
     }
+
+    @Transactional
+    fun registerAnniversary(
+        userId: Long,
+        coupleId: Long,
+        relationshipStartDate: LocalDate,
+        militaryStartDate: LocalDate,
+        militaryEndDate: LocalDate,
+    ) {
+        val couple = coupleService.getById(coupleId)
+        if (!checkUserInCouple(userId, couple)) {
+            throw BadRequestException("sarangggun.couple.not-in-couple")
+        }
+        couple.updateAnniversary(
+            relationshipStartDate = relationshipStartDate,
+            militaryStartDate = militaryStartDate,
+            militaryEndDate = militaryEndDate,
+        )
+    }
+
+    private fun checkUserInCouple(userId: Long, couple: Couple): Boolean {
+        val member = memberService.getById(userId)
+        return member.id == couple.invitorId || member.id == couple.inviteeId
+    }
+
 
     private fun getCoupleCodeOrNull(key: String): Long? {
         return redisTemplate.opsForValue().get(key)?.toLongOrNull()
@@ -79,10 +104,7 @@ class CoupleConnectService(
     }
 
     private fun isAlreadyConnected(userId: Long): Boolean {
-        val member = memberRepository.findById(userId).orElseThrow {
-            BadRequestException("sarangggun.member.not-found")
-        }
-
+        val member = memberService.getById(userId)
         return member.isCouple
     }
 }
