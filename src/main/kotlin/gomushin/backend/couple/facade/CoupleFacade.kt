@@ -24,9 +24,6 @@ class CoupleFacade(
         request: CoupleAnniversaryRequest
     ) = coupleConnectService.registerAnniversary(
         customUserDetails.getId(),
-        request.coupleId,
-        request.relationshipStartDate,
-        request.militaryStartDate,
-        request.militaryEndDate
+        request
     )
 }
