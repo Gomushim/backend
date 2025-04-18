@@ -3,7 +3,7 @@ package gomushin.backend.couple.dto.request
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
 
-class CoupleAnniversaryRequest(
+data class CoupleAnniversaryRequest(
     @Schema(description = "커플 ID", example = "1")
     val coupleId: Long,
 
