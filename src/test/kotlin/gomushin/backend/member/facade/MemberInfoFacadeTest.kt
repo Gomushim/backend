@@ -2,10 +2,9 @@ package gomushin.backend.member.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.member.domain.entity.Member
-import gomushin.backend.member.domain.service.MemberInfoService
+import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.member.domain.value.Provider
 import gomushin.backend.member.domain.value.Role
-import gomushin.backend.member.dto.response.MyInfoResponse
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -14,14 +13,12 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
-import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import kotlin.test.assertEquals
 
 @ExtendWith(MockitoExtension::class)
 class MemberInfoFacadeTest {
     @Mock
-    private lateinit var memberInfoService: MemberInfoService
+    private lateinit var memberService: MemberService
 
     @InjectMocks
     private lateinit var memberInfoFacade: MemberInfoFacade
@@ -52,11 +49,11 @@ class MemberInfoFacadeTest {
     @Test
     fun getMyInfo() {
         // given
-        `when`(memberInfoService.getById(customUserDetails.getId())).thenReturn(member)
+        `when`(memberService.getById(customUserDetails.getId())).thenReturn(member)
         // when
         val result = memberInfoFacade.getMemberInfo(customUserDetails)
         // then
-        verify(memberInfoService).getById(1L)
+        verify(memberService).getById(1L)
         assertEquals(member.nickname, result.nickname)
     }
 }
