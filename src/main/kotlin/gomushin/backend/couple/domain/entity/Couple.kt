@@ -26,7 +26,7 @@ class Couple(
     @Column(name = "military_end_date")
     var militaryEndDate: LocalDate? = null,
 
-): BaseEntity() {
+    ) : BaseEntity() {
     companion object {
         fun of(
             invitorId: Long,
@@ -43,10 +43,9 @@ class Couple(
         relationshipStartDate: LocalDate?,
         militaryStartDate: LocalDate?,
         militaryEndDate: LocalDate?,
-    ): Couple {
+    ) {
         this.relationshipStartDate = relationshipStartDate ?: this.relationshipStartDate
         this.militaryStartDate = militaryStartDate ?: this.militaryStartDate
         this.militaryEndDate = militaryEndDate ?: this.militaryEndDate
-        return this
     }
 }
