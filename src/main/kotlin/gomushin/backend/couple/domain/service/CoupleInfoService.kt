@@ -1,6 +1,7 @@
 package gomushin.backend.couple.domain.service
 
 import gomushin.backend.core.infrastructure.exception.BadRequestException
+import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.repository.CoupleRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -11,8 +12,7 @@ class CoupleInfoService(
         private val coupleRepository: CoupleRepository
 ) {
     fun getGrade(id: Long): Int {
-        val couple = coupleRepository.findByInvitorId(id)
-                ?: coupleRepository.findByInviteeId(id)
+        val couple = getCouple(id)
                 ?: throw BadRequestException("saranggun.couple.not-connected")
         val militaryStartDate = couple.militaryStartDate ?: throw BadRequestException("saranggun.couple.not-defined-militaryStartDate")
         val today = LocalDate.now()
@@ -30,5 +30,12 @@ class CoupleInfoService(
             else -> 4
         }
     }
+
+    fun getCouple(id : Long): Couple? {
+        return coupleRepository.findByInvitorId(id)
+                ?: coupleRepository.findByInviteeId(id)
+    }
+
+    fun checkCouple(id: Long): Boolean = getCouple(id) != null
 
 }

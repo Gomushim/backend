@@ -23,4 +23,12 @@ class CoupleInfoController (
         val grade = coupleFacade.getGradeInfo(customUserDetails)
         return ApiResponse.success(grade)
     }
+
+    @GetMapping(ApiPath.COUPLE_CHECK_CONNECT)
+    @Operation(summary = "커플 연동 여부", description = "커플 연동 여부 true, false로 불러오기")
+    fun check(
+            @AuthenticationPrincipal customUserDetails: CustomUserDetails
+    ): ApiResponse<Boolean> {
+        return ApiResponse.success(coupleFacade.checkConnect(customUserDetails))
+    }
 }

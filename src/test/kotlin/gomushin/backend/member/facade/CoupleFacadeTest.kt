@@ -82,4 +82,13 @@ class CoupleFacadeTest {
         assertEquals(1, result.grade)
     }
 
+    @DisplayName("커플 연동 여부 조회")
+    @Test
+    fun checkConnect(){
+        `when`(coupleInfoService.checkCouple(customUserDetails.getId())).thenReturn(true)
+        val result = coupleFacade.checkConnect(customUserDetails)
+        verify(coupleInfoService).checkCouple(1L)
+        assertEquals(true, result)
+    }
+
 }

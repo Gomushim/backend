@@ -14,6 +14,7 @@ import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDate
+import kotlin.test.assertEquals
 
 
 @ExtendWith(MockitoExtension::class)
@@ -57,7 +58,7 @@ class CoupleInfoServiceTest {
         )
 
         `when`(coupleRepository.findByInvitorId(anyLong())).thenReturn(null)
-        `when`(coupleRepository.findByInvitorId(inviteeId)).thenReturn(couple)
+        `when`(coupleRepository.findByInviteeId(inviteeId)).thenReturn(couple)
 
 
         // when
@@ -102,5 +103,32 @@ class CoupleInfoServiceTest {
         assert(resultGradeTwo == 2)
         assert(resultGradeThree == 3)
         assert(resultGradeFour == 4)
+    }
+
+    @DisplayName("checkCouple - 성공")
+    @Test
+    fun checkCouple_success() {
+        //given
+        val coupleId = 1L
+        val invitorId = 1L
+        val inviteeId = 2L
+        val couple = Couple(
+                id = coupleId,
+                invitorId = invitorId,
+                inviteeId = inviteeId,
+                militaryStartDate = LocalDate.of(2021,5,24)
+        )
+        `when`(coupleRepository.findByInvitorId(invitorId)).thenReturn(couple)
+        `when`(coupleRepository.findByInviteeId(inviteeId)).thenReturn(couple)
+
+        //when
+        val resultTrue1 = coupleInfoService.checkCouple(1L)
+        val resultTrue2 = coupleInfoService.checkCouple(2L)
+        val resultFalse = coupleInfoService.checkCouple(3L)
+
+        //then
+        assertEquals(true, resultTrue1)
+        assertEquals(true, resultTrue2)
+        assertEquals(false, resultFalse)
     }
 }
