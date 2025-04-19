@@ -3,12 +3,15 @@ package gomushin.backend.couple.facade
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.couple.domain.service.CoupleConnectService
 import gomushin.backend.couple.dto.request.CoupleAnniversaryRequest
+import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.couple.dto.request.CoupleConnectRequest
+import gomushin.backend.couple.dto.response.CoupleGradeResponse
 import org.springframework.stereotype.Component
 
 @Component
 class CoupleFacade(
-    private val coupleConnectService: CoupleConnectService
+    private val coupleConnectService: CoupleConnectService,
+    private val coupleInfoService: CoupleInfoService
 ) {
 
     fun requestCoupleCodeGeneration(customUserDetails: CustomUserDetails) =
@@ -26,4 +29,9 @@ class CoupleFacade(
         customUserDetails.getId(),
         request
     )
+
+    fun getGradeInfo(customUserDetails: CustomUserDetails): CoupleGradeResponse {
+        val grade = coupleInfoService.getGrade(customUserDetails.getId())
+        return CoupleGradeResponse.of(grade)
+    }
 }
