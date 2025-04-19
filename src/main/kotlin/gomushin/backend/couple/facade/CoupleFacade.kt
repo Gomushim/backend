@@ -34,4 +34,8 @@ class CoupleFacade(
         val grade = coupleInfoService.getGrade(customUserDetails.getId())
         return CoupleGradeResponse.of(grade)
     }
+
+    fun checkConnect(customUserDetails: CustomUserDetails): Boolean {
+        return coupleInfoService.checkCouple(customUserDetails.getId())
+    }
 }

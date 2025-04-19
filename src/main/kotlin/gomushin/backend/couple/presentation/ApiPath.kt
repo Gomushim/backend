@@ -5,4 +5,5 @@ object ApiPath {
     const val COUPLE_CONNECT = "/v1/couple/connect"
     const val COUPLE_ANNIVERSARY = "/v1/couple/anniversary"
     const val COUPLE_PROFILE = "/v1/couple/profile"
+    const val COUPLE_CHECK_CONNECT = "/v1/couple/check-connect"
 }
