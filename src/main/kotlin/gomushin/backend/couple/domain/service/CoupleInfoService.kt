@@ -3,9 +3,11 @@ package gomushin.backend.couple.domain.service
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.repository.CoupleRepository
+import gomushin.backend.couple.dto.response.DdayResponse
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.Period
+import java.time.temporal.ChronoUnit
 
 @Service
 class CoupleInfoService(
@@ -37,5 +39,24 @@ class CoupleInfoService(
     }
 
     fun checkCouple(id: Long): Boolean = getCouple(id) != null
+    fun getDday(id: Long): DdayResponse {
+        val couple = getCouple(id)
+                ?: throw BadRequestException("saranggun.couple.not-connected")
+        val today = LocalDate.now()
+        val sinceLove: Int? = couple.relationshipStartDate?.let { startLove ->
+            computeDday(startLove, today)
+        }
+        val sinceMilitaryStart : Int? = couple.militaryStartDate?.let { startMilitary ->
+            computeDday(startMilitary, today)
+        }
+        val militaryEndLeft : Int? = couple.militaryEndDate?.let { endMilitary ->
+            computeDday(endMilitary, today)
+        }
+        return DdayResponse(sinceLove, sinceMilitaryStart, militaryEndLeft)
+    }
+
+    fun computeDday(day1: LocalDate, day2: LocalDate) : Int {
+        return ChronoUnit.DAYS.between(day1, day2).toInt()
+    }
 
 }

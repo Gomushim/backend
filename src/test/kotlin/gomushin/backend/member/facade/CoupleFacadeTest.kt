@@ -4,6 +4,7 @@ import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.service.CoupleConnectService
 import gomushin.backend.couple.domain.service.CoupleInfoService
+import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.couple.facade.CoupleFacade
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.value.Provider
@@ -89,6 +90,28 @@ class CoupleFacadeTest {
         val result = coupleFacade.checkConnect(customUserDetails)
         verify(coupleInfoService).checkCouple(1L)
         assertEquals(true, result)
+    }
+
+    @DisplayName("디데이 조회 - 정상응답")
+    @Test
+    fun getDday(){
+        `when`(coupleInfoService.getDday(customUserDetails.getId())).thenReturn(DdayResponse(100, 200, -345))
+        val result = coupleFacade.getDday(customUserDetails)
+        verify(coupleInfoService).getDday(1L)
+        assertEquals(100, result.sinceLove)
+        assertEquals(200, result.sinceMilitaryStart)
+        assertEquals(-345, result.militaryEndLeft)
+    }
+
+    @DisplayName("디데이 조회 - 날짜 정보 안 들어갔을 때")
+    @Test
+    fun getDdayNull(){
+        `when`(coupleInfoService.getDday(customUserDetails.getId())).thenReturn(DdayResponse(null, null, null))
+        val result = coupleFacade.getDday(customUserDetails)
+        verify(coupleInfoService).getDday(1L)
+        assertEquals(null, result.sinceLove)
+        assertEquals(null, result.sinceMilitaryStart)
+        assertEquals(null, result.militaryEndLeft)
     }
 
 }
