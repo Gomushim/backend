@@ -6,9 +6,9 @@ data class DdayResponse (
         val militaryEndLeft : Int?
 ){
     companion object{
-        fun of(sinceLove: Int,
-               sinceMilitaryStart: Int,
-               militaryEndLeft: Int) = DdayResponse (
+        fun of(sinceLove: Int?,
+               sinceMilitaryStart: Int?,
+               militaryEndLeft: Int?) = DdayResponse (
                 sinceLove,
                 sinceMilitaryStart,
                 militaryEndLeft

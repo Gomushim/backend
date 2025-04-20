@@ -2,7 +2,10 @@ package gomushin.backend.couple.domain.service
 
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.repository.CoupleRepository
-import gomushin.backend.couple.dto.response.DdayResponse
+import gomushin.backend.member.domain.entity.Member
+import gomushin.backend.member.domain.repository.MemberRepository
+import gomushin.backend.member.domain.value.Provider
+import gomushin.backend.member.domain.value.Role
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -12,6 +15,7 @@ import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
 import java.time.LocalDate
+import java.util.*
 import kotlin.test.assertEquals
 
 
@@ -19,6 +23,8 @@ import kotlin.test.assertEquals
 class CoupleInfoServiceTest {
     @Mock
     private lateinit var coupleRepository: CoupleRepository
+    @Mock
+    private lateinit var memberRepository: MemberRepository
 
     @InjectMocks
     private lateinit var coupleInfoService: CoupleInfoService
@@ -130,9 +136,9 @@ class CoupleInfoServiceTest {
         assertEquals(false, resultFalse)
     }
 
-    @DisplayName("computeDday")
+    @DisplayName("computeDday - 성공")
     @Test
-    fun computeDday(){
+    fun computeDday_success(){
         //given
         val today = LocalDate.of(2025, 4, 20)
         val yesterday = LocalDate.of(2025, 4, 19)
@@ -147,9 +153,9 @@ class CoupleInfoServiceTest {
         assertEquals(1, plusDday)
     }
 
-    @DisplayName("getDday")
+    @DisplayName("getDday - 성공")
     @Test
-    fun getDday(){
+    fun getDday_success(){
         //given
         val coupleId = 1L
         val invitorId = 1L
@@ -175,5 +181,51 @@ class CoupleInfoServiceTest {
         assertEquals(coupleInfoService.computeDday(militaryStartDate, today), response.sinceMilitaryStart)
         assertEquals(coupleInfoService.computeDday(militaryEndDate, today), response.militaryEndLeft)
         assertEquals(coupleInfoService.computeDday(relationshipStartDate, today), response.sinceLove)
+    }
+
+    @DisplayName("nickName-성공")
+    @Test
+    fun nickName(){
+        //given
+        val coupleId = 1L
+        val userId = 1L
+        val coupleUserId = 2L
+        val couple = Couple(
+            id = coupleId,
+            invitorId = coupleUserId,
+            inviteeId = userId,
+        )
+        val user = Member(
+            id = 1L,
+            name="김영록",
+            nickname="김영록",
+            email="test@test.com",
+            profileImageUrl = "url",
+            birthDate= LocalDate.of(2001,3,27),
+            provider=Provider.KAKAO,
+            role= Role.MEMBER,
+            isCouple= true
+        )
+        val coupleUser = Member(
+            id = 2L,
+            name="김영록 여친",
+            nickname="김영록 여친",
+            email="test2@test.com",
+            profileImageUrl = "url2",
+            birthDate= LocalDate.of(2001,5,19),
+            provider=Provider.KAKAO,
+            role= Role.MEMBER,
+            isCouple= true
+        )
+        `when`(coupleRepository.findByInvitorId(userId)).thenReturn(couple)
+        `when`(memberRepository.findById(userId)).thenReturn(Optional.of(user))
+        `when`(memberRepository.findById(coupleUserId)).thenReturn(Optional.of(coupleUser))
+
+        //when
+        val nicknameResponse = coupleInfoService.nickName(userId)
+
+        //then
+        assertEquals("김영록 여친", nicknameResponse.coupleNickname)
+        assertEquals("김영록", nicknameResponse.userNickname)
     }
 }
