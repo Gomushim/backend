@@ -8,6 +8,7 @@ import gomushin.backend.couple.dto.request.CoupleConnectRequest
 import gomushin.backend.couple.dto.response.CoupleGradeResponse
 import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.couple.dto.response.NicknameResponse
+import gomushin.backend.couple.dto.response.StatusMessageResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -47,5 +48,10 @@ class CoupleFacade(
 
     fun nickName(customUserDetails: CustomUserDetails) : NicknameResponse {
         return coupleInfoService.nickName(customUserDetails.getId())
+    }
+
+    fun statusMessage(customUserDetails: CustomUserDetails): StatusMessageResponse {
+        val statusMessage = coupleInfoService.getStatusMessage(customUserDetails.getId())
+        return StatusMessageResponse.of(statusMessage)
     }
 }

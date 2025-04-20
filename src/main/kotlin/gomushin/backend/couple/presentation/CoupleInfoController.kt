@@ -6,6 +6,7 @@ import gomushin.backend.couple.facade.CoupleFacade
 import gomushin.backend.couple.dto.response.CoupleGradeResponse
 import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.couple.dto.response.NicknameResponse
+import gomushin.backend.couple.dto.response.StatusMessageResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
@@ -54,5 +55,14 @@ class CoupleInfoController (
         @AuthenticationPrincipal customUserDetails: CustomUserDetails
     ):ApiResponse<NicknameResponse>{
         return ApiResponse.success(coupleFacade.nickName(customUserDetails))
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(ApiPath.COUPLE_STATUS_MESSAGE)
+    @Operation(summary = "상태 메시지 조회", description = "상태 메시지 조회")
+    fun statusMessage(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails
+    ):ApiResponse<StatusMessageResponse>{
+        return ApiResponse.success(coupleFacade.statusMessage(customUserDetails))
     }
 }
