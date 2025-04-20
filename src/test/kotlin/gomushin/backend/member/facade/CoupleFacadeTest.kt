@@ -125,4 +125,13 @@ class CoupleFacadeTest {
         assertEquals("김영록 여친", result.coupleNickname)
     }
 
+    @DisplayName("상태 메시지 조회 - 정상응답")
+    @Test
+    fun statusMessage(){
+        `when`(coupleInfoService.getStatusMessage(customUserDetails.getId())).thenReturn("기분이 좋아용")
+        val result = coupleFacade.statusMessage(customUserDetails)
+        verify(coupleInfoService).getStatusMessage(1L)
+        assertEquals("기분이 좋아용", result.statusMessage)
+    }
+
 }

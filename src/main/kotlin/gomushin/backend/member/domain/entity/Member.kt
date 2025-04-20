@@ -25,6 +25,9 @@ class Member(
     @Column(name = "birth_date")
     var birthDate: LocalDate? = null,
 
+    @Column(name = "status_message")
+    var statusMessage : String? = null,
+
     @Column(name = "profile_image_url")
     var profileImageUrl: String?,
 

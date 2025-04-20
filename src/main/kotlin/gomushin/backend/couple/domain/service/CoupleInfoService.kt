@@ -77,4 +77,14 @@ class CoupleInfoService(
         return NicknameResponse.of(userMember.nickname, coupleMember.nickname)
     }
 
+    fun getStatusMessage(id: Long): String? {
+        val couple = getCouple(id) ?: throw BadRequestException("saranggun.couple.not-connected")
+        val coupleMemberId = if (couple.invitorId == id) couple.inviteeId else couple.invitorId
+
+        val coupleMember = memberRepository.findById(coupleMemberId).orElseThrow {
+            BadRequestException("sarangggun.couple.not-exist-couple")
+        }
+        return coupleMember.statusMessage
+    }
+
 }
