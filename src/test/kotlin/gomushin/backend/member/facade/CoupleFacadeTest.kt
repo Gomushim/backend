@@ -5,6 +5,7 @@ import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.service.CoupleConnectService
 import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.couple.dto.response.DdayResponse
+import gomushin.backend.couple.dto.response.NicknameResponse
 import gomushin.backend.couple.facade.CoupleFacade
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.value.Provider
@@ -112,6 +113,16 @@ class CoupleFacadeTest {
         assertEquals(null, result.sinceLove)
         assertEquals(null, result.sinceMilitaryStart)
         assertEquals(null, result.militaryEndLeft)
+    }
+
+    @DisplayName("닉네임 조회 - 정상응답")
+    @Test
+    fun nickName(){
+        `when`(coupleInfoService.nickName(customUserDetails.getId())).thenReturn(NicknameResponse("김영록", "김영록 여친"))
+        val result = coupleFacade.nickName(customUserDetails)
+        verify(coupleInfoService).nickName(1L)
+        assertEquals("김영록", result.userNickname)
+        assertEquals("김영록 여친", result.coupleNickname)
     }
 
 }

@@ -4,6 +4,8 @@ import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.repository.CoupleRepository
 import gomushin.backend.couple.dto.response.DdayResponse
+import gomushin.backend.couple.dto.response.NicknameResponse
+import gomushin.backend.member.domain.repository.MemberRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.Period
@@ -11,7 +13,8 @@ import java.time.temporal.ChronoUnit
 
 @Service
 class CoupleInfoService(
-        private val coupleRepository: CoupleRepository
+        private val coupleRepository: CoupleRepository,
+        private val memberRepository: MemberRepository
 ) {
     fun getGrade(id: Long): Int {
         val couple = getCouple(id)
@@ -52,11 +55,26 @@ class CoupleInfoService(
         val militaryEndLeft : Int? = couple.militaryEndDate?.let { endMilitary ->
             computeDday(endMilitary, today)
         }
-        return DdayResponse(sinceLove, sinceMilitaryStart, militaryEndLeft)
+        return DdayResponse.of(sinceLove, sinceMilitaryStart, militaryEndLeft)
     }
 
     fun computeDday(day1: LocalDate, day2: LocalDate) : Int {
         return ChronoUnit.DAYS.between(day1, day2).toInt()
+    }
+
+    fun nickName(id: Long): NicknameResponse {
+        val userMember = memberRepository.findById(id).orElseThrow {
+            BadRequestException("saranggun.member.not-found")
+        }
+
+        val couple = getCouple(id) ?: throw BadRequestException("saranggun.couple.not-connected")
+        val coupleMemberId = if (couple.invitorId == id) couple.inviteeId else couple.invitorId
+
+        val coupleMember = memberRepository.findById(coupleMemberId).orElseThrow {
+            BadRequestException("sarangggun.couple.not-exist-couple")
+        }
+
+        return NicknameResponse.of(userMember.nickname, coupleMember.nickname)
     }
 
 }

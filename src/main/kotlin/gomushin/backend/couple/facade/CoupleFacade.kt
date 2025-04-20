@@ -7,6 +7,7 @@ import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.couple.dto.request.CoupleConnectRequest
 import gomushin.backend.couple.dto.response.CoupleGradeResponse
 import gomushin.backend.couple.dto.response.DdayResponse
+import gomushin.backend.couple.dto.response.NicknameResponse
 import org.springframework.stereotype.Component
 
 @Component
@@ -42,5 +43,9 @@ class CoupleFacade(
 
     fun getDday(customUserDetails: CustomUserDetails): DdayResponse {
         return coupleInfoService.getDday(customUserDetails.getId())
+    }
+
+    fun nickName(customUserDetails: CustomUserDetails) : NicknameResponse {
+        return coupleInfoService.nickName(customUserDetails.getId())
     }
 }
