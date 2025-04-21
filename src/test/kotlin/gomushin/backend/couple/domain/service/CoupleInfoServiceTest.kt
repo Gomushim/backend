@@ -42,7 +42,7 @@ class CoupleInfoServiceTest {
                 militaryStartDate = LocalDate.of(2021,5,24)
         )
 
-        Mockito.`when`(coupleRepository.findByInvitorId(invitorId)).thenReturn(couple)
+        `when`(coupleRepository.findByMemberId(invitorId)).thenReturn(couple)
 
         // when
         coupleInfoService.getGrade(invitorId)
@@ -61,8 +61,7 @@ class CoupleInfoServiceTest {
                 militaryStartDate = LocalDate.of(2021,5,24)
         )
 
-        `when`(coupleRepository.findByInvitorId(anyLong())).thenReturn(null)
-        `when`(coupleRepository.findByInviteeId(inviteeId)).thenReturn(couple)
+        `when`(coupleRepository.findByMemberId(inviteeId)).thenReturn(couple)
 
 
         // when
@@ -113,17 +112,45 @@ class CoupleInfoServiceTest {
     @Test
     fun checkCouple_success() {
         //given
-        val coupleId = 1L
-        val invitorId = 1L
-        val inviteeId = 2L
-        val couple = Couple(
-                id = coupleId,
-                invitorId = invitorId,
-                inviteeId = inviteeId,
-                militaryStartDate = LocalDate.of(2021,5,24)
+        val userId = 1L
+        val coupleUserId = 2L
+        val notCoupleUserId = 3L
+        val user = Member(
+            id = userId,
+            name="김영록",
+            nickname="김영록",
+            email="test@test.com",
+            profileImageUrl = "url",
+            birthDate= LocalDate.of(2001,3,27),
+            provider=Provider.KAKAO,
+            role= Role.MEMBER,
+            isCouple= true
         )
-        `when`(coupleRepository.findByInvitorId(invitorId)).thenReturn(couple)
-        `when`(coupleRepository.findByInviteeId(inviteeId)).thenReturn(couple)
+        val coupleUser = Member(
+            id = coupleUserId,
+            name="김영록 여친",
+            nickname="김영록 여친",
+            email="test2@test.com",
+            profileImageUrl = "url2",
+            birthDate= LocalDate.of(2001,5,19),
+            provider=Provider.KAKAO,
+            role= Role.MEMBER,
+            isCouple= true
+        )
+        val notCoupleUser = Member(
+            id = coupleUserId,
+            name="김영록 여친",
+            nickname="김영록 여친",
+            email="test2@test.com",
+            profileImageUrl = "url2",
+            birthDate= LocalDate.of(2001,5,19),
+            provider=Provider.KAKAO,
+            role= Role.MEMBER,
+            isCouple= false
+        )
+        `when`(memberRepository.findById(userId)).thenReturn(Optional.of(user))
+        `when`(memberRepository.findById(coupleUserId)).thenReturn(Optional.of(coupleUser))
+        `when`(memberRepository.findById(notCoupleUserId)).thenReturn(Optional.of(notCoupleUser))
 
         //when
         val resultTrue1 = coupleInfoService.checkCouple(1L)
@@ -172,7 +199,7 @@ class CoupleInfoServiceTest {
         val militaryStartDate = couple.militaryStartDate!!
         val militaryEndDate = couple.militaryEndDate!!
         val relationshipStartDate = couple.relationshipStartDate!!
-        `when`(coupleRepository.findByInvitorId(invitorId)).thenReturn(couple)
+        `when`(coupleRepository.findByMemberId(invitorId)).thenReturn(couple)
 
         //when
         val response = coupleInfoService.getDday(invitorId)
@@ -217,12 +244,12 @@ class CoupleInfoServiceTest {
             role= Role.MEMBER,
             isCouple= true
         )
-        `when`(coupleRepository.findByInvitorId(userId)).thenReturn(couple)
+        `when`(coupleRepository.findByMemberId(userId)).thenReturn(couple)
         `when`(memberRepository.findById(userId)).thenReturn(Optional.of(user))
         `when`(memberRepository.findById(coupleUserId)).thenReturn(Optional.of(coupleUser))
 
         //when
-        val nicknameResponse = coupleInfoService.nickName(userId)
+        val nicknameResponse = coupleInfoService.getNickName(userId)
 
         //then
         assertEquals("김영록 여친", nicknameResponse.coupleNickname)
@@ -253,7 +280,7 @@ class CoupleInfoServiceTest {
             isCouple= true,
             statusMessage = "기분이 좋아용"
         )
-        `when`(coupleRepository.findByInvitorId(userId)).thenReturn(couple)
+        `when`(coupleRepository.findByMemberId(userId)).thenReturn(couple)
         `when`(memberRepository.findById(coupleUserId)).thenReturn(Optional.of(coupleUser))
 
         //when

@@ -47,7 +47,7 @@ class CoupleFacade(
     }
 
     fun nickName(customUserDetails: CustomUserDetails) : NicknameResponse {
-        return coupleInfoService.nickName(customUserDetails.getId())
+        return coupleInfoService.getNickName(customUserDetails.getId())
     }
 
     fun statusMessage(customUserDetails: CustomUserDetails): StatusMessageResponse {

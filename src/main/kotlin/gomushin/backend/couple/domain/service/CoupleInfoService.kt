@@ -1,12 +1,13 @@
 package gomushin.backend.couple.domain.service
 
 import gomushin.backend.core.infrastructure.exception.BadRequestException
-import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.repository.CoupleRepository
 import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.couple.dto.response.NicknameResponse
+import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.repository.MemberRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 import java.time.Period
 import java.time.temporal.ChronoUnit
@@ -16,8 +17,9 @@ class CoupleInfoService(
         private val coupleRepository: CoupleRepository,
         private val memberRepository: MemberRepository
 ) {
+    @Transactional(readOnly = true)
     fun getGrade(id: Long): Int {
-        val couple = getCouple(id)
+        val couple = coupleRepository.findByMemberId(id)
                 ?: throw BadRequestException("saranggun.couple.not-connected")
         val militaryStartDate = couple.militaryStartDate ?: throw BadRequestException("saranggun.couple.not-defined-militaryStartDate")
         val today = LocalDate.now()
@@ -36,14 +38,16 @@ class CoupleInfoService(
         }
     }
 
-    fun getCouple(id : Long): Couple? {
-        return coupleRepository.findByInvitorId(id)
-                ?: coupleRepository.findByInviteeId(id)
+    @Transactional(readOnly = true)
+    fun checkCouple(id: Long): Boolean {
+        return memberRepository.findById(id)
+            .orElseThrow{ BadRequestException("sarangggun.member.not-exist-member") }
+            .isCouple
     }
 
-    fun checkCouple(id: Long): Boolean = getCouple(id) != null
+    @Transactional(readOnly = true)
     fun getDday(id: Long): DdayResponse {
-        val couple = getCouple(id)
+        val couple = coupleRepository.findByMemberId(id)
                 ?: throw BadRequestException("saranggun.couple.not-connected")
         val today = LocalDate.now()
         val sinceLove: Int? = couple.relationshipStartDate?.let { startLove ->
@@ -62,29 +66,31 @@ class CoupleInfoService(
         return ChronoUnit.DAYS.between(day1, day2).toInt()
     }
 
-    fun nickName(id: Long): NicknameResponse {
+    @Transactional(readOnly = true)
+    fun getNickName(id: Long): NicknameResponse {
         val userMember = memberRepository.findById(id).orElseThrow {
             BadRequestException("saranggun.member.not-found")
         }
 
-        val couple = getCouple(id) ?: throw BadRequestException("saranggun.couple.not-connected")
-        val coupleMemberId = if (couple.invitorId == id) couple.inviteeId else couple.invitorId
-
-        val coupleMember = memberRepository.findById(coupleMemberId).orElseThrow {
-            BadRequestException("sarangggun.couple.not-exist-couple")
-        }
+        val coupleMember = findCoupleMember(id)
 
         return NicknameResponse.of(userMember.nickname, coupleMember.nickname)
     }
 
+    @Transactional(readOnly = true)
     fun getStatusMessage(id: Long): String? {
-        val couple = getCouple(id) ?: throw BadRequestException("saranggun.couple.not-connected")
+        val coupleMember = findCoupleMember(id)
+        return coupleMember.statusMessage
+    }
+
+    private fun findCoupleMember(id : Long): Member {
+        val couple = coupleRepository.findByMemberId(id) ?: throw BadRequestException("saranggun.couple.not-connected")
         val coupleMemberId = if (couple.invitorId == id) couple.inviteeId else couple.invitorId
 
         val coupleMember = memberRepository.findById(coupleMemberId).orElseThrow {
             BadRequestException("sarangggun.couple.not-exist-couple")
         }
-        return coupleMember.statusMessage
+        return coupleMember
     }
 
 }
