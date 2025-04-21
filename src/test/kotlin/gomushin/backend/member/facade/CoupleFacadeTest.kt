@@ -118,9 +118,9 @@ class CoupleFacadeTest {
     @DisplayName("닉네임 조회 - 정상응답")
     @Test
     fun nickName(){
-        `when`(coupleInfoService.nickName(customUserDetails.getId())).thenReturn(NicknameResponse("김영록", "김영록 여친"))
+        `when`(coupleInfoService.getNickName(customUserDetails.getId())).thenReturn(NicknameResponse("김영록", "김영록 여친"))
         val result = coupleFacade.nickName(customUserDetails)
-        verify(coupleInfoService).nickName(1L)
+        verify(coupleInfoService).getNickName(1L)
         assertEquals("김영록", result.userNickname)
         assertEquals("김영록 여친", result.coupleNickname)
     }
