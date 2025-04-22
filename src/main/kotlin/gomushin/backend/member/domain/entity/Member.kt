@@ -42,6 +42,12 @@ class Member(
     @Column(name = "is_couple", nullable = false)
     var isCouple: Boolean = false,
 
+    @Column(name = "emotion")
+    var emotion: String = "",
+
+    @Column(name = "fcm_token", nullable = false)
+    var fcmToken: String = "",
+
     ) : BaseEntity() {
     companion object {
         fun create(
@@ -49,7 +55,7 @@ class Member(
             nickname: String?,
             email: String,
             profileImageUrl: String?,
-            provider: Provider
+            provider: Provider,
         ): Member {
             return Member(
                 name = name,
@@ -59,6 +65,10 @@ class Member(
                 provider = provider,
             )
         }
+    }
+
+    fun updateFcmToken(fcmToken: String) {
+        this.fcmToken = fcmToken
     }
 
     fun updateCoupleStatus() {
