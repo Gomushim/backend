@@ -1,6 +1,7 @@
 package gomushin.backend.couple.facade
 
 import gomushin.backend.core.CustomUserDetails
+import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.couple.domain.service.CoupleConnectService
 import gomushin.backend.couple.dto.request.CoupleAnniversaryRequest
 import gomushin.backend.couple.domain.service.CoupleInfoService
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component
 @Component
 class CoupleFacade(
     private val coupleConnectService: CoupleConnectService,
+    private val anniversaryService: AnniversaryService
     private val coupleInfoService: CoupleInfoService
 ) {
 
@@ -28,7 +30,7 @@ class CoupleFacade(
     fun registerAnniversary(
         customUserDetails: CustomUserDetails,
         request: CoupleAnniversaryRequest
-    ) = coupleConnectService.registerAnniversary(
+    ) = anniversaryService.registerAnniversary(
         customUserDetails.getId(),
         request
     )

@@ -2,14 +2,12 @@ package gomushin.backend.couple.domain.service
 
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.couple.domain.entity.Couple
-import gomushin.backend.couple.dto.request.CoupleAnniversaryRequest
 import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.member.util.CoupleCodeGeneratorUtil
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
-import java.time.LocalDate
 
 @Service
 class CoupleConnectService(
@@ -65,27 +63,6 @@ class CoupleConnectService(
     fun updateCoupleStatus(userId: Long) {
         val member = memberService.getById(userId)
         member.updateCoupleStatus()
-    }
-
-    @Transactional
-    fun registerAnniversary(
-        userId: Long,
-        request: CoupleAnniversaryRequest
-    ) {
-        val couple = coupleService.getById(request.coupleId)
-        if (!checkUserInCouple(userId, couple)) {
-            throw BadRequestException("sarangggun.couple.not-in-couple")
-        }
-        couple.updateAnniversary(
-            relationshipStartDate = request.relationshipStartDate,
-            militaryStartDate = request.militaryStartDate,
-            militaryEndDate = request.militaryEndDate,
-        )
-    }
-
-    private fun checkUserInCouple(userId: Long, couple: Couple): Boolean {
-        val member = memberService.getById(userId)
-        return member.id == couple.invitorId || member.id == couple.inviteeId
     }
 
 
