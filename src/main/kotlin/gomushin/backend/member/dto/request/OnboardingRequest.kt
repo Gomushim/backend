@@ -9,4 +9,10 @@ data class OnboardingRequest(
 
     @Schema(description = "생일", example = "2000-01-01")
     val birthDate: LocalDate,
+
+    @Schema(description = "FCM 토큰")
+    val fcmToken: String,
+
+    @Schema(description = "알림 설정 여부", example = "false")
+    val isNotification: Boolean,
 )
