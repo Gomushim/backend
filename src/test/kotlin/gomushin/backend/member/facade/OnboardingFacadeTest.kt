@@ -1,5 +1,6 @@
 package gomushin.backend.member.facade
 
+import gomushin.backend.member.domain.service.NotificationService
 import gomushin.backend.member.domain.service.OnboardingService
 import gomushin.backend.member.dto.request.OnboardingRequest
 import org.junit.jupiter.api.DisplayName
@@ -16,6 +17,9 @@ class OnboardingFacadeTest {
 
     @Mock
     private lateinit var onboardingService: OnboardingService
+
+    @Mock
+    private lateinit var notificationService: NotificationService
 
     @InjectMocks
     private lateinit var onboardingFacade: OnboardingFacade
