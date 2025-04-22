@@ -1,6 +1,7 @@
 package gomushin.backend.couple.domain.entity
 
 import gomushin.backend.core.infrastructure.jpa.shared.BaseEntity
+import gomushin.backend.couple.domain.value.Military
 import jakarta.persistence.*
 import java.time.LocalDate
 
@@ -26,7 +27,11 @@ class Couple(
     @Column(name = "military_end_date")
     var militaryEndDate: LocalDate? = null,
 
-): BaseEntity() {
+    @Column(name = "army")
+    @Enumerated(EnumType.STRING)
+    var military: Military? = null,
+
+    ) : BaseEntity() {
     companion object {
         fun of(
             invitorId: Long,
@@ -39,6 +44,12 @@ class Couple(
         }
     }
 
+    fun updateMilitary(
+        military: String
+    ) {
+        this.military = Military.getByName(military)
+    }
+
     fun updateAnniversary(
         relationshipStartDate: LocalDate?,
         militaryStartDate: LocalDate?,
@@ -48,4 +59,7 @@ class Couple(
         this.militaryStartDate = militaryStartDate ?: this.militaryStartDate
         this.militaryEndDate = militaryEndDate ?: this.militaryEndDate
     }
+
+    fun containsUser(userId: Long): Boolean =
+        userId == invitorId || userId == inviteeId
 }
