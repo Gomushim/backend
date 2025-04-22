@@ -41,7 +41,9 @@ class OnboardingServiceTest {
 
         val onboardingRequest = OnboardingRequest(
             nickname = "새로운 닉네임",
-            birthDate = LocalDate.of(2000, 1, 1)
+            birthDate = LocalDate.of(2000, 1, 1),
+            fcmToken = "fcmToken",
+            isNotification = false,
         )
 
         `when`(memberRepository.findById(memberId)).thenReturn(Optional.of(existingMember))
