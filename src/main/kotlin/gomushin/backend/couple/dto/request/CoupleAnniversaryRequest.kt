@@ -15,4 +15,7 @@ data class CoupleAnniversaryRequest(
 
     @Schema(description = "전역일", example = "2024-10-28")
     val militaryEndDate: LocalDate,
+
+    @Schema(description = "부대", example = "ARMY | NAVY | AIR_FORCE | MARINE 중 택 1 ")
+    val military: String,
 )
