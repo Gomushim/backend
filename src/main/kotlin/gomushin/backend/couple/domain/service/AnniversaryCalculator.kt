@@ -1,5 +1,6 @@
 package gomushin.backend.couple.domain.service
 
+import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.couple.domain.entity.Anniversary
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -13,6 +14,9 @@ class AnniversaryCalculator {
         militaryEndDate: LocalDate,
         anniversaryList: MutableList<Anniversary>,
     ): List<Anniversary> {
+
+        if (militaryStartDate.isAfter(militaryEndDate)) throw BadRequestException("sarangggun.military.invalid-date")
+
         calculateAnniversariesBetweenMilitaryStartDateAndMilitaryEndDate(
             coupleId,
             relationShipStartDate,

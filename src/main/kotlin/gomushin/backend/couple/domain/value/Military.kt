@@ -11,7 +11,7 @@ enum class Military {
     companion object {
         fun getByName(name: String): Military {
             return entries.firstOrNull { it.name == name }
-                ?: throw BadRequestException("sarangggun.miliatry.not-exist-military")
+                ?: throw BadRequestException("sarangggun.military.not-exist-military")
         }
     }
 }
