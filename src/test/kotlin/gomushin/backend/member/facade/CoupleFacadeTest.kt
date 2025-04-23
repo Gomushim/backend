@@ -2,6 +2,7 @@ package gomushin.backend.member.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.couple.domain.entity.Couple
+import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.couple.domain.service.CoupleConnectService
 import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.couple.dto.response.DdayResponse
@@ -30,6 +31,9 @@ class CoupleFacadeTest {
 
     @Mock
     private lateinit var coupleConnectService: CoupleConnectService
+
+    @Mock
+    private lateinit var anniversaryService: AnniversaryService
 
     @InjectMocks
     private lateinit var coupleFacade: CoupleFacade
