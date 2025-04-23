@@ -5,6 +5,7 @@ import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.member.domain.value.Provider
 import gomushin.backend.member.domain.value.Role
+import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -68,5 +69,16 @@ class MemberInfoFacadeTest {
         //then
         verify(memberService).getById(1L)
         assertEquals(member.statusMessage, result.statusMessage)
+    }
+
+    @DisplayName("이모지 및 상태 메시지 업데이트")
+    @Test
+    fun updateMyEmotionAndStatusMessage() {
+        //given
+        val updateMyEmotionAndStatusMessageRequest = UpdateMyEmotionAndStatusMessageRequest(1, "좋은 날씨야")
+        //when
+        val result = memberInfoFacade.updateMyEmotionAndStatusMessage(customUserDetails, updateMyEmotionAndStatusMessageRequest)
+        //then
+        verify(memberService).updateMyEmotionAndStatusMessage(1L, updateMyEmotionAndStatusMessageRequest)
     }
 }
