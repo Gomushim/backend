@@ -20,7 +20,8 @@ class ScheduleService(
                 it.startDate = upsertScheduleRequest.startDate
                 it.endDate = upsertScheduleRequest.endDate
                 it.content = upsertScheduleRequest.content
-                it.content = upsertScheduleRequest.content
+                it.fatigue = upsertScheduleRequest.fatigue
+                it.isAllDay = upsertScheduleRequest.isAllDay
             }
         } ?: save(upsertScheduleRequest.toEntity(coupleId, userId))
     }
