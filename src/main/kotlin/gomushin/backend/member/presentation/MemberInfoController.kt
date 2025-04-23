@@ -2,18 +2,26 @@ package gomushin.backend.member.presentation
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.response.ApiResponse
+import gomushin.backend.core.infrastructure.exception.BadRequestException
+import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
 import gomushin.backend.member.facade.MemberInfoFacade
 import gomushin.backend.member.dto.response.MyInfoResponse
 import gomushin.backend.member.dto.response.MyStatusMessageResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.validation.BindingResult
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
+@Validated
 @Tag(name = "회원 정보", description = "MemberController")
 class MemberInfoController(
     private val memberInfoFacade: MemberInfoFacade,
@@ -37,5 +45,16 @@ class MemberInfoController(
     ): ApiResponse<MyStatusMessageResponse> {
         val statusMessage = memberInfoFacade.getMyStatusMessage(customUserDetails)
         return ApiResponse.success(statusMessage)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping(ApiPath.UPDATE_MY_EMOTION_AND_STATUS_MESSAGE)
+    @Operation(summary = "내 상태 이모지 및 상태 메시지 저장", description = "updateMyEmotionAndStatusMessage")
+    fun updateMyEmotionAndStatusMessage(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @Valid @RequestBody updateMyEmotionAndStatusMessageRequest: UpdateMyEmotionAndStatusMessageRequest
+    ): ApiResponse<Boolean> {
+        memberInfoFacade.updateMyEmotionAndStatusMessage(customUserDetails, updateMyEmotionAndStatusMessageRequest)
+        return ApiResponse.success(true)
     }
 }

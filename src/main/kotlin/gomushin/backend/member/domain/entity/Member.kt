@@ -43,7 +43,7 @@ class Member(
     var isCouple: Boolean = false,
 
     @Column(name = "emotion")
-    var emotion: String = "",
+    var emotion : Int? = null,
 
     @Column(name = "fcm_token", nullable = false)
     var fcmToken: String = "",
@@ -73,5 +73,13 @@ class Member(
 
     fun updateCoupleStatus() {
         this.isCouple = !this.isCouple
+    }
+
+    fun updateEmotion(emotion: Int) {
+        this.emotion = emotion
+    }
+
+    fun updateStatusMessage(statusMessage: String) {
+        this.statusMessage = statusMessage
     }
 }

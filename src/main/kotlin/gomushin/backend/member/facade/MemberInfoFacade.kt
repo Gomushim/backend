@@ -2,6 +2,7 @@ package gomushin.backend.member.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.member.domain.service.MemberService
+import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
 import gomushin.backend.member.dto.response.MyInfoResponse
 import gomushin.backend.member.dto.response.MyStatusMessageResponse
 import org.springframework.stereotype.Component
@@ -19,4 +20,7 @@ class MemberInfoFacade(
         val member = memberService.getById(customUserDetails.getId())
         return MyStatusMessageResponse.of(member)
     }
+
+    fun updateMyEmotionAndStatusMessage(customUserDetails: CustomUserDetails, updateMyEmotionAndStatusMessageRequest: UpdateMyEmotionAndStatusMessageRequest)
+        = memberService.updateMyEmotionAndStatusMessage(customUserDetails.getId(), updateMyEmotionAndStatusMessageRequest)
 }
