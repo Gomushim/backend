@@ -25,4 +25,14 @@ class CoupleService(
     fun save(couple: Couple): Couple {
         return coupleRepository.save(couple)
     }
+
+    @Transactional
+    fun getByMemberId(memberId: Long): Couple {
+        return findByMemberId(memberId) ?: throw BadRequestException("sarangggun.couple.not-found")
+    }
+
+    @Transactional
+    fun findByMemberId(memberId: Long): Couple? {
+        return coupleRepository.findByMemberId(memberId)
+    }
 }
