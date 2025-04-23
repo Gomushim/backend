@@ -37,6 +37,7 @@ class MemberInfoFacadeTest {
             profileImageUrl = null,
             provider = Provider.KAKAO,
             role = Role.MEMBER,
+            statusMessage = "상태 메시지"
         )
 
         customUserDetails = mock(CustomUserDetails::class.java)
@@ -55,5 +56,17 @@ class MemberInfoFacadeTest {
         // then
         verify(memberService).getById(1L)
         assertEquals(member.nickname, result.nickname)
+    }
+
+    @DisplayName("내 상태 메시지 조회")
+    @Test
+    fun getMyStatusMessage() {
+        //given
+        `when`(memberService.getById(customUserDetails.getId())).thenReturn(member)
+        //when
+        val result = memberInfoFacade.getMyStatusMessage(customUserDetails)
+        //then
+        verify(memberService).getById(1L)
+        assertEquals(member.statusMessage, result.statusMessage)
     }
 }
