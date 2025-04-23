@@ -1,5 +1,6 @@
 package gomushin.backend.schedule.domain.entity
 
+import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.core.infrastructure.jpa.shared.BaseEntity
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -32,6 +33,15 @@ class Schedule(
     @Column(name = "fatigue", nullable = false)
     var fatigue: String,
 ) : BaseEntity() {
+
+    @PrePersist
+    @PreUpdate
+    fun validate() {
+        if (startDate.isAfter(endDate)) {
+            throw BadRequestException("sarangggun.schedule.invalid-date")
+        }
+    }
+
     companion object {
         fun of(
             coupleId: Long,
