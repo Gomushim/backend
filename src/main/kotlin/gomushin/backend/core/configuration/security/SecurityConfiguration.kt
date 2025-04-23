@@ -5,6 +5,7 @@ import gomushin.backend.core.jwt.JwtTokenProvider
 import gomushin.backend.core.oauth.handler.CustomSuccessHandler
 import gomushin.backend.core.oauth.service.CustomOAuth2UserService
 import gomushin.backend.core.service.CustomUserDetailsService
+import gomushin.backend.couple.domain.repository.CoupleRepository
 import gomushin.backend.member.domain.repository.MemberRepository
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -26,7 +27,7 @@ class SecurityConfiguration(
     @Bean
     fun filterChain(
         http: HttpSecurity, corsConfiguration: CustomCorsConfiguration,
-        customOAuth2UserService: CustomOAuth2UserService
+        customOAuth2UserService: CustomOAuth2UserService, coupleRepository: CoupleRepository
     ): SecurityFilterChain {
         http
             .csrf {
@@ -77,6 +78,7 @@ class SecurityConfiguration(
                     jwtTokenProvider,
                     CustomUserDetailsService(
                         memberRepository,
+                        coupleRepository,
                     )
                 ),
                 UsernamePasswordAuthenticationFilter::

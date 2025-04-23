@@ -1,5 +1,8 @@
 package gomushin.backend.core
 
+import gomushin.backend.core.infrastructure.exception.BadRequestException
+import gomushin.backend.couple.domain.entity.Couple
+import gomushin.backend.couple.domain.repository.CoupleRepository
 import gomushin.backend.member.domain.entity.Member
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -7,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails
 
 class CustomUserDetails(
     private val member: Member,
+    private val coupleRepository: CoupleRepository,
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return mutableListOf(SimpleGrantedAuthority("ROLE_${member.role.name}"))
@@ -37,6 +41,11 @@ class CustomUserDetails(
     }
 
     fun getId(): Long {
-        return member.id ?: throw IllegalStateException("존재하지 않는 멤버입니다.")
+        return member.id
+    }
+
+    fun getCouple(): Couple {
+        return coupleRepository.findByMemberId(getId())
+            ?: throw BadRequestException("saranggun.couple.not-connected")
     }
 }
