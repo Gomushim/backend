@@ -4,6 +4,7 @@ import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.response.ApiResponse
 import gomushin.backend.member.facade.MemberInfoFacade
 import gomushin.backend.member.dto.response.MyInfoResponse
+import gomushin.backend.member.dto.response.MyStatusMessageResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
@@ -26,5 +27,15 @@ class MemberInfoController(
     ): ApiResponse<MyInfoResponse> {
         val member = memberInfoFacade.getMemberInfo(customUserDetails)
         return ApiResponse.success(member)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(ApiPath.MY_STATUS_MESSAGE)
+    @Operation(summary = "내 상태 메시지 조회", description = "getMyStatusMessage")
+    fun getMyStatusMessage(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails
+    ): ApiResponse<MyStatusMessageResponse> {
+        val statusMessage = memberInfoFacade.getMyStatusMessage(customUserDetails)
+        return ApiResponse.success(statusMessage)
     }
 }
