@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@Validated
 @Tag(name = "회원 정보", description = "MemberController")
 class MemberInfoController(
     private val memberInfoFacade: MemberInfoFacade,
@@ -52,7 +51,7 @@ class MemberInfoController(
     @Operation(summary = "내 상태 이모지 및 상태 메시지 저장", description = "updateMyEmotionAndStatusMessage")
     fun updateMyEmotionAndStatusMessage(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
-        @Valid @RequestBody updateMyEmotionAndStatusMessageRequest: UpdateMyEmotionAndStatusMessageRequest
+        @RequestBody updateMyEmotionAndStatusMessageRequest: UpdateMyEmotionAndStatusMessageRequest
     ): ApiResponse<Boolean> {
         memberInfoFacade.updateMyEmotionAndStatusMessage(customUserDetails, updateMyEmotionAndStatusMessageRequest)
         return ApiResponse.success(true)
