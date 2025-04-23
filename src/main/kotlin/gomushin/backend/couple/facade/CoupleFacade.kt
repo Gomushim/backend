@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component
 @Component
 class CoupleFacade(
     private val coupleConnectService: CoupleConnectService,
-    private val anniversaryService: AnniversaryService
-    private val coupleInfoService: CoupleInfoService
+    private val anniversaryService: AnniversaryService,
+    private val coupleInfoService: CoupleInfoService,
 ) {
 
     fun requestCoupleCodeGeneration(customUserDetails: CustomUserDetails) =
