@@ -24,7 +24,7 @@ class AnniversaryCalculator {
             militaryEndDate,
             anniversaryList
         )
-        calculateHundredAnniversaryBetweenMilitaryStartDateAndMilitaryEndDate(
+        calculateHundredsAnniversariesBetweenMilitaryStartDateAndMilitaryEndDate(
             coupleId,
             relationShipStartDate,
             militaryStartDate,
@@ -57,7 +57,7 @@ class AnniversaryCalculator {
             if (anniversaryDate.isAfter(militaryEndDate)) {
                 break
             } else {
-                val title = "$anniversaryYear 주년"
+                val title = "${anniversaryYear}주년"
                 val anniversary = Anniversary.create(coupleId, title, anniversaryDate)
                 anniversaryList.add(anniversary)
                 anniversaryYear++
@@ -65,7 +65,7 @@ class AnniversaryCalculator {
         }
     }
 
-    private fun calculateHundredAnniversaryBetweenMilitaryStartDateAndMilitaryEndDate(
+    private fun calculateHundredsAnniversariesBetweenMilitaryStartDateAndMilitaryEndDate(
         coupleId: Long,
         relationShipStartDate: LocalDate,
         militaryStartDate: LocalDate,
