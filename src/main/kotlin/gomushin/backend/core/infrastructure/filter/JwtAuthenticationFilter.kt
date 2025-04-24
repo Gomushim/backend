@@ -17,9 +17,9 @@ class JwtAuthenticationFilter(
 ) : OncePerRequestFilter() {
 
     companion object {
-        private val AT_IN_COOKIE = "access_token"
-        private val AUTHORIZATION_HEADER = "Authorization"
-        private val BEARER_PREFIX = "Bearer "
+        private const val AT_IN_COOKIE = "access_token"
+        private const val AUTHORIZATION_HEADER = "Authorization"
+        private const val BEARER_PREFIX = "Bearer "
     }
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
