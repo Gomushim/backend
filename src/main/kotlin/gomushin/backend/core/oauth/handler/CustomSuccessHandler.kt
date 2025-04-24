@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.stereotype.Component
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component
 class CustomSuccessHandler(
     private val jwtTokenProvider: JwtTokenProvider,
     private val memberRepository: MemberRepository,
+    @Value("\${redirect-url}") private val redirectUrl: String
 ) : SimpleUrlAuthenticationSuccessHandler() {
 
     @Throws(IOException::class, ServletException::class)
@@ -40,8 +42,7 @@ class CustomSuccessHandler(
         }
 
         response!!.addCookie(createCookie("access_token", accessToken))
-//        response.sendRedirect("https://frontend-sarang.vercel.app")
-        response.sendRedirect("http://localhost:5173")
+        response.sendRedirect(redirectUrl)
     }
 
     private fun createCookie(key: String, value: String): Cookie {

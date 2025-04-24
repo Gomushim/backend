@@ -16,6 +16,12 @@ class JwtAuthenticationFilter(
     private val customUserDetailsService: CustomUserDetailsService
 ) : OncePerRequestFilter() {
 
+    companion object {
+        private val AT_IN_COOKIE = "access_token"
+        private val AUTHORIZATION_HEADER = "Authorization"
+        private val BEARER_PREFIX = "Bearer "
+    }
+
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         val excludedPaths = listOf(
             "/v1/auth", "/v1/oauth", "/swagger", "/v3/api-docs", "/api-docs"
@@ -31,11 +37,15 @@ class JwtAuthenticationFilter(
         filterChain: FilterChain
     ) {
 
-        val accessToken = getCookieValue(request, "access_token")
+        val accessToken = getCookieValue(request, AT_IN_COOKIE) ?: getAccessTokenFromHeader(request)
 
         when {
             accessToken != null && tokenProvider.validateToken(accessToken) -> {
                 applyAuthentication(accessToken)
+            }
+
+            else -> {
+                SecurityContextHolder.clearContext()
             }
         }
 
@@ -56,5 +66,14 @@ class JwtAuthenticationFilter(
 
     private fun getCookieValue(request: HttpServletRequest, name: String): String? {
         return request.cookies?.firstOrNull { it.name == name }?.value
+    }
+
+    private fun getAccessTokenFromHeader(request: HttpServletRequest): String? {
+        val authorizationHeader = request.getHeader(AUTHORIZATION_HEADER)
+        return if (authorizationHeader != null && authorizationHeader.startsWith(BEARER_PREFIX)) {
+            authorizationHeader.substring(7)
+        } else {
+            null
+        }
     }
 }

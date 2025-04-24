@@ -6,6 +6,7 @@ import gomushin.backend.core.oauth.handler.CustomSuccessHandler
 import gomushin.backend.core.oauth.service.CustomOAuth2UserService
 import gomushin.backend.core.service.CustomUserDetailsService
 import gomushin.backend.member.domain.repository.MemberRepository
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 class SecurityConfiguration(
     private val jwtTokenProvider: JwtTokenProvider,
     private val memberRepository: MemberRepository,
+    @Value("\${redirect-url}") private val redirectUrl: String
 ) {
 
     @Bean
@@ -50,7 +52,7 @@ class SecurityConfiguration(
                         userInfoEndpointConfigurer
                             .userService(customOAuth2UserService)
                     }
-                    .successHandler(CustomSuccessHandler(jwtTokenProvider, memberRepository))
+                    .successHandler(CustomSuccessHandler(jwtTokenProvider, memberRepository, redirectUrl))
             }
             .authorizeHttpRequests {
                 it.requestMatchers(
@@ -74,7 +76,7 @@ class SecurityConfiguration(
                 JwtAuthenticationFilter(
                     jwtTokenProvider,
                     CustomUserDetailsService(
-                        memberRepository
+                        memberRepository,
                     )
                 ),
                 UsernamePasswordAuthenticationFilter::
