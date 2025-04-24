@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class SwaggerConfiguration(
-    @Value("\${springdoc.api-docs.request-url}")
+    @Value("\${swagger.request-url}")
     private val requestUrl: String,
 ) {
 
