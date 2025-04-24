@@ -17,7 +17,7 @@ class CustomCorsConfiguration {
                 "http://localhost:5173",
                 "http://localhost:8080",
                 "https://frontend-sarang.vercel.app",
-                "https://sarang-backend.o-r.kr"
+                "http://sarang-backend.o-r.kr"
             )
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
         configuration.allowedHeaders = listOf("*")
