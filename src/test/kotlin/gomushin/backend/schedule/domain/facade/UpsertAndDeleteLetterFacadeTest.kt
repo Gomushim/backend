@@ -2,9 +2,12 @@ package gomushin.backend.schedule.domain.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.service.S3Service
+import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.schedule.domain.entity.Letter
+import gomushin.backend.schedule.domain.entity.Schedule
 import gomushin.backend.schedule.domain.service.LetterService
 import gomushin.backend.schedule.domain.service.PictureService
+import gomushin.backend.schedule.domain.service.ScheduleService
 import gomushin.backend.schedule.dto.UpsertLetterRequest
 import gomushin.backend.schedule.facade.UpsertAndDeleteLetterFacade
 import org.junit.jupiter.api.DisplayName
@@ -29,6 +32,9 @@ class UpsertAndDeleteLetterFacadeTest {
     @Mock
     private lateinit var pictureService: PictureService
 
+    @Mock
+    private lateinit var scheduleService: ScheduleService
+
     @InjectMocks
     private lateinit var upsertAndDeleteLetterFacade: UpsertAndDeleteLetterFacade
 
@@ -47,12 +53,17 @@ class UpsertAndDeleteLetterFacadeTest {
                 scheduleId = 1L
             )
             val pictures = listOf(mock(MultipartFile::class.java))
-
+            val schedule = mock(Schedule::class.java)
             val letter = mock(Letter::class.java)
+            val couple = mock(Couple::class.java)
 
             // when
             `when`(letter.id).thenReturn(1L)
             `when`(customUserDetails.getId()).thenReturn(1L)
+            `when`(scheduleService.getById(upsertLetterRequest.scheduleId)).thenReturn(schedule)
+            `when`(customUserDetails.getCouple()).thenReturn(couple)
+            `when`(customUserDetails.getCouple().id).thenReturn(1L)
+            `when`(schedule.coupleId).thenReturn(1L)
             `when`(letterService.upsert(1L, upsertLetterRequest)).thenReturn(letter)
             `when`(s3Service.uploadFile(pictures[0])).thenReturn("http://example.com/test.jpg")
             doNothing().`when`(pictureService).upsert(1L, listOf("http://example.com/test.jpg"))
@@ -77,9 +88,15 @@ class UpsertAndDeleteLetterFacadeTest {
             )
             val pictures: List<MultipartFile>? = null
             val letter = mock(Letter::class.java)
+            val couple = mock(Couple::class.java)
+            val schedule = mock(Schedule::class.java)
 
             // when
             `when`(customUserDetails.getId()).thenReturn(1L)
+            `when`(scheduleService.getById(upsertLetterRequest.scheduleId)).thenReturn(schedule)
+            `when`(customUserDetails.getCouple()).thenReturn(couple)
+            `when`(customUserDetails.getCouple().id).thenReturn(1L)
+            `when`(schedule.coupleId).thenReturn(1L)
             `when`(letterService.upsert(1L, upsertLetterRequest)).thenReturn(letter)
             upsertAndDeleteLetterFacade.upsert(customUserDetails, upsertLetterRequest, pictures)
 
