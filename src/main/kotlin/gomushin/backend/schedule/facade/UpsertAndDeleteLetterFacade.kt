@@ -64,6 +64,12 @@ class UpsertAndDeleteLetterFacade(
             throw BadRequestException("sarangggun.letter.invalid-schedule")
         }
 
+        pictureService.findAllByLetterId(letter.id)
+            .takeIf { it.isNotEmpty() }
+            ?.forEach { picture ->
+                s3Service.deleteFile(picture.pictureUrl)
+            }
+
         letterService.delete(letterId)
         pictureService.deleteAllByLetterId(letterId)
     }

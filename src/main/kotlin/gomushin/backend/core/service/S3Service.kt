@@ -33,6 +33,15 @@ class S3Service(
         return getFileUrl(fileName)
     }
 
+    @Transactional
+    fun deleteFile(fileName: String) {
+        s3Client.deleteObject { it.bucket(bucket).key(fileName) }
+    }
+
+    private fun getFileName(fileUrl: String): String {
+        return fileUrl.substringAfterLast("/")
+    }
+
     private fun getFileUrl(fileName: String): String {
         val normalizedEndpoint = endpoint.removeSuffix("/")
         return "$normalizedEndpoint/$bucket/$fileName"

@@ -21,6 +21,11 @@ class PictureService(
         return pictureRepository.findAllByPictureUrlIn(urls)
     }
 
+    @Transactional(readOnly = true)
+    fun findAllByLetterId(letterId: Long): List<Picture> {
+        return pictureRepository.findAllByLetterId(letterId)
+    }
+
     @Transactional
     fun saveAll(pictures: List<Picture>): List<Picture> {
         return pictureRepository.saveAll(pictures)
