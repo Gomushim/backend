@@ -20,7 +20,7 @@ class CustomCorsConfiguration {
                 "http://sarang-backend.o-r.kr"
             )
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
-        configuration.allowedHeaders = listOf("*")
+        configuration.allowedHeaders = listOf("Set-Cookie", "Authorization", "Content-Type")
         configuration.allowCredentials = true
         configuration.maxAge = 3600
         val source = UrlBasedCorsConfigurationSource()

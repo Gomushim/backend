@@ -51,6 +51,7 @@ class CustomSuccessHandler(
         cookie.isHttpOnly = true
         cookie.secure = false //Todo : 밋업 할 때는 true로 변경하기
         cookie.maxAge = 1800
+        cookie.setAttribute("SameSite", "Lax")
         return cookie
     }
 
