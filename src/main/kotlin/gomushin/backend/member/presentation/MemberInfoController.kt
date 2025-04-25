@@ -2,6 +2,7 @@ package gomushin.backend.member.presentation
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.response.ApiResponse
+import gomushin.backend.member.dto.request.UpdateMyBirthdayRequest
 import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
 import gomushin.backend.member.dto.request.UpdateMyNickNameRequest
 import gomushin.backend.member.dto.response.MyEmotionResponse
@@ -73,6 +74,17 @@ class MemberInfoController(
         @RequestBody updateMyNickNameRequest: UpdateMyNickNameRequest
     ):ApiResponse<Boolean> {
         memberInfoFacade.updateMyNickname(customUserDetails, updateMyNickNameRequest)
+        return ApiResponse.success(true)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping(ApiPath.UPDATE_MY_BIRTHDAY)
+    @Operation(summary = "내 생일 수정", description = "updateMyBirthDate")
+    fun updateMyBirthDate(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @RequestBody updateMyBirthdayRequest : UpdateMyBirthdayRequest
+    ):ApiResponse<Boolean> {
+        memberInfoFacade.updateMyBirthday(customUserDetails, updateMyBirthdayRequest)
         return ApiResponse.success(true)
     }
 }

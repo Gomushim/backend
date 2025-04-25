@@ -86,4 +86,8 @@ class Member(
     fun updateNickname(nickname: String) {
         this.nickname = nickname
     }
+
+    fun updateBirthday(birthDate : LocalDate) {
+        this.birthDate = birthDate
+    }
 }

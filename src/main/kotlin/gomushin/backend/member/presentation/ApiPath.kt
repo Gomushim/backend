@@ -7,4 +7,5 @@ object ApiPath {
     const val UPDATE_MY_EMOTION_AND_STATUS_MESSAGE = "/v1/member/my-emotion-and-status-message"
     const val MY_EMOTION = "/v1/member/my-emotion"
     const val UPDATE_MY_NICKNAME = "/v1/member/my-nickname"
+    const val UPDATE_MY_BIRTHDAY = "/v1/member/my-birthday"
 }
