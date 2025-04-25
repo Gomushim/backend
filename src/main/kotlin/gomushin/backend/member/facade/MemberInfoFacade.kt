@@ -2,6 +2,7 @@ package gomushin.backend.member.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.member.domain.service.MemberService
+import gomushin.backend.member.dto.request.UpdateMyBirthdayRequest
 import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
 import gomushin.backend.member.dto.request.UpdateMyNickNameRequest
 import gomushin.backend.member.dto.response.MyEmotionResponse
@@ -33,4 +34,7 @@ class MemberInfoFacade(
 
     fun updateMyNickname(customUserDetails: CustomUserDetails, updateMyNickNameRequest: UpdateMyNickNameRequest)
         = memberService.updateMyNickname(customUserDetails.getId(), updateMyNickNameRequest)
+
+    fun updateMyBirthday(customUserDetails: CustomUserDetails, updateMyBirthdayRequest: UpdateMyBirthdayRequest)
+        = memberService.updateMyBirthDate(customUserDetails.getId(), updateMyBirthdayRequest)
 }
