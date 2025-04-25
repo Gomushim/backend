@@ -81,4 +81,16 @@ class MemberInfoFacadeTest {
         //then
         verify(memberService).updateMyEmotionAndStatusMessage(1L, updateMyEmotionAndStatusMessageRequest)
     }
+
+    @DisplayName("이모지 조회 테스트")
+    @Test
+    fun getMyEmotion() {
+        //given
+        `when`(memberService.getById(customUserDetails.getId())).thenReturn(member)
+        //when
+        val result = memberInfoFacade.getMemberEmotion(customUserDetails)
+        //then
+        verify(memberService).getById(1L)
+        assertEquals(member.emotion, result.emotion)
+    }
 }
