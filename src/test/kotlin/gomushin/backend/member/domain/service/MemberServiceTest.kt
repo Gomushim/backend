@@ -4,6 +4,7 @@ import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.repository.MemberRepository
 import gomushin.backend.member.domain.value.Provider
 import gomushin.backend.member.domain.value.Role
+import gomushin.backend.member.dto.request.UpdateMyBirthdayRequest
 import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
 import gomushin.backend.member.dto.request.UpdateMyNickNameRequest
 import org.junit.jupiter.api.DisplayName
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
+import java.time.LocalDate
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -98,5 +100,30 @@ class MemberServiceTest {
         val result = memberService.updateMyNickname(memberId, updateMyNickNameRequest)
         //then
         assertEquals(expectedMember.nickname, updateMyNickNameRequest.nickname)
+    }
+
+    @DisplayName("생년월일 수정 - 성공")
+    @Test
+    fun updateMyBirthDate() {
+        // given
+        val memberId = 1L
+        val expectedMember = Member(
+            id = 1L,
+            name = "테스트",
+            nickname = "테스트 닉네임",
+            email = "test@test.com",
+            birthDate = LocalDate.of(2001, 3, 27),
+            profileImageUrl = null,
+            provider = Provider.KAKAO,
+            role = Role.GUEST,
+            emotion = 1,
+            statusMessage = "상태 변경전",
+        )
+        val updateMyBirthdayRequest = UpdateMyBirthdayRequest(LocalDate.of(2001, 3, 30))
+        //when
+        `when`(memberRepository.findById(memberId)).thenReturn(Optional.of(expectedMember))
+        val result = memberService.updateMyBirthDate(memberId, updateMyBirthdayRequest)
+        //then
+        assertEquals(expectedMember.birthDate, updateMyBirthdayRequest.birthDate)
     }
 }

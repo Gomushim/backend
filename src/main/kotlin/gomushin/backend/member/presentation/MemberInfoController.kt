@@ -84,7 +84,7 @@ class MemberInfoController(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @RequestBody updateMyBirthdayRequest : UpdateMyBirthdayRequest
     ):ApiResponse<Boolean> {
-        memberInfoFacade.updateMyBirthday(customUserDetails, updateMyBirthdayRequest)
+        memberInfoFacade.updateMyBirthDate(customUserDetails, updateMyBirthdayRequest)
         return ApiResponse.success(true)
     }
 }

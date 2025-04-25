@@ -5,6 +5,7 @@ import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.member.domain.value.Provider
 import gomushin.backend.member.domain.value.Role
+import gomushin.backend.member.dto.request.UpdateMyBirthdayRequest
 import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
 import gomushin.backend.member.dto.request.UpdateMyNickNameRequest
 import org.junit.jupiter.api.BeforeEach
@@ -15,6 +16,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
+import java.time.LocalDate
 import kotlin.test.assertEquals
 
 @ExtendWith(MockitoExtension::class)
@@ -104,5 +106,16 @@ class MemberInfoFacadeTest {
         val result = memberInfoFacade.updateMyNickname(customUserDetails, updateMyNickNameRequest)
         //then
         verify(memberService).updateMyNickname(1L, updateMyNickNameRequest)
+    }
+
+    @DisplayName("생년월일 수정")
+    @Test
+    fun updateBirthDate() {
+        //given
+        val updateMyBirthdayRequest = UpdateMyBirthdayRequest(LocalDate.of(2001, 3, 30))
+        //when
+        val result = memberInfoFacade.updateMyBirthDate(customUserDetails, updateMyBirthdayRequest)
+        //then
+        verify(memberService).updateMyBirthDate(1L, updateMyBirthdayRequest)
     }
 }
