@@ -15,13 +15,14 @@ class CustomCorsConfiguration {
         configuration.allowedOrigins =
             listOf(
                 "http://localhost:5173",
+                "https://localhost:5173",
                 "http://localhost:8080",
                 "https://frontend-sarang.vercel.app",
-                "http://sarang-backend.o-r.kr"
             )
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
-        configuration.allowedHeaders = listOf("Set-Cookie", "Authorization", "Content-Type")
+        configuration.allowedHeaders = listOf("*")
         configuration.allowCredentials = true
+        configuration.exposedHeaders = listOf("Authorization", "Set-Cookie")
         configuration.maxAge = 3600
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
