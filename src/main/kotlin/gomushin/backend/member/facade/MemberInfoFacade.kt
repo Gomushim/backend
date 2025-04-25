@@ -35,6 +35,6 @@ class MemberInfoFacade(
     fun updateMyNickname(customUserDetails: CustomUserDetails, updateMyNickNameRequest: UpdateMyNickNameRequest)
         = memberService.updateMyNickname(customUserDetails.getId(), updateMyNickNameRequest)
 
-    fun updateMyBirthday(customUserDetails: CustomUserDetails, updateMyBirthdayRequest: UpdateMyBirthdayRequest)
+    fun updateMyBirthDate(customUserDetails: CustomUserDetails, updateMyBirthdayRequest: UpdateMyBirthdayRequest)
         = memberService.updateMyBirthDate(customUserDetails.getId(), updateMyBirthdayRequest)
 }
