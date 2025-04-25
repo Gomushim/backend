@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsUtils
 
 @Configuration
 @EnableWebSecurity
@@ -60,6 +61,8 @@ class SecurityConfiguration(
                     "/",
                     "/v1/auth/**",
                     "/v1/oauth/**",
+                    "/oauth2/**",
+                    "/oauth2/authorization/**",
                     "/swagger-ui.html",
                     "/swagger-ui/**",
                     "/v3/api-docs/**",
@@ -70,6 +73,7 @@ class SecurityConfiguration(
                     "/favicon.ico",
                     "/error"
                 ).permitAll()
+                it.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 it.requestMatchers("/v1/member/onboarding").hasRole("GUEST")
                 it.anyRequest().hasRole("MEMBER")
             }
