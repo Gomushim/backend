@@ -4,6 +4,7 @@ import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.response.ApiResponse
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
+import gomushin.backend.member.dto.response.MyEmotionResponse
 import gomushin.backend.member.facade.MemberInfoFacade
 import gomushin.backend.member.dto.response.MyInfoResponse
 import gomushin.backend.member.dto.response.MyStatusMessageResponse
@@ -55,5 +56,15 @@ class MemberInfoController(
     ): ApiResponse<Boolean> {
         memberInfoFacade.updateMyEmotionAndStatusMessage(customUserDetails, updateMyEmotionAndStatusMessageRequest)
         return ApiResponse.success(true)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(ApiPath.MY_EMOTION)
+    @Operation(summary = "내 상태 이모지 조회", description = "getMyEmotion")
+    fun getMyEmotion(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails
+    ):ApiResponse<MyEmotionResponse> {
+        val emotion = memberInfoFacade.getMemberEmotion(customUserDetails)
+        return ApiResponse.success(emotion)
     }
 }
