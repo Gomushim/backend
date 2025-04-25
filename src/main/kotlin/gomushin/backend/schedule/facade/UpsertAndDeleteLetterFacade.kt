@@ -18,7 +18,7 @@ class UpsertAndDeleteLetterFacade(
     private val pictureService: PictureService,
     private val scheduleService: ScheduleService,
 ) {
-
+    // TODO: 이벤트 드리븐하게 수정
     @Transactional
     fun upsert(
         customUserDetails: CustomUserDetails,

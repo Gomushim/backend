@@ -2,6 +2,7 @@ package gomushin.backend.core.service
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
 import software.amazon.awssdk.core.sync.RequestBody
@@ -16,7 +17,6 @@ class S3Service(
     @Value("\${aws.s3.bucket}") private val bucket: String,
 ) {
 
-    @Transactional
     fun uploadFile(multipartFile: MultipartFile): String {
 
         val fileName = generateFileName(multipartFile)
@@ -33,9 +33,8 @@ class S3Service(
         return getFileUrl(fileName)
     }
 
-    @Transactional
     fun deleteFile(fileName: String) {
-        s3Client.deleteObject { it.bucket(bucket).key(fileName) }
+        s3Client.deleteObject { it.bucket(bucket).key(getFileName(fileName)) }
     }
 
     private fun getFileName(fileUrl: String): String {
