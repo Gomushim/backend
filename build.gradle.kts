@@ -67,8 +67,12 @@ dependencies {
     // configuration processor
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
+    // aws
+    implementation("software.amazon.awssdk:s3:2.30.38")
+
     implementation("org.springframework.boot:spring-boot-starter-validation")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
