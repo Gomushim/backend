@@ -3,6 +3,7 @@ package gomushin.backend.member.facade
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
+import gomushin.backend.member.dto.request.UpdateMyNickNameRequest
 import gomushin.backend.member.dto.response.MyEmotionResponse
 import gomushin.backend.member.dto.response.MyInfoResponse
 import gomushin.backend.member.dto.response.MyStatusMessageResponse
@@ -29,4 +30,7 @@ class MemberInfoFacade(
         val member = memberService.getById(customUserDetails.getId())
         return MyEmotionResponse.of(member)
     }
+
+    fun updateMyNickname(customUserDetails: CustomUserDetails, updateMyNickNameRequest: UpdateMyNickNameRequest)
+        = memberService.updateMyNickname(customUserDetails.getId(), updateMyNickNameRequest)
 }

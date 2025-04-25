@@ -2,19 +2,16 @@ package gomushin.backend.member.presentation
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.response.ApiResponse
-import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
+import gomushin.backend.member.dto.request.UpdateMyNickNameRequest
 import gomushin.backend.member.dto.response.MyEmotionResponse
 import gomushin.backend.member.facade.MemberInfoFacade
 import gomushin.backend.member.dto.response.MyInfoResponse
 import gomushin.backend.member.dto.response.MyStatusMessageResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.validation.BindingResult
-import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -66,5 +63,16 @@ class MemberInfoController(
     ):ApiResponse<MyEmotionResponse> {
         val emotion = memberInfoFacade.getMemberEmotion(customUserDetails)
         return ApiResponse.success(emotion)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping(ApiPath.UPDATE_MY_NICKNAME)
+    @Operation(summary = "내 닉네임 수정", description = "updateMyNickname")
+    fun updateMyNickname(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @RequestBody updateMyNickNameRequest: UpdateMyNickNameRequest
+    ):ApiResponse<Boolean> {
+        memberInfoFacade.updateMyNickname(customUserDetails, updateMyNickNameRequest)
+        return ApiResponse.success(true)
     }
 }

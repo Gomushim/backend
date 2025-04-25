@@ -82,4 +82,8 @@ class Member(
     fun updateStatusMessage(statusMessage: String) {
         this.statusMessage = statusMessage
     }
+
+    fun updateNickname(nickname: String) {
+        this.nickname = nickname
+    }
 }
