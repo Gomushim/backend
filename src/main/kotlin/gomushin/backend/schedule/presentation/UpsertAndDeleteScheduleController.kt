@@ -11,7 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Tag(name = "일정", description = "UpsertAndDeleteScheduleController")
+@Tag(name = "일정 생성 , 수정 , 삭제", description = "UpsertAndDeleteScheduleController")
 class UpsertAndDeleteScheduleController(
     private val upsertAndDeleteScheduleFacade: UpsertAndDeleteScheduleFacade,
 ) {
