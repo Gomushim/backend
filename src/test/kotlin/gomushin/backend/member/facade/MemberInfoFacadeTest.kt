@@ -6,6 +6,7 @@ import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.member.domain.value.Provider
 import gomushin.backend.member.domain.value.Role
 import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
+import gomushin.backend.member.dto.request.UpdateMyNickNameRequest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -92,5 +93,16 @@ class MemberInfoFacadeTest {
         //then
         verify(memberService).getById(1L)
         assertEquals(member.emotion, result.emotion)
+    }
+
+    @DisplayName("닉네임 수정")
+    @Test
+    fun updateMyNickname() {
+        //given
+        val updateMyNickNameRequest = UpdateMyNickNameRequest("테스트 닉네임 수정완료")
+        //when
+        val result = memberInfoFacade.updateMyNickname(customUserDetails, updateMyNickNameRequest)
+        //then
+        verify(memberService).updateMyNickname(1L, updateMyNickNameRequest)
     }
 }
