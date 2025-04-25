@@ -38,6 +38,8 @@ class S3Service(
         return "$normalizedEndpoint/$bucket/$fileName"
     }
 
-    private fun generateFileName(file: MultipartFile) =
-        "${UUID.randomUUID()}-${file.originalFilename?.replace(" ", "_")}"
+    private fun generateFileName(file: MultipartFile): String {
+        val safeName = file.originalFilename?.replace(" ", "_") ?: "unknown-file"
+        return "${UUID.randomUUID()}-$safeName"
+    }
 }
