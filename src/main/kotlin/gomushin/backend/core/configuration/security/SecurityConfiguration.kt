@@ -2,6 +2,7 @@ package gomushin.backend.core.configuration.security
 
 import gomushin.backend.core.infrastructure.filter.JwtAuthenticationFilter
 import gomushin.backend.core.jwt.JwtTokenProvider
+import gomushin.backend.core.oauth.handler.CustomAccessDeniedHandler
 import gomushin.backend.core.oauth.handler.CustomSuccessHandler
 import gomushin.backend.core.oauth.service.CustomOAuth2UserService
 import gomushin.backend.core.service.CustomUserDetailsService
@@ -29,7 +30,8 @@ class SecurityConfiguration(
     @Bean
     fun filterChain(
         http: HttpSecurity, corsConfiguration: CustomCorsConfiguration,
-        customOAuth2UserService: CustomOAuth2UserService, coupleRepository: CoupleRepository
+        customOAuth2UserService: CustomOAuth2UserService, coupleRepository: CoupleRepository,
+        customAccessDeniedHandler: CustomAccessDeniedHandler
     ): SecurityFilterChain {
         http
             .csrf {
@@ -63,6 +65,9 @@ class SecurityConfiguration(
                             cookieDomain
                         )
                     )
+            }
+            .exceptionHandling {
+                it.accessDeniedHandler(customAccessDeniedHandler)
             }
             .authorizeHttpRequests {
                 it.requestMatchers(
