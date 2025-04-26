@@ -6,6 +6,7 @@ import gomushin.backend.couple.domain.service.CoupleConnectService
 import gomushin.backend.couple.dto.request.CoupleAnniversaryRequest
 import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.couple.dto.request.CoupleConnectRequest
+import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
 import gomushin.backend.couple.dto.response.CoupleGradeResponse
 import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.couple.dto.response.NicknameResponse
@@ -56,4 +57,7 @@ class CoupleFacade(
         val statusMessage = coupleInfoService.getStatusMessage(customUserDetails.getId())
         return StatusMessageResponse.of(statusMessage)
     }
+
+    fun updateMilitaryDate(customUserDetails: CustomUserDetails, updateMilitaryDateRequest: UpdateMilitaryDateRequest)
+        = coupleInfoService.updateMilitaryDate(customUserDetails.getId(), updateMilitaryDateRequest)
 }

@@ -2,6 +2,7 @@ package gomushin.backend.couple.presentation
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.response.ApiResponse
+import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
 import gomushin.backend.couple.facade.CoupleFacade
 import gomushin.backend.couple.dto.response.CoupleGradeResponse
 import gomushin.backend.couple.dto.response.DdayResponse
@@ -12,6 +13,8 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
@@ -64,5 +67,16 @@ class CoupleInfoController (
         @AuthenticationPrincipal customUserDetails: CustomUserDetails
     ):ApiResponse<StatusMessageResponse>{
         return ApiResponse.success(coupleFacade.statusMessage(customUserDetails))
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping(ApiPath.COUPLE_UPDATE_MILITARY_DATE)
+    @Operation(summary = "입대, 전역일 수정 api", description = "입대일과 전역일을 수정함")
+    fun updateMilitaryDate(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @RequestBody updateMilitaryDateRequest: UpdateMilitaryDateRequest
+    ) : ApiResponse<Boolean> {
+        coupleFacade.updateMilitaryDate(customUserDetails, updateMilitaryDateRequest)
+        return ApiResponse.success(true)
     }
 }
