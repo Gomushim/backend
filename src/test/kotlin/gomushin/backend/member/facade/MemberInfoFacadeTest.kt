@@ -2,12 +2,15 @@ package gomushin.backend.member.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.member.domain.entity.Member
+import gomushin.backend.member.domain.entity.Notification
 import gomushin.backend.member.domain.service.MemberService
+import gomushin.backend.member.domain.service.NotificationService
 import gomushin.backend.member.domain.value.Provider
 import gomushin.backend.member.domain.value.Role
 import gomushin.backend.member.dto.request.UpdateMyBirthdayRequest
 import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
 import gomushin.backend.member.dto.request.UpdateMyNickNameRequest
+import gomushin.backend.member.dto.request.UpdateMyNotificationRequest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -23,12 +26,15 @@ import kotlin.test.assertEquals
 class MemberInfoFacadeTest {
     @Mock
     private lateinit var memberService: MemberService
+    @Mock
+    private lateinit var notificationService: NotificationService
 
     @InjectMocks
     private lateinit var memberInfoFacade: MemberInfoFacade
 
     private lateinit var customUserDetails: CustomUserDetails
     private lateinit var member: Member
+    private lateinit var notification: Notification
 
     @BeforeEach
     fun setUp() {
@@ -42,6 +48,13 @@ class MemberInfoFacadeTest {
             provider = Provider.KAKAO,
             role = Role.MEMBER,
             statusMessage = "상태 메시지"
+        )
+
+        notification = Notification(
+            id = 1L,
+            memberId = 1L,
+            dday = false,
+            partnerStatus = false
         )
 
         customUserDetails = mock(CustomUserDetails::class.java)
@@ -117,5 +130,20 @@ class MemberInfoFacadeTest {
         val result = memberInfoFacade.updateMyBirthDate(customUserDetails, updateMyBirthdayRequest)
         //then
         verify(memberService).updateMyBirthDate(1L, updateMyBirthdayRequest)
+    }
+
+    @DisplayName("알림설정 수정")
+    @Test
+    fun updateNotification() {
+        //given
+        val updateMyNotificationRequest = UpdateMyNotificationRequest(true, true)
+        `when`(notificationService.getByMemberId(customUserDetails.getId())).thenReturn(notification)
+        val previousDay = notification.dday
+        val previousSuperstate = notification.partnerStatus
+        //when
+        val result = memberInfoFacade.updateMyNotification(customUserDetails, updateMyNotificationRequest)
+        //then
+        assertEquals(notification.dday, !previousDay)
+        assertEquals(notification.partnerStatus, !previousSuperstate)
     }
 }
