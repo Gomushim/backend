@@ -21,7 +21,7 @@ class CoupleUpdateController(
 ) {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(ApiPath.COUPLE_UPDATE_MILITARY_DATE)
-    @Operation(summary = "입대, 전역일 수정 api", description = "입대일과 전역일을 수정함")
+    @Operation(summary = "입대, 전역일 수정 api", description = "updateMilitaryDate")
     fun updateMilitaryDate(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @RequestBody updateMilitaryDateRequest: UpdateMilitaryDateRequest
@@ -32,7 +32,7 @@ class CoupleUpdateController(
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(ApiPath.COUPLE_UPDATE_RELATIONSHIP_DATE)
-    @Operation(summary = "만난날 수정 api", description = "만난날을 수정함")
+    @Operation(summary = "만난날 수정 api", description = "updateRelationshipStartDate")
     fun updateRelationshipStartDate(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @RequestBody updateRelationshipStartDateRequest: UpdateRelationshipStartDateRequest
