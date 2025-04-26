@@ -20,7 +20,8 @@ import org.springframework.stereotype.Component
 class CustomSuccessHandler(
     private val jwtTokenProvider: JwtTokenProvider,
     private val memberRepository: MemberRepository,
-    @Value("\${redirect-url}") private val redirectUrl: String
+    @Value("\${redirect-url}") private val redirectUrl: String,
+    @Value("\${cookie.domain}") private val cookieDomain: String,
 ) : SimpleUrlAuthenticationSuccessHandler() {
 
     @Throws(IOException::class, ServletException::class)
@@ -53,7 +54,7 @@ class CustomSuccessHandler(
             .httpOnly(true)
             .secure(true)
             .sameSite("None")
-            .domain(".sarang-backend.o-r.kr")
+            .domain(cookieDomain)
             .maxAge(432000)
             .build()
     }

@@ -22,7 +22,8 @@ import org.springframework.web.cors.CorsUtils
 class SecurityConfiguration(
     private val jwtTokenProvider: JwtTokenProvider,
     private val memberRepository: MemberRepository,
-    @Value("\${redirect-url}") private val redirectUrl: String
+    @Value("\${redirect-url}") private val redirectUrl: String,
+    @Value("\${cookie.domain}") private val cookieDomain: String
 ) {
 
     @Bean
@@ -54,7 +55,14 @@ class SecurityConfiguration(
                         userInfoEndpointConfigurer
                             .userService(customOAuth2UserService)
                     }
-                    .successHandler(CustomSuccessHandler(jwtTokenProvider, memberRepository, redirectUrl))
+                    .successHandler(
+                        CustomSuccessHandler(
+                            jwtTokenProvider,
+                            memberRepository,
+                            redirectUrl,
+                            cookieDomain
+                        )
+                    )
             }
             .authorizeHttpRequests {
                 it.requestMatchers(
