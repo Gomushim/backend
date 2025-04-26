@@ -5,6 +5,7 @@ import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.couple.domain.service.CoupleConnectService
 import gomushin.backend.couple.domain.service.CoupleInfoService
+import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
 import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.couple.dto.response.NicknameResponse
 import gomushin.backend.couple.facade.CoupleFacade
@@ -136,6 +137,17 @@ class CoupleFacadeTest {
         val result = coupleFacade.statusMessage(customUserDetails)
         verify(coupleInfoService).getStatusMessage(1L)
         assertEquals("기분이 좋아용", result.statusMessage)
+    }
+
+    @DisplayName("입대일, 전역일 수정 - 정상응답")
+    @Test
+    fun updateMilitaryDate() {
+        val updateMilitaryDateRequest = UpdateMilitaryDateRequest(
+            LocalDate.of(2022, 5, 24),
+            LocalDate.of(2023,11,23)
+        )
+        val result = coupleFacade.updateMilitaryDate(customUserDetails, updateMilitaryDateRequest)
+        verify(coupleInfoService).updateMilitaryDate(customUserDetails.getId(), updateMilitaryDateRequest)
     }
 
 }
