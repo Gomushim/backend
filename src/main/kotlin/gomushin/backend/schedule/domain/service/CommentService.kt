@@ -3,7 +3,7 @@ package gomushin.backend.schedule.domain.service
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.schedule.domain.entity.Comment
 import gomushin.backend.schedule.domain.repository.CommentRepository
-import gomushin.backend.schedule.dto.UpsertCommentRequest
+import gomushin.backend.schedule.dto.request.UpsertCommentRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

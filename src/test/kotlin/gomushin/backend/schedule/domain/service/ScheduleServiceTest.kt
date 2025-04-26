@@ -2,7 +2,7 @@ package gomushin.backend.schedule.domain.service
 
 import gomushin.backend.schedule.domain.entity.Schedule
 import gomushin.backend.schedule.domain.repository.ScheduleRepository
-import gomushin.backend.schedule.dto.UpsertScheduleRequest
+import gomushin.backend.schedule.dto.request.UpsertScheduleRequest
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

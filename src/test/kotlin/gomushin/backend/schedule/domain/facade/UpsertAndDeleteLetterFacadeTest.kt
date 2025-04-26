@@ -8,7 +8,7 @@ import gomushin.backend.schedule.domain.entity.Schedule
 import gomushin.backend.schedule.domain.service.LetterService
 import gomushin.backend.schedule.domain.service.PictureService
 import gomushin.backend.schedule.domain.service.ScheduleService
-import gomushin.backend.schedule.dto.UpsertLetterRequest
+import gomushin.backend.schedule.dto.request.UpsertLetterRequest
 import gomushin.backend.schedule.facade.UpsertAndDeleteLetterFacade
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
