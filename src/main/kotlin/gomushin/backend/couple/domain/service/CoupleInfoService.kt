@@ -102,16 +102,14 @@ class CoupleInfoService(
     }
 
     @Transactional
-    fun updateMilitaryDate(id: Long, updateMilitaryDateRequest: UpdateMilitaryDateRequest) {
-        val couple = coupleRepository.findByMemberId(id) ?: throw BadRequestException("saranggun.couple.not-connected")
+    fun updateMilitaryDate(couple: Couple, updateMilitaryDateRequest: UpdateMilitaryDateRequest) {
         updateAnniversary(couple, couple.relationshipStartDate!!, updateMilitaryDateRequest.militaryStartDate, updateMilitaryDateRequest.militaryEndDate)
         couple.updateAnniversary(couple.relationshipStartDate!!,
             updateMilitaryDateRequest.militaryStartDate,
             updateMilitaryDateRequest.militaryEndDate)
     }
     @Transactional
-    fun updateRelationshipStartDate(id: Long, updateRelationshipStartDateRequest: UpdateRelationshipStartDateRequest) {
-        val couple = coupleRepository.findByMemberId(id) ?: throw BadRequestException("saranggun.couple.not-connected")
+    fun updateRelationshipStartDate(couple: Couple, updateRelationshipStartDateRequest: UpdateRelationshipStartDateRequest) {
         updateAnniversary(couple, updateRelationshipStartDateRequest.relationshipStartDate, couple.militaryStartDate!!, couple.militaryEndDate!!)
         couple.updateAnniversary(updateRelationshipStartDateRequest.relationshipStartDate,
             couple.militaryStartDate,
