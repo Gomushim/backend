@@ -313,7 +313,6 @@ class CoupleInfoServiceTest {
             militaryStartDate = LocalDate.of(2021, 5, 24),
             militaryEndDate = LocalDate.of(2022,11,23)
         )
-        `when`(coupleRepository.findByMemberId(userId)).thenReturn(couple)
         doNothing().`when`(anniversaryRepository).deleteAnniversariesWithTitleEndingAndPropertyZero(coupleId)
         `when`(anniversaryCalculator.calculateInitAnniversaries(
             any<Long>(),
@@ -328,10 +327,9 @@ class CoupleInfoServiceTest {
             LocalDate.of(2023,11,23)
         )
         //when
-        val result = coupleInfoService.updateMilitaryDate(userId, updateMilitaryDateRequest)
+        val result = coupleInfoService.updateMilitaryDate(couple, updateMilitaryDateRequest)
 
         //then
-        verify(coupleRepository).findByMemberId(userId)
         verify(anniversaryRepository).deleteAnniversariesWithTitleEndingAndPropertyZero(coupleId)
         verify(anniversaryCalculator).calculateInitAnniversaries(
             any<Long>(),
@@ -360,7 +358,6 @@ class CoupleInfoServiceTest {
             militaryStartDate = LocalDate.of(2021, 5, 24),
             militaryEndDate = LocalDate.of(2022,11,23)
         )
-        `when`(coupleRepository.findByMemberId(userId)).thenReturn(couple)
         doNothing().`when`(anniversaryRepository).deleteAnniversariesWithTitleEndingAndPropertyZero(coupleId)
         `when`(anniversaryCalculator.calculateInitAnniversaries(
             any<Long>(),
@@ -375,10 +372,9 @@ class CoupleInfoServiceTest {
         )
 
         //when
-        val result = coupleInfoService.updateRelationshipStartDate(userId, updateRelationshipStartDateRequest)
+        val result = coupleInfoService.updateRelationshipStartDate(couple, updateRelationshipStartDateRequest)
 
         //then
-        verify(coupleRepository).findByMemberId(userId)
         verify(anniversaryRepository).deleteAnniversariesWithTitleEndingAndPropertyZero(coupleId)
         verify(anniversaryCalculator).calculateInitAnniversaries(
             any<Long>(),

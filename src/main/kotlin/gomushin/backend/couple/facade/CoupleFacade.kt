@@ -5,6 +5,7 @@ import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.couple.domain.service.CoupleConnectService
 import gomushin.backend.couple.dto.request.CoupleAnniversaryRequest
 import gomushin.backend.couple.domain.service.CoupleInfoService
+import gomushin.backend.couple.domain.service.CoupleService
 import gomushin.backend.couple.dto.request.CoupleConnectRequest
 import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
 import gomushin.backend.couple.dto.request.UpdateRelationshipStartDateRequest
@@ -19,6 +20,7 @@ class CoupleFacade(
     private val coupleConnectService: CoupleConnectService,
     private val anniversaryService: AnniversaryService,
     private val coupleInfoService: CoupleInfoService,
+    private val coupleService: CoupleService
 ) {
 
     fun requestCoupleCodeGeneration(customUserDetails: CustomUserDetails) =
@@ -59,9 +61,13 @@ class CoupleFacade(
         return StatusMessageResponse.of(statusMessage)
     }
 
-    fun updateMilitaryDate(customUserDetails: CustomUserDetails, updateMilitaryDateRequest: UpdateMilitaryDateRequest)
-        = coupleInfoService.updateMilitaryDate(customUserDetails.getId(), updateMilitaryDateRequest)
+    fun updateMilitaryDate(customUserDetails: CustomUserDetails, updateMilitaryDateRequest: UpdateMilitaryDateRequest) {
+        val couple = coupleService.getByMemberId(customUserDetails.getId())
+        coupleInfoService.updateMilitaryDate(couple, updateMilitaryDateRequest)
+    }
 
-    fun updateRelationshipStartDate(customUserDetails: CustomUserDetails, updateRelationshipStartDateRequest: UpdateRelationshipStartDateRequest)
-        = coupleInfoService.updateRelationshipStartDate(customUserDetails.getId(), updateRelationshipStartDateRequest)
+    fun updateRelationshipStartDate(customUserDetails: CustomUserDetails, updateRelationshipStartDateRequest: UpdateRelationshipStartDateRequest) {
+        val couple = coupleService.getByMemberId(customUserDetails.getId())
+        coupleInfoService.updateRelationshipStartDate(couple, updateRelationshipStartDateRequest)
+    }
 }

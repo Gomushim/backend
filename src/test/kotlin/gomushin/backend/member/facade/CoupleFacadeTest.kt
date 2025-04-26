@@ -5,6 +5,7 @@ import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.couple.domain.service.CoupleConnectService
 import gomushin.backend.couple.domain.service.CoupleInfoService
+import gomushin.backend.couple.domain.service.CoupleService
 import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
 import gomushin.backend.couple.dto.request.UpdateRelationshipStartDateRequest
 import gomushin.backend.couple.dto.response.DdayResponse
@@ -36,6 +37,9 @@ class CoupleFacadeTest {
 
     @Mock
     private lateinit var anniversaryService: AnniversaryService
+
+    @Mock
+    private lateinit var coupleService: CoupleService
 
     @InjectMocks
     private lateinit var coupleFacade: CoupleFacade
@@ -148,7 +152,7 @@ class CoupleFacadeTest {
             LocalDate.of(2023,11,23)
         )
         val result = coupleFacade.updateMilitaryDate(customUserDetails, updateMilitaryDateRequest)
-        verify(coupleInfoService).updateMilitaryDate(customUserDetails.getId(), updateMilitaryDateRequest)
+        verify(coupleInfoService).updateMilitaryDate(customUserDetails.getCouple(), updateMilitaryDateRequest)
     }
 
     @DisplayName("만난날 수정 - 정상응답")
@@ -158,7 +162,7 @@ class CoupleFacadeTest {
             LocalDate.of(2022, 5, 24),
         )
         val result = coupleFacade.updateRelationshipStartDate(customUserDetails, updateRelationshipStartDateRequest)
-        verify(coupleInfoService).updateRelationshipStartDate(customUserDetails.getId(), updateRelationshipStartDateRequest)
+        verify(coupleInfoService).updateRelationshipStartDate(customUserDetails.getCouple(), updateRelationshipStartDateRequest)
     }
 
 }
