@@ -1,7 +1,12 @@
 package gomushin.backend.couple.domain.service
 
 import gomushin.backend.core.infrastructure.exception.BadRequestException
+import gomushin.backend.couple.domain.entity.Anniversary
+import gomushin.backend.couple.domain.entity.Couple
+import gomushin.backend.couple.domain.repository.AnniversaryRepository
 import gomushin.backend.couple.domain.repository.CoupleRepository
+import gomushin.backend.couple.dto.request.CoupleAnniversaryRequest
+import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
 import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.couple.dto.response.NicknameResponse
 import gomushin.backend.member.domain.entity.Member
@@ -15,7 +20,9 @@ import java.time.temporal.ChronoUnit
 @Service
 class CoupleInfoService(
         private val coupleRepository: CoupleRepository,
-        private val memberRepository: MemberRepository
+        private val memberRepository: MemberRepository,
+        private val anniversaryRepository: AnniversaryRepository,
+        private val anniversaryCalculator: AnniversaryCalculator
 ) {
     @Transactional(readOnly = true)
     fun getGrade(id: Long): Int {
@@ -93,4 +100,28 @@ class CoupleInfoService(
         return coupleMember
     }
 
+    @Transactional
+    fun updateMilitaryDate(id: Long, updateMilitaryDateRequest: UpdateMilitaryDateRequest) {
+        val couple = coupleRepository.findByMemberId(id) ?: throw BadRequestException("saranggun.couple.not-connected")
+        updateAnniversary(couple, couple.relationshipStartDate!!, updateMilitaryDateRequest.militaryStartDate, updateMilitaryDateRequest.militaryEndDate)
+        couple.updateAnniversary(couple.relationshipStartDate!!,
+            updateMilitaryDateRequest.militaryStartDate,
+            updateMilitaryDateRequest.militaryEndDate)
+    }
+
+    private fun updateAnniversary(couple: Couple,
+                                  relationshipStartDate: LocalDate,
+                                  militaryStartDate: LocalDate,
+                                  militaryEndDate : LocalDate) {
+        anniversaryRepository.deleteAnniversariesWithTitleEndingAndPropertyZero(couple.id)
+        val anniversaries: MutableList<Anniversary> = mutableListOf()
+        anniversaryCalculator.calculateInitAnniversaries(
+            couple.id,
+            relationshipStartDate,
+            militaryStartDate,
+            militaryEndDate,
+            anniversaries
+        )
+        anniversaryRepository.saveAll(anniversaries)
+    }
 }
