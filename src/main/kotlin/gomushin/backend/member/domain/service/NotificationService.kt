@@ -35,4 +35,9 @@ class NotificationService(
     fun save(notification: Notification): Notification {
         return notificationRepository.save(notification)
     }
+
+    @Transactional
+    fun deleteAllByMember(memberId: Long) {
+        return notificationRepository.deleteAllByMemberId(memberId)
+    }
 }

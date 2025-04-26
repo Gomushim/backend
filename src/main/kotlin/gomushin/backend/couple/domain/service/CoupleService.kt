@@ -35,4 +35,9 @@ class CoupleService(
     fun findByMemberId(memberId: Long): Couple? {
         return coupleRepository.findByMemberId(memberId)
     }
+
+    @Transactional
+    fun deleteByMemberId(memberId: Long) {
+        return coupleRepository.deleteByMemberId(memberId)
+    }
 }

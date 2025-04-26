@@ -49,6 +49,11 @@ class AnniversaryService(
         return anniversaryRepository.saveAll(anniversaries)
     }
 
+    @Transactional
+    fun deleteAllByCoupleId(coupleId : Long) {
+        return anniversaryRepository.deleteAllByCoupleId(coupleId)
+    }
+
     private fun checkUserInCouple(userId: Long, couple: Couple) {
         if (!couple.containsUser(userId)) {
             throw BadRequestException("sarangggun.couple.not-in-couple")

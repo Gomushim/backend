@@ -43,4 +43,9 @@ class ScheduleService(
         }
         scheduleRepository.deleteById(scheduleId)
     }
+
+    @Transactional
+    fun deleteAllByMember(memberId : Long) {
+        scheduleRepository.deleteAllByUserId(memberId)
+    }
 }

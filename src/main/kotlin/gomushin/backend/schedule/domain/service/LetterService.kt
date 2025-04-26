@@ -45,4 +45,13 @@ class LetterService(
     fun delete(letterId: Long) {
         letterRepository.deleteById(letterId)
     }
+    @Transactional
+    fun deleteAllByMemberId(memberId : Long) {
+        letterRepository.deleteAllByAuthorId(memberId)
+    }
+
+    @Transactional(readOnly = true)
+    fun findAllByAuthorId(memberId: Long) : List<Long>{
+        return letterRepository.findAllByAuthorId(memberId)
+    }
 }
