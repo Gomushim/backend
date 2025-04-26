@@ -9,7 +9,8 @@ import org.springframework.data.repository.query.Param
 
 interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
     @Modifying
-    @Query("""
+    @Query(
+        """
     DELETE FROM Anniversary a
     WHERE (a.title LIKE '%일' OR a.title LIKE '%주년')
     AND a.anniversaryProperty = 0
