@@ -41,17 +41,12 @@ class CustomSuccessHandler(
             accessToken = jwtTokenProvider.provideAccessToken(principal.getUserId(), principal.getRole())
         }
 
-        response!!.addCookie(createCookie("access_token", accessToken))
+        response!!.addHeader("Set-Cookie", createSetCookieHeader("access_token", accessToken))
         response.sendRedirect(redirectUrl)
     }
 
-    private fun createCookie(key: String, value: String): Cookie {
-        val cookie = Cookie(key, value)
-        cookie.path = "/"
-        cookie.isHttpOnly = true
-        cookie.secure = true
-        cookie.maxAge = 1800
-        return cookie
+    private fun createSetCookieHeader(key: String, value: String): String {
+        return "$key=$value; Path=/; Max-Age=1800; HttpOnly; Secure; SameSite=None"
     }
 
     private fun getMemberByEmail(email: String): Member? {
