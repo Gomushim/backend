@@ -69,26 +69,4 @@ class CoupleInfoController (
     ):ApiResponse<StatusMessageResponse>{
         return ApiResponse.success(coupleFacade.statusMessage(customUserDetails))
     }
-
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping(ApiPath.COUPLE_UPDATE_MILITARY_DATE)
-    @Operation(summary = "입대, 전역일 수정 api", description = "입대일과 전역일을 수정함")
-    fun updateMilitaryDate(
-        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
-        @RequestBody updateMilitaryDateRequest: UpdateMilitaryDateRequest
-    ) : ApiResponse<Boolean> {
-        coupleFacade.updateMilitaryDate(customUserDetails, updateMilitaryDateRequest)
-        return ApiResponse.success(true)
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping(ApiPath.COUPLE_UPDATE_RELATIONSHIP_DATE)
-    @Operation(summary = "만난날 수정 api", description = "만난날을 수정함")
-    fun updateRelationshipStartDate(
-        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
-        @RequestBody updateRelationshipStartDateRequest: UpdateRelationshipStartDateRequest
-    ) : ApiResponse<Boolean> {
-        coupleFacade.updateRelationshipStartDate(customUserDetails, updateRelationshipStartDateRequest)
-        return ApiResponse.success(true)
-    }
 }
