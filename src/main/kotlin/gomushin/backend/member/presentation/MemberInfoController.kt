@@ -5,6 +5,7 @@ import gomushin.backend.core.common.web.response.ApiResponse
 import gomushin.backend.member.dto.request.UpdateMyBirthdayRequest
 import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
 import gomushin.backend.member.dto.request.UpdateMyNickNameRequest
+import gomushin.backend.member.dto.request.UpdateMyNotificationRequest
 import gomushin.backend.member.dto.response.MyEmotionResponse
 import gomushin.backend.member.facade.MemberInfoFacade
 import gomushin.backend.member.dto.response.MyInfoResponse
@@ -85,6 +86,17 @@ class MemberInfoController(
         @RequestBody updateMyBirthdayRequest : UpdateMyBirthdayRequest
     ):ApiResponse<Boolean> {
         memberInfoFacade.updateMyBirthDate(customUserDetails, updateMyBirthdayRequest)
+        return ApiResponse.success(true)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping(ApiPath.UPDATE_MY_NOTIFICATION_POLICY)
+    @Operation(summary = "내 알림 정책 수정", description = "updateMyNotification")
+    fun updateMyNotification(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @RequestBody updateMyNotificationRequest: UpdateMyNotificationRequest
+    ):ApiResponse<Boolean> {
+        memberInfoFacade.updateMyNotification(customUserDetails, updateMyNotificationRequest)
         return ApiResponse.success(true)
     }
 }
