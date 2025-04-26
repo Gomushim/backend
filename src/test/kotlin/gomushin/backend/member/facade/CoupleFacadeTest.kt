@@ -6,6 +6,7 @@ import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.couple.domain.service.CoupleConnectService
 import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
+import gomushin.backend.couple.dto.request.UpdateRelationshipStartDateRequest
 import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.couple.dto.response.NicknameResponse
 import gomushin.backend.couple.facade.CoupleFacade
@@ -148,6 +149,16 @@ class CoupleFacadeTest {
         )
         val result = coupleFacade.updateMilitaryDate(customUserDetails, updateMilitaryDateRequest)
         verify(coupleInfoService).updateMilitaryDate(customUserDetails.getId(), updateMilitaryDateRequest)
+    }
+
+    @DisplayName("만난날 수정 - 정상응답")
+    @Test
+    fun updateRelationshipStartDate() {
+        val updateRelationshipStartDateRequest = UpdateRelationshipStartDateRequest(
+            LocalDate.of(2022, 5, 24),
+        )
+        val result = coupleFacade.updateRelationshipStartDate(customUserDetails, updateRelationshipStartDateRequest)
+        verify(coupleInfoService).updateRelationshipStartDate(customUserDetails.getId(), updateRelationshipStartDateRequest)
     }
 
 }

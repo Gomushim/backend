@@ -5,6 +5,7 @@ import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.repository.AnniversaryRepository
 import gomushin.backend.couple.domain.repository.CoupleRepository
 import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
+import gomushin.backend.couple.dto.request.UpdateRelationshipStartDateRequest
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.repository.MemberRepository
 import gomushin.backend.member.domain.value.Provider
@@ -342,5 +343,51 @@ class CoupleInfoServiceTest {
         verify(anniversaryRepository).saveAll(anyList())
         assertEquals(couple.militaryStartDate, updateMilitaryDateRequest.militaryStartDate)
         assertEquals(couple.militaryEndDate, updateMilitaryDateRequest.militaryEndDate)
+    }
+
+    @DisplayName("updateRelationshipStartDate - 성공")
+    @Test
+    fun updateRelationshipStartDate() {
+        //given
+        val coupleId = 1L
+        val userId = 1L
+        val coupleUserId = 2L
+        val couple = Couple(
+            id = coupleId,
+            invitorId = coupleUserId,
+            inviteeId = userId,
+            relationshipStartDate = LocalDate.of(2020,8,1),
+            militaryStartDate = LocalDate.of(2021, 5, 24),
+            militaryEndDate = LocalDate.of(2022,11,23)
+        )
+        `when`(coupleRepository.findByMemberId(userId)).thenReturn(couple)
+        doNothing().`when`(anniversaryRepository).deleteAnniversariesWithTitleEndingAndPropertyZero(coupleId)
+        `when`(anniversaryCalculator.calculateInitAnniversaries(
+            any<Long>(),
+            any<LocalDate>(),
+            any<LocalDate>(),
+            any<LocalDate>(),
+            any<MutableList<Anniversary>>()
+        )).thenReturn(emptyList())
+        `when`(anniversaryRepository.saveAll(anyList())).thenReturn(emptyList())
+        val updateRelationshipStartDateRequest = UpdateRelationshipStartDateRequest(
+            LocalDate.of(2020, 7, 24),
+        )
+
+        //when
+        val result = coupleInfoService.updateRelationshipStartDate(userId, updateRelationshipStartDateRequest)
+
+        //then
+        verify(coupleRepository).findByMemberId(userId)
+        verify(anniversaryRepository).deleteAnniversariesWithTitleEndingAndPropertyZero(coupleId)
+        verify(anniversaryCalculator).calculateInitAnniversaries(
+            any<Long>(),
+            any<LocalDate>(),
+            any<LocalDate>(),
+            any<LocalDate>(),
+            any<MutableList<Anniversary>>()
+        )
+        verify(anniversaryRepository).saveAll(anyList())
+        assertEquals(couple.relationshipStartDate, updateRelationshipStartDateRequest.relationshipStartDate)
     }
 }
