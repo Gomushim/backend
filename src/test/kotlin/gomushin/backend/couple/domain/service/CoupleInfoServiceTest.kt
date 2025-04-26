@@ -1,7 +1,10 @@
 package gomushin.backend.couple.domain.service
 
+import gomushin.backend.couple.domain.entity.Anniversary
 import gomushin.backend.couple.domain.entity.Couple
+import gomushin.backend.couple.domain.repository.AnniversaryRepository
 import gomushin.backend.couple.domain.repository.CoupleRepository
+import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.repository.MemberRepository
 import gomushin.backend.member.domain.value.Provider
@@ -11,13 +14,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
 import java.time.LocalDate
 import java.util.*
 import kotlin.test.assertEquals
-
+import org.mockito.kotlin.any
 
 @ExtendWith(MockitoExtension::class)
 class CoupleInfoServiceTest {
@@ -25,6 +27,11 @@ class CoupleInfoServiceTest {
     private lateinit var coupleRepository: CoupleRepository
     @Mock
     private lateinit var memberRepository: MemberRepository
+    @Mock
+    private lateinit var anniversaryRepository: AnniversaryRepository
+    @Mock
+    private lateinit var anniversaryCalculator: AnniversaryCalculator
+
 
     @InjectMocks
     private lateinit var coupleInfoService: CoupleInfoService
@@ -288,5 +295,52 @@ class CoupleInfoServiceTest {
 
         //then
         assertEquals("기분이 좋아용", statusMessage)
+    }
+
+    @DisplayName("updateMilitaryDate - 성공")
+    @Test
+    fun updateMilitaryDate() {
+        //given
+        val coupleId = 1L
+        val userId = 1L
+        val coupleUserId = 2L
+        val couple = Couple(
+            id = coupleId,
+            invitorId = coupleUserId,
+            inviteeId = userId,
+            relationshipStartDate = LocalDate.of(2020,8,1),
+            militaryStartDate = LocalDate.of(2021, 5, 24),
+            militaryEndDate = LocalDate.of(2022,11,23)
+        )
+        `when`(coupleRepository.findByMemberId(userId)).thenReturn(couple)
+        doNothing().`when`(anniversaryRepository).deleteAnniversariesWithTitleEndingAndPropertyZero(coupleId)
+        `when`(anniversaryCalculator.calculateInitAnniversaries(
+            any<Long>(),
+            any<LocalDate>(),
+            any<LocalDate>(),
+            any<LocalDate>(),
+            any<MutableList<Anniversary>>()
+        )).thenReturn(emptyList())
+        `when`(anniversaryRepository.saveAll(anyList())).thenReturn(emptyList())
+        val updateMilitaryDateRequest = UpdateMilitaryDateRequest(
+            LocalDate.of(2022, 5, 24),
+            LocalDate.of(2023,11,23)
+        )
+        //when
+        val result = coupleInfoService.updateMilitaryDate(userId, updateMilitaryDateRequest)
+
+        //then
+        verify(coupleRepository).findByMemberId(userId)
+        verify(anniversaryRepository).deleteAnniversariesWithTitleEndingAndPropertyZero(coupleId)
+        verify(anniversaryCalculator).calculateInitAnniversaries(
+            any<Long>(),
+            any<LocalDate>(),
+            any<LocalDate>(),
+            any<LocalDate>(),
+            any<MutableList<Anniversary>>()
+        )
+        verify(anniversaryRepository).saveAll(anyList())
+        assertEquals(couple.militaryStartDate, updateMilitaryDateRequest.militaryStartDate)
+        assertEquals(couple.militaryEndDate, updateMilitaryDateRequest.militaryEndDate)
     }
 }
