@@ -7,6 +7,7 @@ import gomushin.backend.couple.dto.request.CoupleAnniversaryRequest
 import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.couple.dto.request.CoupleConnectRequest
 import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
+import gomushin.backend.couple.dto.request.UpdateRelationshipStartDateRequest
 import gomushin.backend.couple.dto.response.CoupleGradeResponse
 import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.couple.dto.response.NicknameResponse
@@ -60,4 +61,7 @@ class CoupleFacade(
 
     fun updateMilitaryDate(customUserDetails: CustomUserDetails, updateMilitaryDateRequest: UpdateMilitaryDateRequest)
         = coupleInfoService.updateMilitaryDate(customUserDetails.getId(), updateMilitaryDateRequest)
+
+    fun updateRelationshipStartDate(customUserDetails: CustomUserDetails, updateRelationshipStartDateRequest: UpdateRelationshipStartDateRequest)
+        = coupleInfoService.updateRelationshipStartDate(customUserDetails.getId(), updateRelationshipStartDateRequest)
 }
