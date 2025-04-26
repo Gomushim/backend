@@ -36,14 +36,7 @@ class JwtTokenProviderImpl(
             Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token)
             return true
         } catch (e: Exception) {
-            when (e) {
-                is ExpiredJwtException,
-                is UnsupportedJwtException,
-                is MalformedJwtException,
-                is IllegalArgumentException -> return false
-
-                else -> throw e
-            }
+            return false
         }
     }
 
