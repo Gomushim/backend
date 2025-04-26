@@ -43,4 +43,9 @@ class MemberService(
         val member = getById(id)
         member.updateBirthday(updateMyBirthdayRequest.birthDate)
     }
+
+    @Transactional
+    fun deleteMember(id : Long) {
+        return memberRepository.deleteById(id)
+    }
 }

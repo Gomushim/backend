@@ -10,10 +10,12 @@ import gomushin.backend.member.dto.response.MyEmotionResponse
 import gomushin.backend.member.facade.MemberInfoFacade
 import gomushin.backend.member.dto.response.MyInfoResponse
 import gomushin.backend.member.dto.response.MyStatusMessageResponse
+import gomushin.backend.member.facade.LeaveFacade
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController
 @Tag(name = "회원 정보", description = "MemberController")
 class MemberInfoController(
     private val memberInfoFacade: MemberInfoFacade,
+    private val leaveFacade: LeaveFacade
 ) {
 
     @ResponseStatus(HttpStatus.OK)
@@ -97,6 +100,16 @@ class MemberInfoController(
         @RequestBody updateMyNotificationRequest: UpdateMyNotificationRequest
     ):ApiResponse<Boolean> {
         memberInfoFacade.updateMyNotification(customUserDetails, updateMyNotificationRequest)
+        return ApiResponse.success(true)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping(ApiPath.DELETE_ALL_MY_DATA)
+    @Operation(summary = "커플 연동 해제(유저 관련 데이터 모두 삭제)", description = "deleteMyData")
+    fun deleteMyData(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails
+    ) : ApiResponse<Boolean> {
+        leaveFacade.leave(customUserDetails)
         return ApiResponse.success(true)
     }
 }

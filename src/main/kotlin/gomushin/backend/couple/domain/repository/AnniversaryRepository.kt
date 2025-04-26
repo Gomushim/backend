@@ -15,4 +15,8 @@ interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
     And a.coupleId = :coupleId
 """)
     fun deleteAnniversariesWithTitleEndingAndPropertyZero(@Param("coupleId")coupleId : Long)
+
+    @Modifying
+    @Query("DELETE FROM Anniversary a WHERE a.coupleId = :coupleId")
+    fun deleteAllByCoupleId(@Param("coupleId") coupleId: Long)
 }

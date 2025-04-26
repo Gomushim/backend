@@ -56,4 +56,9 @@ class CommentService(
     fun delete(id: Long) {
         commentRepository.deleteById(id)
     }
+
+    @Transactional
+    fun deleteAllByMemberId(memberId: Long) {
+        commentRepository.deleteAllByAuthorId(memberId)
+    }
 }

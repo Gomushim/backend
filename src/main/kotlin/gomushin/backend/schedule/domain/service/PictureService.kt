@@ -35,4 +35,14 @@ class PictureService(
     fun deleteAllByLetterId(letterId: Long) {
         pictureRepository.deleteAllByLetterId(letterId)
     }
+
+    @Transactional(readOnly = true)
+    fun findAllByLetterIds(letterIds : List<Long>) : List<Picture> {
+        return pictureRepository.findAllByLetterIdIn(letterIds)
+    }
+
+    @Transactional
+    fun deleteAllByLetterIds(letterIds: List<Long>) {
+        return pictureRepository.deleteAllByLetterIdIn(letterIds)
+    }
 }
