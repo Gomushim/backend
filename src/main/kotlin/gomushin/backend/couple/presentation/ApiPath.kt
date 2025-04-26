@@ -10,4 +10,5 @@ object ApiPath {
     const val COUPLE_NICKNAME = "/v1/couple/nick-name"
     const val COUPLE_STATUS_MESSAGE = "/v1/couple/status-message"
     const val COUPLE_UPDATE_MILITARY_DATE = "/v1/couple/military-date"
+    const val COUPLE_UPDATE_RELATIONSHIP_DATE = "/v1/couple/relationship-start-date"
 }

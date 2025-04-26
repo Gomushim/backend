@@ -7,6 +7,7 @@ import gomushin.backend.couple.domain.repository.AnniversaryRepository
 import gomushin.backend.couple.domain.repository.CoupleRepository
 import gomushin.backend.couple.dto.request.CoupleAnniversaryRequest
 import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
+import gomushin.backend.couple.dto.request.UpdateRelationshipStartDateRequest
 import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.couple.dto.response.NicknameResponse
 import gomushin.backend.member.domain.entity.Member
@@ -107,6 +108,14 @@ class CoupleInfoService(
         couple.updateAnniversary(couple.relationshipStartDate!!,
             updateMilitaryDateRequest.militaryStartDate,
             updateMilitaryDateRequest.militaryEndDate)
+    }
+    @Transactional
+    fun updateRelationshipStartDate(id: Long, updateRelationshipStartDateRequest: UpdateRelationshipStartDateRequest) {
+        val couple = coupleRepository.findByMemberId(id) ?: throw BadRequestException("saranggun.couple.not-connected")
+        updateAnniversary(couple, updateRelationshipStartDateRequest.relationshipStartDate, couple.militaryStartDate!!, couple.militaryEndDate!!)
+        couple.updateAnniversary(updateRelationshipStartDateRequest.relationshipStartDate,
+            couple.militaryStartDate,
+            couple.militaryEndDate)
     }
 
     private fun updateAnniversary(couple: Couple,
