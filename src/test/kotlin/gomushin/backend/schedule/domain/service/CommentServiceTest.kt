@@ -2,7 +2,7 @@ package gomushin.backend.schedule.domain.service
 
 import gomushin.backend.schedule.domain.entity.Comment
 import gomushin.backend.schedule.domain.repository.CommentRepository
-import gomushin.backend.schedule.dto.UpsertCommentRequest
+import gomushin.backend.schedule.dto.request.UpsertCommentRequest
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.extension.ExtendWith

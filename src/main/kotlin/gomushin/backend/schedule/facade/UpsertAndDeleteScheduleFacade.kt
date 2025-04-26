@@ -2,7 +2,7 @@ package gomushin.backend.schedule.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.schedule.domain.service.ScheduleService
-import gomushin.backend.schedule.dto.UpsertScheduleRequest
+import gomushin.backend.schedule.dto.request.UpsertScheduleRequest
 import org.springframework.stereotype.Component
 
 @Component

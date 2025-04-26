@@ -7,7 +7,7 @@ import gomushin.backend.schedule.domain.entity.Comment
 import gomushin.backend.schedule.domain.entity.Letter
 import gomushin.backend.schedule.domain.service.CommentService
 import gomushin.backend.schedule.domain.service.LetterService
-import gomushin.backend.schedule.dto.UpsertCommentRequest
+import gomushin.backend.schedule.dto.request.UpsertCommentRequest
 import gomushin.backend.schedule.facade.UpsertAndDeleteCommentFacade
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.extension.ExtendWith

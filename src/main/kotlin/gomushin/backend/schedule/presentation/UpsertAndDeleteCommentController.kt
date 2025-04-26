@@ -2,7 +2,7 @@ package gomushin.backend.schedule.presentation
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.response.ApiResponse
-import gomushin.backend.schedule.dto.UpsertCommentRequest
+import gomushin.backend.schedule.dto.request.UpsertCommentRequest
 import gomushin.backend.schedule.facade.UpsertAndDeleteCommentFacade
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag

@@ -3,7 +3,7 @@ package gomushin.backend.schedule.domain.service
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.schedule.domain.entity.Letter
 import gomushin.backend.schedule.domain.repository.LetterRepository
-import gomushin.backend.schedule.dto.UpsertLetterRequest
+import gomushin.backend.schedule.dto.request.UpsertLetterRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

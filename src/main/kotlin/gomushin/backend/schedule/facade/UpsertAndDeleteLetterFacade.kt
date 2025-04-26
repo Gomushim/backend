@@ -6,7 +6,7 @@ import gomushin.backend.core.service.S3Service
 import gomushin.backend.schedule.domain.service.LetterService
 import gomushin.backend.schedule.domain.service.PictureService
 import gomushin.backend.schedule.domain.service.ScheduleService
-import gomushin.backend.schedule.dto.UpsertLetterRequest
+import gomushin.backend.schedule.dto.request.UpsertLetterRequest
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile

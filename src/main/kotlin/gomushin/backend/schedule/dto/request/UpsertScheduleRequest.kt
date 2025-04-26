@@ -1,4 +1,4 @@
-package gomushin.backend.schedule.dto
+package gomushin.backend.schedule.dto.request
 
 import gomushin.backend.schedule.domain.entity.Schedule
 import io.swagger.v3.oas.annotations.media.Schema

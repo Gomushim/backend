@@ -5,7 +5,7 @@ import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.schedule.domain.service.CommentService
 import gomushin.backend.schedule.domain.service.LetterService
-import gomushin.backend.schedule.dto.UpsertCommentRequest
+import gomushin.backend.schedule.dto.request.UpsertCommentRequest
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
