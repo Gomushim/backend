@@ -26,7 +26,7 @@ class CoupleInfoController (
 ) {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(ApiPath.COUPLE_PROFILE)
-    @Operation(summary = "프로필 조회", description = "입대일 날짜 기준으로 grade측정")
+    @Operation(summary = "grade 조회 api", description = "getGrade")
     fun getGrade(
             @AuthenticationPrincipal customUserDetails: CustomUserDetails
     ): ApiResponse<CoupleGradeResponse> {
@@ -36,7 +36,7 @@ class CoupleInfoController (
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(ApiPath.COUPLE_CHECK_CONNECT)
-    @Operation(summary = "커플 연동 여부", description = "커플 연동 여부 true, false로 불러오기")
+    @Operation(summary = "커플 연동 여부 체크 api", description = "coupleConnectCheck")
     fun coupleConnectCheck(
             @AuthenticationPrincipal customUserDetails: CustomUserDetails
     ): ApiResponse<Boolean> {
@@ -45,7 +45,7 @@ class CoupleInfoController (
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(ApiPath.COUPLE_DDAY_INFO)
-    @Operation(summary = "디데이 정보", description = "사귄지, 입대한지 얼마되었는지 그리고 전역까지 얼마나 남았는지")
+    @Operation(summary = "디데이 정보 조회 api", description = "getDday")
     fun getDday(
             @AuthenticationPrincipal customUserDetails: CustomUserDetails
     ):ApiResponse<DdayResponse> {
@@ -54,7 +54,7 @@ class CoupleInfoController (
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(ApiPath.COUPLE_NICKNAME)
-    @Operation(summary = "닉네임 조회", description = "userNickname = 내 닉네임, coupleNickName = 내 여(남)친 닉네임")
+    @Operation(summary = "닉네임 조회 api", description = "getNickName")
     fun getNickName(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails
     ):ApiResponse<NicknameResponse>{
@@ -63,7 +63,7 @@ class CoupleInfoController (
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(ApiPath.COUPLE_STATUS_MESSAGE)
-    @Operation(summary = "상태 메시지 조회", description = "상태 메시지 조회")
+    @Operation(summary = "상태 메시지 조회 api", description = "getStatusMessage")
     fun getStatusMessage(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails
     ):ApiResponse<StatusMessageResponse>{
