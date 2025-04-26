@@ -11,6 +11,7 @@ import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.ResponseCookie
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.stereotype.Component
@@ -41,12 +42,20 @@ class CustomSuccessHandler(
             accessToken = jwtTokenProvider.provideAccessToken(principal.getUserId(), principal.getRole())
         }
 
-        response!!.addHeader("Set-Cookie", createSetCookieHeader("access_token", accessToken))
+        val cookie = createCookie("access_token", accessToken)
+        response!!.addHeader("Set-Cookie", cookie.toString())
         response.sendRedirect(redirectUrl)
     }
 
-    private fun createSetCookieHeader(key: String, value: String): String {
-        return "$key=$value; Path=/; Max-Age=1800; HttpOnly; Secure; SameSite=None"
+    private fun createCookie(key: String, value: String): ResponseCookie {
+        return ResponseCookie.from(key, value)
+            .path("/")
+            .httpOnly(true)
+            .secure(true)
+            .sameSite("None")
+            .domain(".sarang-backend.o-r.kr")
+            .maxAge(432000)
+            .build()
     }
 
     private fun getMemberByEmail(email: String): Member? {

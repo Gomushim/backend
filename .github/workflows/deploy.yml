@@ -2,7 +2,7 @@ name: Sarang Backend CI/CD
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   ci:
