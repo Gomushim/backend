@@ -8,4 +8,5 @@ object ApiPath {
     const val MY_EMOTION = "/v1/member/my-emotion"
     const val UPDATE_MY_NICKNAME = "/v1/member/my-nickname"
     const val UPDATE_MY_BIRTHDAY = "/v1/member/my-birthday"
+    const val UPDATE_MY_NOTIFICATION_POLICY = "/v1/member/my-notification"
 }

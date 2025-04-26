@@ -2,17 +2,21 @@ package gomushin.backend.member.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.member.domain.service.MemberService
+import gomushin.backend.member.domain.service.NotificationService
 import gomushin.backend.member.dto.request.UpdateMyBirthdayRequest
 import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
 import gomushin.backend.member.dto.request.UpdateMyNickNameRequest
+import gomushin.backend.member.dto.request.UpdateMyNotificationRequest
 import gomushin.backend.member.dto.response.MyEmotionResponse
 import gomushin.backend.member.dto.response.MyInfoResponse
 import gomushin.backend.member.dto.response.MyStatusMessageResponse
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class MemberInfoFacade(
     private val memberService: MemberService,
+    private val notificationService: NotificationService
 ) {
     fun getMemberInfo(customUserDetails: CustomUserDetails): MyInfoResponse {
         val member = memberService.getById(customUserDetails.getId())
@@ -37,4 +41,12 @@ class MemberInfoFacade(
 
     fun updateMyBirthDate(customUserDetails: CustomUserDetails, updateMyBirthdayRequest: UpdateMyBirthdayRequest)
         = memberService.updateMyBirthDate(customUserDetails.getId(), updateMyBirthdayRequest)
+
+    @Transactional
+    fun updateMyNotification(customUserDetails: CustomUserDetails, updateMyNotificationRequest: UpdateMyNotificationRequest) {
+        notificationService.getByMemberId(customUserDetails.getId()).apply {
+            if (updateMyNotificationRequest.dday) updateDday()
+            if (updateMyNotificationRequest.partnerStatus) updatePartnerStatus()
+        }
+    }
 }
