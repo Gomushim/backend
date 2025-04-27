@@ -12,12 +12,15 @@ data class LetterPreviewResponse(
     val createdAt: LocalDateTime?,
 ) {
     companion object {
+        private const val MAX_CONTENT_LENGTH = 30
+        private const val PREVIEW_CONTENT_LENGTH = 27
+
         fun of(
             letter: Letter?,
             picture: Picture?
         ): LetterPreviewResponse {
-            val previewContent = if (letter?.content != null && letter.content.length > 30) {
-                letter.content.take(27) + "..."
+            val previewContent = if (letter?.content != null && letter.content.length > MAX_CONTENT_LENGTH) {
+                letter.content.take(PREVIEW_CONTENT_LENGTH) + "..."
             } else {
                 letter?.content
             }
