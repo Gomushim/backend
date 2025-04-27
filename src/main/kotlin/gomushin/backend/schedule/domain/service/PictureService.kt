@@ -43,6 +43,6 @@ class PictureService(
 
     @Transactional
     fun deleteAllByLetterIds(letterIds: List<Long>) {
-        return pictureRepository.deleteAllByLetterIdIn(letterIds)
+        pictureRepository.deleteAllByLetterIdIn(letterIds)
     }
 }
