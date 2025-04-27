@@ -1,5 +1,6 @@
 package gomushin.backend.schedule.domain.entity
 
+import gomushin.backend.core.infrastructure.jpa.shared.BaseEntity
 import jakarta.persistence.*
 
 @Entity
@@ -20,7 +21,7 @@ class Comment(
 
     @Column(name = "content", nullable = false)
     var content: String = "",
-) {
+) : BaseEntity() {
     companion object {
         fun of(
             letterId: Long,
