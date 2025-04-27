@@ -63,8 +63,9 @@ class UpsertAndDeleteLetterFacadeTest {
             `when`(scheduleService.getById(upsertLetterRequest.scheduleId)).thenReturn(schedule)
             `when`(customUserDetails.getCouple()).thenReturn(couple)
             `when`(customUserDetails.getCouple().id).thenReturn(1L)
+            `when`(customUserDetails.username).thenReturn("테스트 이름")
             `when`(schedule.coupleId).thenReturn(1L)
-            `when`(letterService.upsert(1L, upsertLetterRequest)).thenReturn(letter)
+            `when`(letterService.upsert(1L, customUserDetails.username, couple, upsertLetterRequest)).thenReturn(letter)
             `when`(s3Service.uploadFile(pictures[0])).thenReturn("http://example.com/test.jpg")
             doNothing().`when`(pictureService).upsert(1L, listOf("http://example.com/test.jpg"))
             upsertAndDeleteLetterFacade.upsert(customUserDetails, upsertLetterRequest, pictures)
@@ -73,7 +74,7 @@ class UpsertAndDeleteLetterFacadeTest {
             verify(
                 letterService,
                 times(1)
-            ).upsert(1L, upsertLetterRequest)
+            ).upsert(1L, "테스트 이름", couple, upsertLetterRequest)
         }
 
         @DisplayName("업로드 성공 - 업로드된 사진이 없을 때")
@@ -96,12 +97,13 @@ class UpsertAndDeleteLetterFacadeTest {
             `when`(scheduleService.getById(upsertLetterRequest.scheduleId)).thenReturn(schedule)
             `when`(customUserDetails.getCouple()).thenReturn(couple)
             `when`(customUserDetails.getCouple().id).thenReturn(1L)
+            `when`(customUserDetails.username).thenReturn("테스트 이름")
             `when`(schedule.coupleId).thenReturn(1L)
-            `when`(letterService.upsert(1L, upsertLetterRequest)).thenReturn(letter)
+            `when`(letterService.upsert(1L, customUserDetails.username, couple, upsertLetterRequest)).thenReturn(letter)
             upsertAndDeleteLetterFacade.upsert(customUserDetails, upsertLetterRequest, pictures)
 
             // then
-            verify(letterService, times(1)).upsert(1L, upsertLetterRequest)
+            verify(letterService, times(1)).upsert(1L, "테스트 이름", couple, upsertLetterRequest)
             verify(s3Service, never()).uploadFile(org.mockito.kotlin.any())
             verify(pictureService, never()).upsert(org.mockito.kotlin.any(), org.mockito.kotlin.any())
         }
