@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   blue:
     image: "${NCP_CONTAINER_REGISTRY}/sarang-backend:${GITHUB_SHA}"
@@ -6,6 +8,9 @@ services:
       TZ: Asia/Seoul
     ports:
       - '8080:8080'
+    depends_on:
+      - redis
+      - minio
     networks:
       - sarang-backend-network
 
@@ -16,8 +21,54 @@ services:
       TZ: Asia/Seoul
     ports:
       - '8081:8080'
+    depends_on:
+      - redis
+      - minio
     networks:
       - sarang-backend-network
+
+  redis:
+    image: redis:6.0.9
+    container_name: redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+    networks:
+      - sarang-backend-network
+
+  minio:
+    image: quay.io/minio/minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - sarang-backend-network
+    restart: unless-stopped
+
+  mc:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+        until mc alias set myminio http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD}; do echo 'MinIO 아직 준비 안됨...'; sleep 5; done;
+        mc mb -p myminio/gomushin;
+        mc anonymous set download myminio/gomushin;
+        exit 0;
+      "
+    networks:
+      - sarang-backend-network
+
+volumes:
+  redis-data:
+  minio_data:
 
 networks:
   sarang-backend-network:
