@@ -46,6 +46,6 @@ class MemberService(
 
     @Transactional
     fun deleteMember(id : Long) {
-        return memberRepository.deleteById(id)
+        memberRepository.deleteById(id)
     }
 }
