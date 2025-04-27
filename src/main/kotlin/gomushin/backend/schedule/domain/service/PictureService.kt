@@ -1,5 +1,6 @@
 package gomushin.backend.schedule.domain.service
 
+import gomushin.backend.schedule.domain.entity.Letter
 import gomushin.backend.schedule.domain.entity.Picture
 import gomushin.backend.schedule.domain.repository.PictureRepository
 import org.springframework.stereotype.Service
@@ -22,8 +23,13 @@ class PictureService(
     }
 
     @Transactional(readOnly = true)
-    fun findAllByLetterId(letterId: Long): List<Picture> {
-        return pictureRepository.findAllByLetterId(letterId)
+    fun findFirstByLetterId(letterId: Long): Picture? {
+        return pictureRepository.findFirstByLetterIdOrderByIdAsc(letterId)
+    }
+
+    @Transactional(readOnly = true)
+    fun findAllByLetter(letter: Letter): List<Picture> {
+        return pictureRepository.findAllByLetterId(letter.id)
     }
 
     @Transactional

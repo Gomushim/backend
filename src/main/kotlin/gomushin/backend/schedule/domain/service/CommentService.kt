@@ -2,6 +2,7 @@ package gomushin.backend.schedule.domain.service
 
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.schedule.domain.entity.Comment
+import gomushin.backend.schedule.domain.entity.Letter
 import gomushin.backend.schedule.domain.repository.CommentRepository
 import gomushin.backend.schedule.dto.request.UpsertCommentRequest
 import org.springframework.data.repository.findByIdOrNull
@@ -35,6 +36,11 @@ class CommentService(
                 content = upsertCommentRequest.content,
             )
         )
+    }
+
+    @Transactional(readOnly = true)
+    fun findAllByLetter(letter: Letter): List<Comment> {
+        return commentRepository.findAllByLetterId(letter.id)
     }
 
     @Transactional(readOnly = true)
