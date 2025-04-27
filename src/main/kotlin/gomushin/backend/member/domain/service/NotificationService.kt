@@ -38,6 +38,6 @@ class NotificationService(
 
     @Transactional
     fun deleteAllByMember(memberId: Long) {
-        return notificationRepository.deleteAllByMemberId(memberId)
+        notificationRepository.deleteAllByMemberId(memberId)
     }
 }
