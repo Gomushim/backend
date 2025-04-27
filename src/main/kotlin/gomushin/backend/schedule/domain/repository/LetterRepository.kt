@@ -7,6 +7,10 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 
 interface LetterRepository : JpaRepository<Letter, Long> {
+    fun findByCoupleIdAndScheduleId(coupleId: Long, scheduleId: Long): List<Letter>
+
+    fun findByCoupleIdAndScheduleIdAndId(coupleId: Long, scheduleId: Long, letterId: Long): Letter?
+
     @Query("SELECT l.id FROM Letter l WHERE l.authorId = :authorId")
     fun findAllByAuthorId(@Param("authorId") authorId: Long): List<Long>
 
