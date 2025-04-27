@@ -4,8 +4,8 @@ import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.couple.dto.response.MonthlyAnniversariesResponse
-import gomushin.backend.schedule.domain.entity.Schedule
 import gomushin.backend.schedule.domain.service.ScheduleService
+import gomushin.backend.schedule.dto.response.DailyScheduleResponse
 import gomushin.backend.schedule.dto.response.MonthlySchedulesResponse
 import gomushin.backend.schedule.facade.ReadScheduleFacade
 import org.junit.jupiter.api.BeforeEach
@@ -63,7 +63,7 @@ class ReadScheduleFacadeTest {
     fun get_success() {
         // given
         val date = LocalDate.of(2025, 4, 1)
-        val mockSchedules = listOf(mock(Schedule::class.java))
+        val mockSchedules = listOf(mock(DailyScheduleResponse::class.java))
 
         // when
         `when`(scheduleService.findByDate(customUserDetails.getCouple(), date)).thenReturn(mockSchedules)

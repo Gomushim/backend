@@ -2,7 +2,7 @@ package gomushin.backend.schedule.presentation
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.response.ApiResponse
-import gomushin.backend.schedule.domain.entity.Schedule
+import gomushin.backend.schedule.dto.response.DailySchedulesAndAnniversariesResponse
 import gomushin.backend.schedule.dto.response.MonthlySchedulesAndAnniversariesResponse
 import gomushin.backend.schedule.facade.ReadScheduleFacade
 import io.swagger.v3.oas.annotations.Operation
@@ -35,7 +35,7 @@ class ReadScheduleController(
     fun getSchedule(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @RequestParam date: LocalDate,
-    ): ApiResponse<List<Schedule>> {
+    ): ApiResponse<DailySchedulesAndAnniversariesResponse> {
         val schedules = readScheduleFacade.get(customUserDetails, date)
         return ApiResponse.success(schedules)
     }

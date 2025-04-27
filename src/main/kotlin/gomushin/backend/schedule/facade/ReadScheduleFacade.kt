@@ -2,8 +2,8 @@ package gomushin.backend.schedule.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.couple.domain.service.AnniversaryService
-import gomushin.backend.schedule.domain.entity.Schedule
 import gomushin.backend.schedule.domain.service.ScheduleService
+import gomushin.backend.schedule.dto.response.DailySchedulesAndAnniversariesResponse
 import gomushin.backend.schedule.dto.response.MonthlySchedulesAndAnniversariesResponse
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -25,7 +25,9 @@ class ReadScheduleFacade(
         return MonthlySchedulesAndAnniversariesResponse.of(monthlySchedules, monthlyAnniversaries)
     }
 
-    fun get(customUserDetails: CustomUserDetails, date: LocalDate): List<Schedule> {
-        return scheduleService.findByDate(customUserDetails.getCouple(), date)
+    fun get(customUserDetails: CustomUserDetails, date: LocalDate): DailySchedulesAndAnniversariesResponse {
+        val dailySchedules = scheduleService.findByDate(customUserDetails.getCouple(), date)
+        val dailyAnniversaries = anniversaryService.findByDate(customUserDetails.getCouple(), date)
+        return DailySchedulesAndAnniversariesResponse.of(dailySchedules, dailyAnniversaries)
     }
 }
