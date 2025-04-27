@@ -34,6 +34,8 @@ class UpsertAndDeleteLetterFacade(
 
         val letter = letterService.upsert(
             customUserDetails.getId(),
+            customUserDetails.username,
+            customUserDetails.getCouple(),
             upsertLetterRequest
         )
 
@@ -64,7 +66,7 @@ class UpsertAndDeleteLetterFacade(
             throw BadRequestException("sarangggun.letter.invalid-schedule")
         }
 
-        pictureService.findAllByLetterId(letter.id)
+        pictureService.findAllByLetter(letter)
             .takeIf { it.isNotEmpty() }
             ?.forEach { picture ->
                 s3Service.deleteFile(picture.pictureUrl)
