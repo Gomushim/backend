@@ -1,6 +1,7 @@
 package gomushin.backend.schedule.domain.repository
 
 import gomushin.backend.schedule.domain.entity.Schedule
+import gomushin.backend.schedule.dto.response.DailyScheduleResponse
 import gomushin.backend.schedule.dto.response.MonthlySchedulesResponse
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
@@ -16,7 +17,7 @@ interface ScheduleRepository : JpaRepository<Schedule, Long> {
     @Query(
         """
         SELECT new gomushin.backend.schedule.dto.response.MonthlySchedulesResponse(
-            s.content, 
+            s.title, 
             s.startDate, 
             s.endDate, 
             s.fatigue
@@ -31,11 +32,18 @@ interface ScheduleRepository : JpaRepository<Schedule, Long> {
 
     @Query(
         """
-        SELECT s
+        SELECT new gomushin.backend.schedule.dto.response.DailyScheduleResponse(
+            s.id, 
+            s.title, 
+            s.fatigue, 
+            s.startDate, 
+            s.endDate, 
+            s.isAllDay
+        )
         FROM Schedule s
         WHERE s.coupleId = :coupleId 
         AND function('DATE', s.startDate) = :startDate
     """
     )
-    fun findByCoupleIdAndStartDate(coupleId: Long, startDate: LocalDate): List<Schedule>
+    fun findByCoupleIdAndStartDate(coupleId: Long, startDate: LocalDate): List<DailyScheduleResponse>
 }

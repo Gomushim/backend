@@ -18,8 +18,8 @@ class Schedule(
     @Column(name = "user_id", nullable = false)
     val userId: Long = 0L,
 
-    @Column(name = "content", nullable = false)
-    var content: String,
+    @Column(name = "title", nullable = false)
+    var title: String,
 
     @Column(name = "start_date", nullable = false)
     var startDate: LocalDateTime,
@@ -46,7 +46,7 @@ class Schedule(
         fun of(
             coupleId: Long,
             userId: Long,
-            content: String,
+            title: String,
             startDate: LocalDateTime,
             endDate: LocalDateTime,
             fatigue: String,
@@ -55,7 +55,7 @@ class Schedule(
             return Schedule(
                 coupleId = coupleId,
                 userId = userId,
-                content = content,
+                title = title,
                 startDate = startDate,
                 endDate = endDate,
                 fatigue = fatigue,

@@ -71,7 +71,7 @@ class ScheduleServiceTest {
             userId = userId,
             startDate = LocalDateTime.of(2023, 1, 1, 0, 0),
             endDate = LocalDateTime.of(2023, 1, 2, 0, 0),
-            content = "Test Schedule",
+            title = "Test Schedule",
             isAllDay = false,
             fatigue = "VERY_TIRED",
         )

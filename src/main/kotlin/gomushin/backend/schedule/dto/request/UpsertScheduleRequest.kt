@@ -7,8 +7,8 @@ import java.time.LocalDateTime
 data class UpsertScheduleRequest(
     @Schema(description = "일정 ID(새로 생성 시 null, 업데이트 시 id)", example = "1")
     val id: Long?,
-    @Schema(description = "일정 내용", example = "훈련")
-    val content: String,
+    @Schema(description = "일정 제목", example = "훈련")
+    val title: String,
     @Schema(description = "일정 시작 시간", example = "2023-10-01T10:00:00")
     val startDate: LocalDateTime,
     @Schema(description = "일정 종료 시간", example = "2023-10-01T12:00:00")
@@ -21,7 +21,7 @@ data class UpsertScheduleRequest(
     fun toEntity(coupleId: Long, userId: Long) = Schedule(
         coupleId = coupleId,
         userId = userId,
-        content = content,
+        title = title,
         startDate = startDate,
         endDate = endDate,
         fatigue = fatigue,
