@@ -38,6 +38,6 @@ class CoupleService(
 
     @Transactional
     fun deleteByMemberId(memberId: Long) {
-        return coupleRepository.deleteByMemberId(memberId)
+        coupleRepository.deleteByMemberId(memberId)
     }
 }
