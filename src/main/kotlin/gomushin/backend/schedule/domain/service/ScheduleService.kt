@@ -5,6 +5,7 @@ import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.schedule.domain.entity.Schedule
 import gomushin.backend.schedule.domain.repository.ScheduleRepository
 import gomushin.backend.schedule.dto.request.UpsertScheduleRequest
+import gomushin.backend.schedule.dto.response.DailyScheduleResponse
 import gomushin.backend.schedule.dto.response.MonthlySchedulesResponse
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -21,7 +22,7 @@ class ScheduleService(
     }
 
     @Transactional(readOnly = true)
-    fun findByDate(couple: Couple, date: LocalDate): List<Schedule> {
+    fun findByDate(couple: Couple, date: LocalDate): List<DailyScheduleResponse> {
         return scheduleRepository.findByCoupleIdAndStartDate(couple.id, date)
     }
 
@@ -31,7 +32,7 @@ class ScheduleService(
             getById(id).let {
                 it.startDate = upsertScheduleRequest.startDate
                 it.endDate = upsertScheduleRequest.endDate
-                it.content = upsertScheduleRequest.content
+                it.title = upsertScheduleRequest.title
                 it.fatigue = upsertScheduleRequest.fatigue
                 it.isAllDay = upsertScheduleRequest.isAllDay
             }
