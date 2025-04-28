@@ -165,4 +165,13 @@ class CoupleFacadeTest {
         verify(coupleInfoService).updateRelationshipStartDate(customUserDetails.getCouple(), updateRelationshipStartDateRequest)
     }
 
+    @DisplayName("이모지 조회 - 정상응답")
+    @Test
+    fun getEmotion() {
+        `when`(coupleInfoService.getCoupleEmotion(customUserDetails.getId())).thenReturn(1)
+        val result = coupleFacade.getCoupleEmotion(customUserDetails)
+        verify(coupleInfoService).getCoupleEmotion(1L)
+        assertEquals(1, result.emotion)
+    }
+
 }

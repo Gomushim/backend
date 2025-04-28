@@ -5,7 +5,6 @@ import gomushin.backend.couple.domain.entity.Anniversary
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.repository.AnniversaryRepository
 import gomushin.backend.couple.domain.repository.CoupleRepository
-import gomushin.backend.couple.dto.request.CoupleAnniversaryRequest
 import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
 import gomushin.backend.couple.dto.request.UpdateRelationshipStartDateRequest
 import gomushin.backend.couple.dto.response.DdayResponse
@@ -133,7 +132,7 @@ class CoupleInfoService(
     }
 
     @Transactional(readOnly = true)
-    fun getEmotion(id: Long): Int {
+    fun getCoupleEmotion(id: Long): Int {
         val coupleMember = findCoupleMember(id)
         return coupleMember.emotion ?: throw BadRequestException("sarangggun.member.not-exist-emoji")
     }
