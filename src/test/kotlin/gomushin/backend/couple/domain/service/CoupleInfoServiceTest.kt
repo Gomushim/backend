@@ -386,4 +386,39 @@ class CoupleInfoServiceTest {
         verify(anniversaryRepository).saveAll(anyList())
         assertEquals(couple.relationshipStartDate, updateRelationshipStartDateRequest.relationshipStartDate)
     }
+
+    @DisplayName("getCoupleEmotion - 성공")
+    @Test
+    fun getCoupleEmotion(){
+        //given
+        val coupleId = 1L
+        val userId = 1L
+        val coupleUserId = 2L
+        val couple = Couple(
+            id = coupleId,
+            invitorId = coupleUserId,
+            inviteeId = userId,
+        )
+        val coupleUser = Member(
+            id = 2L,
+            name="김영록 여친",
+            nickname="김영록 여친",
+            email="test2@test.com",
+            profileImageUrl = "url2",
+            birthDate= LocalDate.of(2001,5,19),
+            provider=Provider.KAKAO,
+            role= Role.MEMBER,
+            isCouple= true,
+            statusMessage = "기분이 좋아용",
+            emotion = 2
+        )
+        `when`(coupleRepository.findByMemberId(userId)).thenReturn(couple)
+        `when`(memberRepository.findById(coupleUserId)).thenReturn(Optional.of(coupleUser))
+
+        //when
+        val emotion = coupleInfoService.getCoupleEmotion(userId)
+
+        //then
+        assertEquals(coupleUser.emotion, emotion)
+    }
 }

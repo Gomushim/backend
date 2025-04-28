@@ -69,7 +69,7 @@ class CoupleFacade(
     }
 
     fun getCoupleEmotion(customUserDetails: CustomUserDetails): CoupleEmotionResponse {
-        val emotion = coupleInfoService.getEmotion(customUserDetails.getId())
+        val emotion = coupleInfoService.getCoupleEmotion(customUserDetails.getId())
         return CoupleEmotionResponse.of(emotion)
     }
 }
