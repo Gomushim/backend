@@ -33,7 +33,7 @@ class ReadLetterFacadeTest {
     @Mock
     lateinit var pictureService: PictureService
 
-    lateinit var readLetterFacade: ReadLetterFacade
+    private lateinit var readLetterFacade: ReadLetterFacade
 
 
     @BeforeEach
