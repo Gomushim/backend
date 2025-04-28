@@ -1,6 +1,8 @@
 package gomushin.backend.member.facade
 
+import gomushin.backend.alarm.service.StatusAlarmService
 import gomushin.backend.core.CustomUserDetails
+import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.member.domain.service.NotificationService
 import gomushin.backend.member.dto.request.UpdateMyBirthdayRequest
@@ -16,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional
 @Component
 class MemberInfoFacade(
     private val memberService: MemberService,
-    private val notificationService: NotificationService
+    private val notificationService: NotificationService,
+    private val statusAlarmService: StatusAlarmService,
+    private val coupleInfoService: CoupleInfoService
 ) {
     fun getMemberInfo(customUserDetails: CustomUserDetails): MyInfoResponse {
         val member = memberService.getById(customUserDetails.getId())
@@ -28,8 +32,15 @@ class MemberInfoFacade(
         return MyStatusMessageResponse.of(member)
     }
 
-    fun updateMyEmotionAndStatusMessage(customUserDetails: CustomUserDetails, updateMyEmotionAndStatusMessageRequest: UpdateMyEmotionAndStatusMessageRequest)
-        = memberService.updateMyEmotionAndStatusMessage(customUserDetails.getId(), updateMyEmotionAndStatusMessageRequest)
+    fun updateMyEmotionAndStatusMessage(customUserDetails: CustomUserDetails, updateMyEmotionAndStatusMessageRequest: UpdateMyEmotionAndStatusMessageRequest) {
+        memberService.updateMyEmotionAndStatusMessage(customUserDetails.getId(), updateMyEmotionAndStatusMessageRequest)
+        coupleInfoService.findCoupleMember(customUserDetails.getId()).also { receiver ->
+            if (notificationService.getByMemberId(receiver.id).partnerStatus) {
+                val sender = memberService.getById(customUserDetails.getId())
+                statusAlarmService.sendStatusAlarm(sender, receiver, updateMyEmotionAndStatusMessageRequest.emotion)
+            }
+        }
+    }
 
     fun getMemberEmotion(customUserDetails: CustomUserDetails): MyEmotionResponse {
         val member = memberService.getById(customUserDetails.getId())
