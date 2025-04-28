@@ -33,19 +33,22 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: YML 파일 세팅
+      - name: YML 파일 세팅 및 fcm.json 주입
         env:
           APPLICATION_PROPERTIES: ${{ secrets.APPLICATION_PROPERTIES }}
           TEST_APPLICATION_PROPERTIES: ${{ secrets.TEST_APPLICATION_PROPERTIES }}
           ERROR_MESSAGES_PROPERTIES: ${{ secrets.ERROR_MESSAGES_PROPERTIES }}
+          FCM_JSON: ${{secrets.FCM_JSON}}
         run: |
           cd ./src
           rm -rf main/resources/application.yml
           mkdir -p test/resources
           mkdir -p main/resources
+          mkdir -p main/resources/firebase
           echo "$APPLICATION_PROPERTIES" > main/resources/application.yml
           echo "$ERROR_MESSAGES_PROPERTIES" > main/resources/api-error-messages.properties
-          # echo "$TEST_APPLICATION_PROPERTIES" > test/resources/application.yml
+          echo "$FCM_JSON" > main/resources/firebase/fcm.json
+          echo "$TEST_APPLICATION_PROPERTIES" > test/resources/application.yml
 
       - name: gradlew 권한 부여
         run: chmod +x gradlew
