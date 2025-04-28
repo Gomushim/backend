@@ -10,9 +10,9 @@ import gomushin.backend.schedule.domain.service.LetterService
 import gomushin.backend.schedule.domain.service.PictureService
 import gomushin.backend.schedule.domain.service.ScheduleService
 import gomushin.backend.schedule.facade.ReadLetterFacade
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
@@ -33,9 +33,20 @@ class ReadLetterFacadeTest {
     @Mock
     lateinit var pictureService: PictureService
 
-    @InjectMocks
     lateinit var readLetterFacade: ReadLetterFacade
 
+
+    @BeforeEach
+    fun setUp() {
+        val baseUrl = "http://localhost:8080"
+        readLetterFacade = ReadLetterFacade(
+            letterService,
+            scheduleService,
+            pictureService,
+            commentService,
+            baseUrl
+        )
+    }
 
     @DisplayName("getList - 성공")
     @Test
