@@ -2,20 +2,13 @@ package gomushin.backend.couple.presentation
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.response.ApiResponse
-import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
-import gomushin.backend.couple.dto.request.UpdateRelationshipStartDateRequest
+import gomushin.backend.couple.dto.response.*
 import gomushin.backend.couple.facade.CoupleFacade
-import gomushin.backend.couple.dto.response.CoupleGradeResponse
-import gomushin.backend.couple.dto.response.DdayResponse
-import gomushin.backend.couple.dto.response.NicknameResponse
-import gomushin.backend.couple.dto.response.StatusMessageResponse
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
@@ -68,5 +61,14 @@ class CoupleInfoController (
         @AuthenticationPrincipal customUserDetails: CustomUserDetails
     ):ApiResponse<StatusMessageResponse>{
         return ApiResponse.success(coupleFacade.statusMessage(customUserDetails))
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(ApiPath.COUPLE_EMOJI)
+    @Operation(summary = "커플 이모지 조회 api", description = "getCoupleEmotion")
+    fun getCoupleEmotion(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails
+    ):ApiResponse<CoupleEmotionResponse>{
+        return ApiResponse.success(coupleFacade.getCoupleEmotion(customUserDetails))
     }
 }

@@ -9,10 +9,7 @@ import gomushin.backend.couple.domain.service.CoupleService
 import gomushin.backend.couple.dto.request.CoupleConnectRequest
 import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
 import gomushin.backend.couple.dto.request.UpdateRelationshipStartDateRequest
-import gomushin.backend.couple.dto.response.CoupleGradeResponse
-import gomushin.backend.couple.dto.response.DdayResponse
-import gomushin.backend.couple.dto.response.NicknameResponse
-import gomushin.backend.couple.dto.response.StatusMessageResponse
+import gomushin.backend.couple.dto.response.*
 import org.springframework.stereotype.Component
 
 @Component
@@ -69,5 +66,10 @@ class CoupleFacade(
     fun updateRelationshipStartDate(customUserDetails: CustomUserDetails, updateRelationshipStartDateRequest: UpdateRelationshipStartDateRequest) {
         val couple = coupleService.getByMemberId(customUserDetails.getId())
         coupleInfoService.updateRelationshipStartDate(couple, updateRelationshipStartDateRequest)
+    }
+
+    fun getCoupleEmotion(customUserDetails: CustomUserDetails): CoupleEmotionResponse {
+        val emotion = coupleInfoService.getEmotion(customUserDetails.getId())
+        return CoupleEmotionResponse.of(emotion)
     }
 }
