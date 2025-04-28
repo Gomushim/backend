@@ -88,7 +88,6 @@ class LetterService(
             partnerPk,
             readLettersToMePaginationRequest.key,
             readLettersToMePaginationRequest.take,
-            readLettersToMePaginationRequest.orderCreatedAt
         )
     }
 }

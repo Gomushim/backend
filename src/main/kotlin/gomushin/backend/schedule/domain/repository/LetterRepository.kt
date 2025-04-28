@@ -35,6 +35,5 @@ interface LetterRepository : JpaRepository<Letter, Long> {
         @Param("partnerPk") partnerPk: Long,
         @Param("key") key: Long,
         @Param("take") take: Long,
-        @Param("orderCreatedAt") orderCreatedAt: String,
     ): List<Letter?>
 }
