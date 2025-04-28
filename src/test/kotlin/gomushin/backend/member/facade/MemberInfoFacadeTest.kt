@@ -1,6 +1,8 @@
 package gomushin.backend.member.facade
 
+import gomushin.backend.alarm.service.StatusAlarmService
 import gomushin.backend.core.CustomUserDetails
+import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.entity.Notification
 import gomushin.backend.member.domain.service.MemberService
@@ -28,13 +30,19 @@ class MemberInfoFacadeTest {
     private lateinit var memberService: MemberService
     @Mock
     private lateinit var notificationService: NotificationService
+    @Mock
+    private lateinit var statusAlarmService: StatusAlarmService
+    @Mock
+    private lateinit var coupleInfoService: CoupleInfoService
 
     @InjectMocks
     private lateinit var memberInfoFacade: MemberInfoFacade
 
     private lateinit var customUserDetails: CustomUserDetails
     private lateinit var member: Member
+    private lateinit var memberCouple : Member
     private lateinit var notification: Notification
+    private lateinit var memberCoupleNotification : Notification
 
     @BeforeEach
     fun setUp() {
@@ -50,11 +58,30 @@ class MemberInfoFacadeTest {
             statusMessage = "상태 메시지"
         )
 
+        memberCouple = Member(
+            id = 2L,
+            name = "멤버의 커플",
+            nickname = "멤버의 커플 닉네임",
+            email = "test@test.com",
+            birthDate = null,
+            profileImageUrl = null,
+            provider = Provider.KAKAO,
+            role = Role.MEMBER,
+            statusMessage = "상태 메시지"
+        )
+
         notification = Notification(
             id = 1L,
             memberId = 1L,
             dday = false,
             partnerStatus = false
+        )
+
+        memberCoupleNotification = Notification (
+            id = 2L,
+            memberId = 2L,
+            dday = false,
+            partnerStatus = true
         )
 
         customUserDetails = mock(CustomUserDetails::class.java)
@@ -92,10 +119,18 @@ class MemberInfoFacadeTest {
     fun updateMyEmotionAndStatusMessage() {
         //given
         val updateMyEmotionAndStatusMessageRequest = UpdateMyEmotionAndStatusMessageRequest(1, "좋은 날씨야")
+        `when`(coupleInfoService.findCoupleMember(customUserDetails.getId())).thenReturn(memberCouple)
+        `when`(notificationService.getByMemberId(memberCouple.id)).thenReturn(memberCoupleNotification)
+        `when`(memberService.getById(customUserDetails.getId())).thenReturn(member)
+        doNothing().`when`(statusAlarmService).sendStatusAlarm(member, memberCouple, updateMyEmotionAndStatusMessageRequest.emotion)
         //when
         val result = memberInfoFacade.updateMyEmotionAndStatusMessage(customUserDetails, updateMyEmotionAndStatusMessageRequest)
         //then
         verify(memberService).updateMyEmotionAndStatusMessage(1L, updateMyEmotionAndStatusMessageRequest)
+        verify(coupleInfoService).findCoupleMember(customUserDetails.getId())
+        verify(notificationService).getByMemberId(memberCouple.id)
+        verify(memberService).getById(customUserDetails.getId())
+        verify(statusAlarmService).sendStatusAlarm(member, memberCouple, updateMyEmotionAndStatusMessageRequest.emotion)
     }
 
     @DisplayName("이모지 조회 테스트")
