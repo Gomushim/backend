@@ -5,6 +5,7 @@ import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.schedule.domain.entity.Letter
 import gomushin.backend.schedule.domain.entity.Schedule
 import gomushin.backend.schedule.domain.repository.LetterRepository
+import gomushin.backend.schedule.dto.request.ReadLettersToMePaginationRequest
 import gomushin.backend.schedule.dto.request.UpsertLetterRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -65,13 +66,29 @@ class LetterService(
     fun delete(letterId: Long) {
         letterRepository.deleteById(letterId)
     }
+
     @Transactional
-    fun deleteAllByMemberId(memberId : Long) {
+    fun deleteAllByMemberId(memberId: Long) {
         letterRepository.deleteAllByAuthorId(memberId)
     }
 
     @Transactional(readOnly = true)
-    fun findAllByAuthorId(memberId: Long) : List<Long>{
+    fun findAllByAuthorId(memberId: Long): List<Long> {
         return letterRepository.findAllByAuthorId(memberId)
+    }
+
+    @Transactional(readOnly = true)
+    fun findArrivedToMe(
+        couple: Couple,
+        partnerPk: Long,
+        readLettersToMePaginationRequest: ReadLettersToMePaginationRequest
+    ): List<Letter?> {
+        return letterRepository.findByLettersToMe(
+            couple.id,
+            partnerPk,
+            readLettersToMePaginationRequest.key,
+            readLettersToMePaginationRequest.take,
+            readLettersToMePaginationRequest.orderCreatedAt
+        )
     }
 }
