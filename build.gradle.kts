@@ -70,6 +70,12 @@ dependencies {
     // aws
     implementation("software.amazon.awssdk:s3:2.30.38")
 
+    //okhttp3
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+
+    //google auth
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.18.0")
+
     implementation("org.springframework.boot:spring-boot-starter-validation")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")

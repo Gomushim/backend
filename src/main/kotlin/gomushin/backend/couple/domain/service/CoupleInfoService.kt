@@ -90,7 +90,8 @@ class CoupleInfoService(
         return coupleMember.statusMessage
     }
 
-    private fun findCoupleMember(id : Long): Member {
+    @Transactional(readOnly = true)
+    fun findCoupleMember(id : Long): Member {
         val couple = coupleRepository.findByMemberId(id) ?: throw BadRequestException("saranggun.couple.not-connected")
         val coupleMemberId = if (couple.invitorId == id) couple.inviteeId else couple.invitorId
 
