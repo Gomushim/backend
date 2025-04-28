@@ -135,6 +135,6 @@ class CoupleInfoService(
     @Transactional(readOnly = true)
     fun getEmotion(id: Long): Int {
         val coupleMember = findCoupleMember(id)
-        return coupleMember.emotion!!
+        return coupleMember.emotion ?: throw BadRequestException("sarangggun.member.not-exist-emoji")
     }
 }
