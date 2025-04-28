@@ -17,4 +17,24 @@ interface LetterRepository : JpaRepository<Letter, Long> {
     @Modifying
     @Query("DELETE FROM Letter l WHERE l.authorId = :authorId")
     fun deleteAllByAuthorId(@Param("authorId") authorId: Long)
+
+    @Query(
+        """
+            SELECT *
+            FROM Letter l 
+            WHERE l.couple_id = :coupleId 
+                AND l.author_id = :partnerPk
+                AND l.id <:key
+            ORDER BY l.created_at DESC         
+            LIMIT :take
+        """,
+        nativeQuery = true
+    )
+    fun findByLettersToMe(
+        @Param("coupleId") coupleId: Long,
+        @Param("partnerPk") partnerPk: Long,
+        @Param("key") key: Long,
+        @Param("take") take: Long,
+        @Param("orderCreatedAt") orderCreatedAt: String,
+    ): List<Letter?>
 }
