@@ -13,6 +13,7 @@ import gomushin.backend.member.dto.request.UpdateMyBirthdayRequest
 import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
 import gomushin.backend.member.dto.request.UpdateMyNickNameRequest
 import gomushin.backend.member.dto.request.UpdateMyNotificationRequest
+import gomushin.backend.member.value.Emotion
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -118,7 +119,7 @@ class MemberInfoFacadeTest {
     @Test
     fun updateMyEmotionAndStatusMessage() {
         //given
-        val updateMyEmotionAndStatusMessageRequest = UpdateMyEmotionAndStatusMessageRequest(1, "좋은 날씨야")
+        val updateMyEmotionAndStatusMessageRequest = UpdateMyEmotionAndStatusMessageRequest(Emotion.GOOD, "좋은 날씨야")
         `when`(coupleInfoService.findCoupleMember(customUserDetails.getId())).thenReturn(memberCouple)
         `when`(notificationService.getByMemberId(memberCouple.id)).thenReturn(memberCoupleNotification)
         `when`(memberService.getById(customUserDetails.getId())).thenReturn(member)
