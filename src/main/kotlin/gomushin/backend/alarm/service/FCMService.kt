@@ -77,7 +77,8 @@ class FCMService(
             googleCredentials.refreshIfExpired()
             return googleCredentials.accessToken.tokenValue
         } catch (e: IOException) {
-            throw BadRequestException(e.message.toString())
+            log.error("FCM AccessToken 발급 중 오류 발생", e)
+            throw BadRequestException("sarangggun.alarm.fail-issue-accesstoken")
         }
     }
 }
