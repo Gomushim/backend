@@ -1,6 +1,7 @@
 package gomushin.backend.member.domain.entity
 
 import gomushin.backend.core.infrastructure.jpa.shared.BaseEntity
+import gomushin.backend.member.domain.value.Emotion
 import gomushin.backend.member.domain.value.Provider
 import gomushin.backend.member.domain.value.Role
 import jakarta.persistence.*
@@ -42,8 +43,9 @@ class Member(
     @Column(name = "is_couple", nullable = false)
     var isCouple: Boolean = false,
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "emotion")
-    var emotion : Int? = null,
+    var emotion : Emotion? = null,
 
     @Column(name = "fcm_token", nullable = false)
     var fcmToken: String = "",
@@ -75,7 +77,7 @@ class Member(
         this.isCouple = !this.isCouple
     }
 
-    fun updateEmotion(emotion: Int) {
+    fun updateEmotion(emotion: Emotion) {
         this.emotion = emotion
     }
 

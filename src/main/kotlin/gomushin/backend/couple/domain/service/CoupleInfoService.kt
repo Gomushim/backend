@@ -11,6 +11,7 @@ import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.couple.dto.response.NicknameResponse
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.repository.MemberRepository
+import gomushin.backend.member.domain.value.Emotion
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -133,7 +134,7 @@ class CoupleInfoService(
     }
 
     @Transactional(readOnly = true)
-    fun getCoupleEmotion(id: Long): Int {
+    fun getCoupleEmotion(id: Long): Emotion {
         val coupleMember = findCoupleMember(id)
         return coupleMember.emotion ?: throw BadRequestException("sarangggun.member.not-exist-emoji")
     }

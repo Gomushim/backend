@@ -2,7 +2,7 @@ package gomushin.backend.alarm.service
 
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.member.domain.entity.Member
-import gomushin.backend.member.value.Emotion
+import gomushin.backend.member.domain.value.Emotion
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 
@@ -23,11 +23,11 @@ class StatusAlarmService (
             "서운한 마음이 들었대요.+연인과 진심 어린 대화 어때요?",
             "연인의 마음이 무거운가봐요.+따뜻한 공감이 필요해요"
         ),
-        Emotion.GOOD to listOf(
+        Emotion.HAPPY to listOf(
             "기분 좋은 하루를 함께 나눠보세요.+당신의 행복이 전해질 거예요.",
             "좋은 일이 있었대요!+축하해주고 같이 기뻐해주세요💛"
         ),
-        Emotion.ANNOY to listOf(
+        Emotion.ANGRY to listOf(
             "연인이 짜증나는 일이 있었대요.+들어주는 것도 큰 위로가 될거예요",
             "OO님 오늘 좀 힘들었나 봐요.+오늘 전화통화 어때요?"
         ),
@@ -35,7 +35,7 @@ class StatusAlarmService (
             "당신을 걱정하는 마음이 담겼어요.+잠깐 안부를 전해주면 어떨까요?",
             "연인이 당신을 걱정해요.+연인의 마음 한쪽이 조금 무거웠대요."
         ),
-        Emotion.NOTHING to listOf(
+        Emotion.COMMON to listOf(
             "연인이 평범한 일상을 보냈대요.+안부를 전하는 일상이 관계를 지켜줄 거예요.",
             "감정의 큰 파도는 없지만,+OO님의 하루를 들어줄 누군가가 있다면 좋겠대요."
         )
