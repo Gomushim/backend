@@ -29,11 +29,13 @@ class FCMService(
     private val googleScope : String
 ) {
     private val log: Logger = LoggerFactory.getLogger(FCMService::class.java)
+    companion object {
+        private val client: OkHttpClient = OkHttpClient()
+    }
     @Throws(IOException::class)
     fun sendMessageTo(targetToken: String, title: String, body: String) {
         val message = makeMessage(targetToken, title, body)
 
-        val client = OkHttpClient()
         val requestBody = message
             .toRequestBody("application/json; charset=utf-8".toMediaType())
 
