@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 
 data class UpdateMyEmotionAndStatusMessageRequest(
-    @Schema(description = "이모지(1 : 보고싶어요, 2: 기분 좋아요, 3 : 아무느낌 없어요, " +
-            "4 : 피곤해요, 5: 서운해요, 6 : 걱정돼요, 7 : 짜증나요)", example = "1")
+    @Schema(description = "이모지(MISS : 보고싶어요, GOOD: 기분 좋아요, NOTHING : 아무느낌 없어요, " +
+            "TIRED : 피곤해요, SAD: 서운해요, WORRY : 걱정돼요, ANNOY : 짜증나요)", example = "1")
     val emotion : Emotion,
 
     @Schema(description = "상태 메시지", example = "보고 싶어요")
