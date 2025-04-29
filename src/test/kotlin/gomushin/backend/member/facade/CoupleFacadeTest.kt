@@ -12,6 +12,7 @@ import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.couple.dto.response.NicknameResponse
 import gomushin.backend.couple.facade.CoupleFacade
 import gomushin.backend.member.domain.entity.Member
+import gomushin.backend.member.domain.value.Emotion
 import gomushin.backend.member.domain.value.Provider
 import gomushin.backend.member.domain.value.Role
 import org.junit.jupiter.api.BeforeEach
@@ -168,10 +169,10 @@ class CoupleFacadeTest {
     @DisplayName("이모지 조회 - 정상응답")
     @Test
     fun getEmotion() {
-        `when`(coupleInfoService.getCoupleEmotion(customUserDetails.getId())).thenReturn(1)
+        `when`(coupleInfoService.getCoupleEmotion(customUserDetails.getId())).thenReturn(Emotion.HAPPY)
         val result = coupleFacade.getCoupleEmotion(customUserDetails)
         verify(coupleInfoService).getCoupleEmotion(1L)
-        assertEquals(1, result.emotion)
+        assertEquals(Emotion.HAPPY.name, result.emotion)
     }
 
 }

@@ -8,6 +8,7 @@ import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
 import gomushin.backend.couple.dto.request.UpdateRelationshipStartDateRequest
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.repository.MemberRepository
+import gomushin.backend.member.domain.value.Emotion
 import gomushin.backend.member.domain.value.Provider
 import gomushin.backend.member.domain.value.Role
 import org.junit.jupiter.api.DisplayName
@@ -410,7 +411,7 @@ class CoupleInfoServiceTest {
             role= Role.MEMBER,
             isCouple= true,
             statusMessage = "기분이 좋아용",
-            emotion = 2
+            emotion = Emotion.HAPPY
         )
         `when`(coupleRepository.findByMemberId(userId)).thenReturn(couple)
         `when`(memberRepository.findById(coupleUserId)).thenReturn(Optional.of(coupleUser))
