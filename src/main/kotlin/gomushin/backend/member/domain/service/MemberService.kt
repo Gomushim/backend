@@ -28,7 +28,7 @@ class MemberService(
     @Transactional
     fun updateMyEmotionAndStatusMessage(id: Long, updateMyEmotionAndStatusMessageRequest: UpdateMyEmotionAndStatusMessageRequest) {
         val member = getById(id)
-        member.updateEmotion(updateMyEmotionAndStatusMessageRequest.emotion.code)
+        member.updateEmotion(updateMyEmotionAndStatusMessageRequest.emotion)
         member.updateStatusMessage(updateMyEmotionAndStatusMessageRequest.statusMessage)
     }
 

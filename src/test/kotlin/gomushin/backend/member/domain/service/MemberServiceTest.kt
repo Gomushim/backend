@@ -7,7 +7,7 @@ import gomushin.backend.member.domain.value.Role
 import gomushin.backend.member.dto.request.UpdateMyBirthdayRequest
 import gomushin.backend.member.dto.request.UpdateMyEmotionAndStatusMessageRequest
 import gomushin.backend.member.dto.request.UpdateMyNickNameRequest
-import gomushin.backend.member.value.Emotion
+import gomushin.backend.member.domain.value.Emotion
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -66,7 +66,7 @@ class MemberServiceTest {
             profileImageUrl = null,
             provider = Provider.KAKAO,
             role = Role.GUEST,
-            emotion = 1,
+            emotion = Emotion.COMMON,
             statusMessage = "상태 변경전"
         )
         val updateMyEmotionAndStatusMessageRequest = UpdateMyEmotionAndStatusMessageRequest(Emotion.SAD, "상태 변경후")
@@ -74,7 +74,7 @@ class MemberServiceTest {
         `when`(memberRepository.findById(memberId)).thenReturn(Optional.of(expectedMember))
         val result = memberService.updateMyEmotionAndStatusMessage(memberId, updateMyEmotionAndStatusMessageRequest)
         //then
-        assertEquals(expectedMember.emotion, updateMyEmotionAndStatusMessageRequest.emotion.code)
+        assertEquals(expectedMember.emotion, updateMyEmotionAndStatusMessageRequest.emotion)
         assertEquals(expectedMember.statusMessage, updateMyEmotionAndStatusMessageRequest.statusMessage)
     }
 
@@ -92,7 +92,7 @@ class MemberServiceTest {
             profileImageUrl = null,
             provider = Provider.KAKAO,
             role = Role.GUEST,
-            emotion = 1,
+            emotion = Emotion.COMMON,
             statusMessage = "상태 변경전"
         )
         val updateMyNickNameRequest = UpdateMyNickNameRequest("테스트 닉네임 수정")
@@ -117,7 +117,7 @@ class MemberServiceTest {
             profileImageUrl = null,
             provider = Provider.KAKAO,
             role = Role.GUEST,
-            emotion = 1,
+            emotion = Emotion.COMMON,
             statusMessage = "상태 변경전",
         )
         val updateMyBirthdayRequest = UpdateMyBirthdayRequest(LocalDate.of(2001, 3, 30))
