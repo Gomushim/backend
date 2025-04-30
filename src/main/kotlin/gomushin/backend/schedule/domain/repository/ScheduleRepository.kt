@@ -17,6 +17,7 @@ interface ScheduleRepository : JpaRepository<Schedule, Long> {
     @Query(
         """
         SELECT new gomushin.backend.schedule.dto.response.MonthlySchedulesResponse(
+            s.id,
             s.title, 
             s.startDate, 
             s.endDate, 

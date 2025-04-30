@@ -6,6 +6,8 @@ import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.couple.domain.service.CoupleConnectService
 import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.couple.domain.service.CoupleService
+import gomushin.backend.couple.domain.value.AnniversaryEmoji
+import gomushin.backend.couple.dto.request.GenerateAnniversaryRequest
 import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
 import gomushin.backend.couple.dto.request.UpdateRelationshipStartDateRequest
 import gomushin.backend.couple.dto.response.DdayResponse
@@ -83,12 +85,12 @@ class CoupleFacadeTest {
 
         customUserDetails = Mockito.mock(CustomUserDetails::class.java)
 
-        `when`(customUserDetails.getId()).thenReturn(1L)
     }
 
     @DisplayName("grade 조회")
     @Test
     fun getGradeInfo(){
+        `when`(customUserDetails.getId()).thenReturn(1L)
         `when`(coupleInfoService.getGrade(customUserDetails.getId())).thenReturn(1)
         val result = coupleFacade.getGradeInfo(customUserDetails)
         verify(coupleInfoService).getGrade(1L)
@@ -98,6 +100,7 @@ class CoupleFacadeTest {
     @DisplayName("커플 연동 여부 조회")
     @Test
     fun checkConnect(){
+        `when`(customUserDetails.getId()).thenReturn(1L)
         `when`(coupleInfoService.checkCouple(customUserDetails.getId())).thenReturn(true)
         val result = coupleFacade.checkConnect(customUserDetails)
         verify(coupleInfoService).checkCouple(1L)
@@ -107,6 +110,7 @@ class CoupleFacadeTest {
     @DisplayName("디데이 조회 - 정상응답")
     @Test
     fun getDday(){
+        `when`(customUserDetails.getId()).thenReturn(1L)
         `when`(coupleInfoService.getDday(customUserDetails.getId())).thenReturn(DdayResponse(100, 200, -345))
         val result = coupleFacade.getDday(customUserDetails)
         verify(coupleInfoService).getDday(1L)
@@ -118,6 +122,7 @@ class CoupleFacadeTest {
     @DisplayName("디데이 조회 - 날짜 정보 안 들어갔을 때")
     @Test
     fun getDdayNull(){
+        `when`(customUserDetails.getId()).thenReturn(1L)
         `when`(coupleInfoService.getDday(customUserDetails.getId())).thenReturn(DdayResponse(null, null, null))
         val result = coupleFacade.getDday(customUserDetails)
         verify(coupleInfoService).getDday(1L)
@@ -129,6 +134,7 @@ class CoupleFacadeTest {
     @DisplayName("닉네임 조회 - 정상응답")
     @Test
     fun nickName(){
+        `when`(customUserDetails.getId()).thenReturn(1L)
         `when`(coupleInfoService.getNickName(customUserDetails.getId())).thenReturn(NicknameResponse("김영록", "김영록 여친"))
         val result = coupleFacade.nickName(customUserDetails)
         verify(coupleInfoService).getNickName(1L)
@@ -139,6 +145,7 @@ class CoupleFacadeTest {
     @DisplayName("상태 메시지 조회 - 정상응답")
     @Test
     fun statusMessage(){
+        `when`(customUserDetails.getId()).thenReturn(1L)
         `when`(coupleInfoService.getStatusMessage(customUserDetails.getId())).thenReturn("기분이 좋아용")
         val result = coupleFacade.statusMessage(customUserDetails)
         verify(coupleInfoService).getStatusMessage(1L)
@@ -148,6 +155,7 @@ class CoupleFacadeTest {
     @DisplayName("입대일, 전역일 수정 - 정상응답")
     @Test
     fun updateMilitaryDate() {
+        `when`(customUserDetails.getId()).thenReturn(1L)
         val updateMilitaryDateRequest = UpdateMilitaryDateRequest(
             LocalDate.of(2022, 5, 24),
             LocalDate.of(2023,11,23)
@@ -159,6 +167,7 @@ class CoupleFacadeTest {
     @DisplayName("만난날 수정 - 정상응답")
     @Test
     fun updateRelationshipStartDate() {
+        `when`(customUserDetails.getId()).thenReturn(1L)
         val updateRelationshipStartDateRequest = UpdateRelationshipStartDateRequest(
             LocalDate.of(2022, 5, 24),
         )
@@ -169,10 +178,29 @@ class CoupleFacadeTest {
     @DisplayName("이모지 조회 - 정상응답")
     @Test
     fun getEmotion() {
+        `when`(customUserDetails.getId()).thenReturn(1L)
         `when`(coupleInfoService.getCoupleEmotion(customUserDetails.getId())).thenReturn(Emotion.HAPPY)
         val result = coupleFacade.getCoupleEmotion(customUserDetails)
         verify(coupleInfoService).getCoupleEmotion(1L)
         assertEquals(Emotion.HAPPY.name, result.emotion)
     }
 
+    @DisplayName("기념일 생성 - 정상응답")
+    @Test
+    fun generateAnniversary() {
+        //given
+        val generateAnniversaryRequest = GenerateAnniversaryRequest(
+            "전역일",
+            AnniversaryEmoji.CAKE,
+            LocalDate.of(2025, 5, 1)
+        )
+        `when`(customUserDetails.getCouple()).thenReturn(couple)
+//        `when`(anniversaryService.generateAnniversary(customUserDetails.getCouple(),generateAnniversaryRequest)).thenReturn(
+//            Mockito.mock(Unit::class.java)
+//        )
+        //when
+        coupleFacade.generateAnniversary(customUserDetails, generateAnniversaryRequest)
+        //then
+        verify(anniversaryService).generateAnniversary(couple, generateAnniversaryRequest)
+    }
 }
