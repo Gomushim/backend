@@ -58,7 +58,7 @@ class AnniversaryCalculator {
                 break
             } else {
                 val title = "${anniversaryYear}주년"
-                val anniversary = Anniversary.create(coupleId, title, anniversaryDate)
+                val anniversary = Anniversary.autoCreate(coupleId, title, anniversaryDate)
                 anniversaryList.add(anniversary)
                 anniversaryYear++
             }
@@ -82,7 +82,7 @@ class AnniversaryCalculator {
                 break
             } else if (anniversaryDate.isAfter(militaryStartDate) && anniversaryDate.isBefore(militaryEndDate)) {
                 val title = "${anniversaryDay}일"
-                val anniversary = Anniversary.create(coupleId, title, anniversaryDate)
+                val anniversary = Anniversary.autoCreate(coupleId, title, anniversaryDate)
                 anniversaryList.add(anniversary)
             }
         }
