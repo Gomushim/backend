@@ -5,6 +5,7 @@ import gomushin.backend.couple.domain.entity.Anniversary
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.repository.AnniversaryRepository
 import gomushin.backend.couple.dto.request.CoupleAnniversaryRequest
+import gomushin.backend.couple.dto.request.GenerateAnniversaryRequest
 import gomushin.backend.couple.dto.response.MonthlyAnniversariesResponse
 import gomushin.backend.schedule.dto.response.DailyAnniversaryResponse
 import org.springframework.stereotype.Service
@@ -65,6 +66,16 @@ class AnniversaryService(
     @Transactional
     fun deleteAllByCoupleId(coupleId : Long) {
         return anniversaryRepository.deleteAllByCoupleId(coupleId)
+    }
+
+    @Transactional
+    fun generateAnniversary(couple: Couple, generateAnniversaryRequest: GenerateAnniversaryRequest) {
+        anniversaryRepository.save(Anniversary.manualCreate(
+            couple.id,
+            generateAnniversaryRequest.title,
+            generateAnniversaryRequest.date,
+            generateAnniversaryRequest.emoji
+        ))
     }
 
     private fun checkUserInCouple(userId: Long, couple: Couple) {

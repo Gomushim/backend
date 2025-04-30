@@ -1,6 +1,7 @@
 package gomushin.backend.couple.domain.entity
 
 import gomushin.backend.core.infrastructure.jpa.shared.BaseEntity
+import gomushin.backend.couple.domain.value.AnniversaryEmoji
 import jakarta.persistence.*
 import java.time.LocalDate
 
@@ -21,16 +22,31 @@ class Anniversary(
     var anniversaryDate: LocalDate,
 
     @Column(name = "anniversary_property", nullable = false)
-    var anniversaryProperty: Int
+    var anniversaryProperty: Int,
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "anniversary_emoji")
+    var emoji : AnniversaryEmoji? = null
 ) : BaseEntity() {
     companion object {
-        fun create(coupleId: Long, title: String, anniversaryDate: LocalDate): Anniversary {
+        fun autoCreate(coupleId: Long, title: String, anniversaryDate: LocalDate): Anniversary {
             return Anniversary(
                 coupleId = coupleId,
                 title = title,
                 anniversaryDate = anniversaryDate,
-                anniversaryProperty = 0
+                anniversaryProperty = 0,
             )
         }
+
+        fun manualCreate(coupleId: Long, title: String, anniversaryDate: LocalDate, emoji: AnniversaryEmoji) : Anniversary {
+            return Anniversary(
+                coupleId = coupleId,
+                title = title,
+                anniversaryDate = anniversaryDate,
+                anniversaryProperty = 1,
+                emoji = emoji
+            )
+        }
+
     }
 }
