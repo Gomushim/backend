@@ -47,7 +47,7 @@ class ReadScheduleController(
     fun getScheduleDetail(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable scheduleId: Long
-    ): ApiResponse<ScheduleDetailResponse>{
+    ): ApiResponse<ScheduleDetailResponse> {
         val scheduleDetails = readScheduleFacade.getScheduleDetail(customUserDetails, scheduleId)
         return ApiResponse.success(scheduleDetails)
     }

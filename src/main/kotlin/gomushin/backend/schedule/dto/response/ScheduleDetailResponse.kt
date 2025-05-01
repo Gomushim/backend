@@ -12,7 +12,7 @@ data class ScheduleDetailResponse(
     val letters : List<LetterPreviewResponse>
 ) {
     companion object {
-        fun of(schedule : Schedule, letters: List<LetterPreviewResponse>) : ScheduleDetailResponse{
+        fun of(schedule : Schedule, letters: List<LetterPreviewResponse>) : ScheduleDetailResponse {
             return ScheduleDetailResponse(
                 schedule.id,
                 schedule.title,
