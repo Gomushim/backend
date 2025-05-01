@@ -36,6 +36,7 @@ class AnniversaryService(
     ) {
         val couple = coupleService.getById(request.coupleId)
         checkUserInCouple(userId, couple)
+        checkCoupleAnniversaryIsInit(couple)
 
         couple.updateMilitary(request.military)
 
@@ -54,6 +55,8 @@ class AnniversaryService(
             request.militaryEndDate,
             anniversaries
         )
+
+        couple.initAnniversaries()
 
         saveAll(anniversaries)
     }
@@ -81,6 +84,12 @@ class AnniversaryService(
     private fun checkUserInCouple(userId: Long, couple: Couple) {
         if (!couple.containsUser(userId)) {
             throw BadRequestException("sarangggun.couple.not-in-couple")
+        }
+    }
+
+    private fun checkCoupleAnniversaryIsInit(couple: Couple) {
+        if (couple.isInit) {
+            throw BadRequestException("sarangggun.couple.already-init")
         }
     }
 }
