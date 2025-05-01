@@ -11,14 +11,14 @@ data class CoupleInfoResponse(
     val military: String,
 
     @Schema(description = "커플 기념일 초기화 되었는지 여부", example = "false")
-    val isInit: Boolean = false,
+    val isAnniversariesRegistered: Boolean = false,
 ) {
     companion object {
         fun of(couple: Couple): CoupleInfoResponse {
             return CoupleInfoResponse(
                 coupleId = couple.id,
                 military = couple.military.toString(),
-                isInit = couple.isInit,
+                isAnniversariesRegistered = couple.isAnniversariesRegistered,
             )
         }
     }

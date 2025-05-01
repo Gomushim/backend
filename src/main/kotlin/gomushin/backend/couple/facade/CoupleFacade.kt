@@ -126,7 +126,7 @@ class CoupleFacade(
     }
 
     private fun checkCoupleAnniversaryIsInit(couple: Couple) {
-        if (couple.isInit) {
+        if (couple.isAnniversariesRegistered) {
             throw BadRequestException("sarangggun.couple.already-init")
         }
     }

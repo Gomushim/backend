@@ -31,8 +31,8 @@ class Couple(
     @Enumerated(EnumType.STRING)
     var military: Military? = null,
 
-    @Column(name = "is_init")
-    var isInit: Boolean = false,
+    @Column(name = "is_anniversaries_registered")
+    var isAnniversariesRegistered: Boolean = false,
 
     ) : BaseEntity() {
     companion object {
@@ -67,6 +67,6 @@ class Couple(
         userId == invitorId || userId == inviteeId
 
     fun initAnniversaries() {
-        this.isInit = true
+        this.isAnniversariesRegistered = true
     }
 }
