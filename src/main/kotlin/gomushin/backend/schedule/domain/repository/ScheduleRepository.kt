@@ -2,12 +2,14 @@ package gomushin.backend.schedule.domain.repository
 
 import gomushin.backend.schedule.domain.entity.Schedule
 import gomushin.backend.schedule.dto.response.DailyScheduleResponse
+import gomushin.backend.schedule.dto.response.MainSchedulesResponse
 import gomushin.backend.schedule.dto.response.MonthlySchedulesResponse
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 interface ScheduleRepository : JpaRepository<Schedule, Long> {
     @Modifying
@@ -47,4 +49,24 @@ interface ScheduleRepository : JpaRepository<Schedule, Long> {
     """
     )
     fun findByCoupleIdAndStartDate(coupleId: Long, startDate: LocalDate): List<DailyScheduleResponse>
+
+    @Query(
+        """
+        SELECT new gomushin.backend.schedule.dto.response.MainSchedulesResponse(
+            s.id, 
+            s.title,
+            s.startDate,
+            s.endDate,
+            s.fatigue
+        )
+        FROM Schedule s
+        WHERE s.coupleId = :coupleId 
+        AND s.startDate BETWEEN :startDate AND :endDate
+    """
+    )
+    fun findByCoupleIdAndStartDateBetween(
+        coupleId: Long,
+        startDate: LocalDateTime,
+        endDate: LocalDateTime
+    ): List<MainSchedulesResponse>
 }

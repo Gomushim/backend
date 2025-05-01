@@ -6,6 +6,7 @@ import gomushin.backend.schedule.domain.entity.Schedule
 import gomushin.backend.schedule.domain.repository.ScheduleRepository
 import gomushin.backend.schedule.dto.request.UpsertScheduleRequest
 import gomushin.backend.schedule.dto.response.DailyScheduleResponse
+import gomushin.backend.schedule.dto.response.MainSchedulesResponse
 import gomushin.backend.schedule.dto.response.MonthlySchedulesResponse
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -19,6 +20,19 @@ class ScheduleService(
     @Transactional(readOnly = true)
     fun findByCoupleIdAndYearAndMonth(couple: Couple, year: Int, month: Int): List<MonthlySchedulesResponse> {
         return scheduleRepository.findByCoupleIdAndYearAndMonth(couple.id, year, month)
+    }
+
+    @Transactional(readOnly = true)
+    fun findByCoupleIdAndDateBetween(
+        couple: Couple,
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): List<MainSchedulesResponse> {
+        return scheduleRepository.findByCoupleIdAndStartDateBetween(
+            couple.id,
+            startDate.atStartOfDay(),
+            endDate.atTime(23, 59, 59)
+        )
     }
 
     @Transactional(readOnly = true)
@@ -58,7 +72,7 @@ class ScheduleService(
     }
 
     @Transactional
-    fun deleteAllByMember(memberId : Long) {
+    fun deleteAllByMember(memberId: Long) {
         scheduleRepository.deleteAllByUserId(memberId)
     }
 }

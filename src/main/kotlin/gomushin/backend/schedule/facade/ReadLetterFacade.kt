@@ -103,4 +103,15 @@ class ReadLetterFacade(
             isLastPage = isLastPage
         )
     }
+
+    fun getLetterListMain(
+        customUserDetails: CustomUserDetails,
+    ): List<MainLetterPreviewResponse> {
+        val letters = letterService.findTop5ByCreatedDateDesc(customUserDetails.getCouple())
+        return letters.map { letter ->
+            val picture = pictureService.findFirstByLetterId(letter.id)
+            val schedule = scheduleService.findById(letter.scheduleId)
+            MainLetterPreviewResponse.of(letter, picture, schedule)
+        }
+    }
 }

@@ -45,6 +45,7 @@ class JwtAuthenticationFilter(
             }
 
             else -> {
+                // TODO: 에러 응답 처리
                 SecurityContextHolder.clearContext()
             }
         }

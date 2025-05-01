@@ -6,11 +6,14 @@ import gomushin.backend.schedule.domain.service.LetterService
 import gomushin.backend.schedule.domain.service.PictureService
 import gomushin.backend.schedule.domain.service.ScheduleService
 import gomushin.backend.schedule.dto.response.DailySchedulesAndAnniversariesResponse
+import gomushin.backend.schedule.dto.response.MainSchedulesAndAnniversariesResponse
+import gomushin.backend.schedule.dto.response.MainSchedulesResponse
 import gomushin.backend.schedule.dto.response.LetterPreviewResponse
 import gomushin.backend.schedule.dto.response.MonthlySchedulesAndAnniversariesResponse
 import gomushin.backend.schedule.dto.response.ScheduleDetailResponse
 import org.springframework.stereotype.Component
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Component
 class ReadScheduleFacade(
@@ -47,5 +50,24 @@ class ReadScheduleFacade(
             LetterPreviewResponse.of(letter, picturesByLetterId[letter.id])
         }
         return ScheduleDetailResponse.of(schedule, letterPreviews)
+    }
+
+    fun getListByWeek(customUserDetails: CustomUserDetails): MainSchedulesAndAnniversariesResponse {
+        val today = LocalDate.now()
+        val schedules = scheduleService.findByCoupleIdAndDateBetween(
+            customUserDetails.getCouple(),
+            today,
+            today.plusDays(6)
+        )
+        val anniversaries = anniversaryService.findByCoupleIdAndDateBetween(
+            customUserDetails.getCouple(),
+            today,
+            today.plusDays(6)
+        )
+
+        return MainSchedulesAndAnniversariesResponse.of(
+            schedules,
+            anniversaries
+        )
     }
 }
