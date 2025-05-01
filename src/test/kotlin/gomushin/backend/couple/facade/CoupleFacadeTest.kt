@@ -2,10 +2,7 @@ package gomushin.backend.couple.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.couple.domain.entity.Couple
-import gomushin.backend.couple.domain.service.AnniversaryService
-import gomushin.backend.couple.domain.service.CoupleConnectService
-import gomushin.backend.couple.domain.service.CoupleInfoService
-import gomushin.backend.couple.domain.service.CoupleService
+import gomushin.backend.couple.domain.service.*
 import gomushin.backend.couple.domain.value.AnniversaryEmoji
 import gomushin.backend.couple.dto.request.GenerateAnniversaryRequest
 import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
@@ -46,6 +43,9 @@ class CoupleFacadeTest {
 
     @Mock
     private lateinit var memberService: MemberService
+
+    @Mock
+    private lateinit var anniversaryCalculator: AnniversaryCalculator
 
     @InjectMocks
     private lateinit var coupleFacade: CoupleFacade
