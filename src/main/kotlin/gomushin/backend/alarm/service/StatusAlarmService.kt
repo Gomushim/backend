@@ -1,5 +1,6 @@
 package gomushin.backend.alarm.service
 
+import gomushin.backend.alarm.util.MessageParsingUtil
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.value.Emotion
@@ -46,14 +47,13 @@ class StatusAlarmService (
         val notificationContent =
             statusMessage[emotion]?.random()
                 ?: throw BadRequestException("sarangggun.member.not-exist-emoji")
-        val parts = notificationContent.split("+")
-        val title = parts[0]
-        val content = if (parts[1].contains("OO")) {
-            parts[1].replace("OO", sender.nickname)
+        val (title, content) = MessageParsingUtil.parse(notificationContent)
+        val sendContent = if (content.contains("OO")) {
+            content.replace("OO", sender.nickname)
         } else {
-            parts[1]
+            content
         }
         val token = receiver.fcmToken
-        fcmService.sendMessageTo(token, title, content)
+        fcmService.sendMessageTo(token, title, sendContent)
     }
 }
