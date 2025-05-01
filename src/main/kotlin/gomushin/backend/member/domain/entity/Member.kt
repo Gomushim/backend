@@ -27,7 +27,7 @@ class Member(
     var birthDate: LocalDate? = null,
 
     @Column(name = "status_message")
-    var statusMessage : String? = null,
+    var statusMessage: String? = null,
 
     @Column(name = "profile_image_url")
     var profileImageUrl: String?,
@@ -45,7 +45,7 @@ class Member(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "emotion")
-    var emotion : Emotion? = null,
+    var emotion: Emotion? = null,
 
     @Column(name = "fcm_token", nullable = false)
     var fcmToken: String = "",
@@ -69,6 +69,10 @@ class Member(
         }
     }
 
+    fun checkIsCouple(): Boolean {
+        return isCouple
+    }
+
     fun updateFcmToken(fcmToken: String) {
         this.fcmToken = fcmToken
     }
@@ -89,7 +93,7 @@ class Member(
         this.nickname = nickname
     }
 
-    fun updateBirthday(birthDate : LocalDate) {
+    fun updateBirthday(birthDate: LocalDate) {
         this.birthDate = birthDate
     }
 }

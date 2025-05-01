@@ -72,7 +72,7 @@ class AnniversaryCalculator {
         militaryEndDate: LocalDate,
         anniversaryList: MutableList<Anniversary>,
     ) {
-        val plusDay = 100L
+        val plusDay = 101L
         var anniversaryDay = 0L
         var anniversaryDate = relationShipStartDate
         while (true) {

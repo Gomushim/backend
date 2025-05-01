@@ -26,7 +26,7 @@ class Anniversary(
 
     @Enumerated(EnumType.STRING)
     @Column(name = "anniversary_emoji")
-    var emoji : AnniversaryEmoji? = null
+    var emoji: AnniversaryEmoji? = null,
 ) : BaseEntity() {
     companion object {
         fun autoCreate(coupleId: Long, title: String, anniversaryDate: LocalDate): Anniversary {
@@ -35,10 +35,16 @@ class Anniversary(
                 title = title,
                 anniversaryDate = anniversaryDate,
                 anniversaryProperty = 0,
+                emoji = AnniversaryEmoji.HEART
             )
         }
 
-        fun manualCreate(coupleId: Long, title: String, anniversaryDate: LocalDate, emoji: AnniversaryEmoji) : Anniversary {
+        fun manualCreate(
+            coupleId: Long,
+            title: String,
+            anniversaryDate: LocalDate,
+            emoji: AnniversaryEmoji
+        ): Anniversary {
             return Anniversary(
                 coupleId = coupleId,
                 title = title,
