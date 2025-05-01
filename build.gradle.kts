@@ -76,6 +76,9 @@ dependencies {
     //google auth
     implementation("com.google.auth:google-auth-library-oauth2-http:1.33.1")
 
+    //coroutine
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+
     implementation("org.springframework.boot:spring-boot-starter-validation")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
