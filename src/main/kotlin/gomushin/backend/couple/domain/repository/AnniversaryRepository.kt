@@ -58,7 +58,7 @@ interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
 
     @Query(
         """
-        SELECT new gomushin.backend.schedule.dto.response.DailyAnniversaryResponse(
+        SELECT new gomushin.backend.schedule.dto.response.MainAnniversariesResponse(
             a.id, 
             a.title, 
             a.anniversaryDate
