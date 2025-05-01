@@ -48,4 +48,9 @@ class MemberService(
     fun deleteMember(id : Long) {
         memberRepository.deleteById(id)
     }
+
+    @Transactional(readOnly = true)
+    fun getAllCoupledMember() : List<Member>{
+        return memberRepository.findCoupledMembers()
+    }
 }
