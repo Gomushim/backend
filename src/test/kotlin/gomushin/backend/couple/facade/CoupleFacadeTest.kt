@@ -1,4 +1,4 @@
-package gomushin.backend.member.facade
+package gomushin.backend.couple.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.couple.domain.entity.Couple
@@ -12,8 +12,8 @@ import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
 import gomushin.backend.couple.dto.request.UpdateRelationshipStartDateRequest
 import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.couple.dto.response.NicknameResponse
-import gomushin.backend.couple.facade.CoupleFacade
 import gomushin.backend.member.domain.entity.Member
+import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.member.domain.value.Emotion
 import gomushin.backend.member.domain.value.Provider
 import gomushin.backend.member.domain.value.Role
@@ -43,6 +43,9 @@ class CoupleFacadeTest {
 
     @Mock
     private lateinit var coupleService: CoupleService
+
+    @Mock
+    private lateinit var memberService: MemberService
 
     @InjectMocks
     private lateinit var coupleFacade: CoupleFacade
