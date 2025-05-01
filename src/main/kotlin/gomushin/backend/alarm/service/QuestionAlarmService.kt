@@ -39,7 +39,6 @@ class QuestionAlarmService (
                         fcmService.sendMessageTo(member.fcmToken, title, sendContent)
                     } catch (e: Exception) {
                         log.error("질문형 메시지 전송오류 : 수신자 {${member.name}}, 전송시각{${LocalDateTime.now()}}\n")
-                        throw BadRequestException("sarangggun.alarm.fail-send-alarm")
                     }
                 }
             }.awaitAll()
