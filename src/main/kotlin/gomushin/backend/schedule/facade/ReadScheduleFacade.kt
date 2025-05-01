@@ -5,15 +5,9 @@ import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.schedule.domain.service.LetterService
 import gomushin.backend.schedule.domain.service.PictureService
 import gomushin.backend.schedule.domain.service.ScheduleService
-import gomushin.backend.schedule.dto.response.DailySchedulesAndAnniversariesResponse
-import gomushin.backend.schedule.dto.response.MainSchedulesAndAnniversariesResponse
-import gomushin.backend.schedule.dto.response.MainSchedulesResponse
-import gomushin.backend.schedule.dto.response.LetterPreviewResponse
-import gomushin.backend.schedule.dto.response.MonthlySchedulesAndAnniversariesResponse
-import gomushin.backend.schedule.dto.response.ScheduleDetailResponse
+import gomushin.backend.schedule.dto.response.*
 import org.springframework.stereotype.Component
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 @Component
 class ReadScheduleFacade(
