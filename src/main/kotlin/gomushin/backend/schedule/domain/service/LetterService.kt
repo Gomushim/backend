@@ -90,4 +90,9 @@ class LetterService(
             readLettersToMePaginationRequest.take,
         )
     }
+
+    @Transactional(readOnly = true)
+    fun findTop5ByCreatedDateDesc(couple: Couple): List<Letter> {
+        return letterRepository.findTop5ByCoupleIdOrderByCreatedAtDesc(couple.id)
+    }
 }

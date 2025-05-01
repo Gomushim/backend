@@ -36,4 +36,6 @@ interface LetterRepository : JpaRepository<Letter, Long> {
         @Param("key") key: Long,
         @Param("take") take: Long,
     ): List<Letter?>
+
+    fun findTop5ByCoupleIdOrderByCreatedAtDesc(coupleId: Long): List<Letter>
 }

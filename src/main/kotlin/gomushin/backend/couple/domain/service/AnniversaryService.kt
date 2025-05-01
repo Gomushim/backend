@@ -6,14 +6,21 @@ import gomushin.backend.couple.domain.repository.AnniversaryRepository
 import gomushin.backend.couple.dto.request.GenerateAnniversaryRequest
 import gomushin.backend.couple.dto.response.MonthlyAnniversariesResponse
 import gomushin.backend.schedule.dto.response.DailyAnniversaryResponse
+import gomushin.backend.schedule.dto.response.MainAnniversariesResponse
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Service
 class AnniversaryService(
     private val anniversaryRepository: AnniversaryRepository,
 ) {
+
+    @Transactional(readOnly = true)
+    fun findByCoupleIdAndDateBetween(couple: Couple, startDate: LocalDate, endDate: LocalDate): List<MainAnniversariesResponse> {
+        return anniversaryRepository.findByCoupleIdAndDateBetween(couple.id, startDate, endDate)
+    }
 
     @Transactional(readOnly = true)
     fun findByCoupleIdAndYearAndMonth(couple: Couple, year: Int, month: Int): List<MonthlyAnniversariesResponse> {
@@ -45,5 +52,10 @@ class AnniversaryService(
                 generateAnniversaryRequest.emoji
             )
         )
+    }
+
+    @Transactional(readOnly = true)
+    fun getUpcomingTop3Anniversaries(couple: Couple): List<Anniversary> {
+        return anniversaryRepository.findTop3UpcomingAnniversaries(couple.id)
     }
 }
