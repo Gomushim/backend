@@ -89,4 +89,23 @@ interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
     fun findTop3UpcomingAnniversaries(
         @Param("coupleId") coupleId: Long
     ): List<Anniversary>
+
+
+    @Query(
+        value =
+        """
+            SELECT * 
+            FROM anniversary a
+            WHERE a.couple_id = :coupleId
+                AND a.id < :key
+            ORDER BY anniversary_date DESC
+            LIMIT :take
+        """,
+        nativeQuery = true
+    )
+    fun findAnniversaries(
+        @Param("coupleId") coupleId: Long,
+        @Param("key") key: Long,
+        @Param("take") take: Long
+    ): List<Anniversary?>
 }

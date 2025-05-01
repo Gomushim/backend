@@ -4,6 +4,7 @@ import gomushin.backend.couple.domain.entity.Anniversary
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.repository.AnniversaryRepository
 import gomushin.backend.couple.dto.request.GenerateAnniversaryRequest
+import gomushin.backend.couple.dto.request.ReadAnniversariesRequest
 import gomushin.backend.couple.dto.response.MonthlyAnniversariesResponse
 import gomushin.backend.schedule.dto.response.DailyAnniversaryResponse
 import gomushin.backend.schedule.dto.response.MainAnniversariesResponse
@@ -17,7 +18,20 @@ class AnniversaryService(
 ) {
 
     @Transactional(readOnly = true)
-    fun findByCoupleIdAndDateBetween(couple: Couple, startDate: LocalDate, endDate: LocalDate): List<MainAnniversariesResponse> {
+    fun findAnniversaries(couple: Couple, readAnniversariesRequest: ReadAnniversariesRequest): List<Anniversary?> {
+        return anniversaryRepository.findAnniversaries(
+            couple.id,
+            readAnniversariesRequest.key,
+            readAnniversariesRequest.take,
+        )
+    }
+
+    @Transactional(readOnly = true)
+    fun findByCoupleIdAndDateBetween(
+        couple: Couple,
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): List<MainAnniversariesResponse> {
         return anniversaryRepository.findByCoupleIdAndDateBetween(couple.id, startDate, endDate)
     }
 
