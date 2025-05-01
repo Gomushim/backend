@@ -3,20 +3,20 @@ package gomushin.backend.couple.presentation
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.response.ApiResponse
 import gomushin.backend.couple.dto.request.GenerateAnniversaryRequest
+import gomushin.backend.couple.dto.response.MainAnniversaryResponse
+import gomushin.backend.couple.facade.AnniversaryFacade
 import gomushin.backend.couple.facade.CoupleFacade
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @Tag(name = "기념일 생성", description = "AnniversaryController")
 class AnniversaryController(
-    private val coupleFacade: CoupleFacade
+    private val coupleFacade: CoupleFacade,
+    private val anniversaryFacade: AnniversaryFacade
 ) {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(ApiPath.ANNIVERSARY_GENERATE)
@@ -31,4 +31,15 @@ class AnniversaryController(
         coupleFacade.generateAnniversary(customUserDetails, generateAnniversaryRequest)
         return ApiResponse.success(true)
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(ApiPath.ANNIVERSARY_MAIN)
+    @Operation(
+        summary = "메인 - 가까운 3개의 기념일 조회",
+        description = "getAnniversariesMain"
+    )
+    fun getAnniversariesMain(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails
+    ): ApiResponse<List<MainAnniversaryResponse>> =
+        ApiResponse.success(anniversaryFacade.getAnniversaryListMain(customUserDetails))
 }

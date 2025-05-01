@@ -3,6 +3,7 @@ package gomushin.backend.schedule.presentation
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.response.ApiResponse
 import gomushin.backend.schedule.dto.response.DailySchedulesAndAnniversariesResponse
+import gomushin.backend.schedule.dto.response.MainSchedulesAndAnniversariesResponse
 import gomushin.backend.schedule.dto.response.MonthlySchedulesAndAnniversariesResponse
 import gomushin.backend.schedule.dto.response.ScheduleDetailResponse
 import gomushin.backend.schedule.facade.ReadScheduleFacade
@@ -50,5 +51,14 @@ class ReadScheduleController(
     ): ApiResponse<ScheduleDetailResponse> {
         val scheduleDetails = readScheduleFacade.getScheduleDetail(customUserDetails, scheduleId)
         return ApiResponse.success(scheduleDetails)
+    }
+
+    @GetMapping(ApiPath.SCHEDULES_BY_WEEK)
+    @Operation(summary = "메인 - 오늘 부터 일주일간의 일정 및 기념일 가져오기", description = "getScheduleByWeek")
+    fun getScheduleByWeek(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+    ): ApiResponse<MainSchedulesAndAnniversariesResponse> {
+        val schedules = readScheduleFacade.getListByWeek(customUserDetails)
+        return ApiResponse.success(schedules)
     }
 }

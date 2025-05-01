@@ -6,6 +6,7 @@ import gomushin.backend.core.common.web.response.ApiResponse
 import gomushin.backend.schedule.dto.request.ReadLettersToMePaginationRequest
 import gomushin.backend.schedule.dto.response.LetterDetailResponse
 import gomushin.backend.schedule.dto.response.LetterPreviewResponse
+import gomushin.backend.schedule.dto.response.MainLetterPreviewResponse
 import gomushin.backend.schedule.facade.ReadLetterFacade
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -51,4 +52,14 @@ class ReadLetterController(
         val letters = readLetterFacade.getLetterListToMe(customUserDetails,readLettersToMePaginationRequest)
         return ApiResponse.success(letters)
     }
+
+    @GetMapping(ApiPath.LETTERS_MAIN)
+    @Operation(summary = "메인화면 편지 리스트 가져오기", description = "getLetterListMain")
+    fun getLetterListMain(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+    ): ApiResponse<List<MainLetterPreviewResponse>> {
+        val letters = readLetterFacade.getLetterListMain(customUserDetails)
+        return ApiResponse.success(letters)
+    }
+
 }
