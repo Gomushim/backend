@@ -1,12 +1,14 @@
 package gomushin.backend.couple.facade
 
 import gomushin.backend.core.CustomUserDetails
+import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.couple.domain.service.CoupleConnectService
 import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.couple.domain.service.CoupleService
 import gomushin.backend.couple.dto.request.*
 import gomushin.backend.couple.dto.response.*
+import gomushin.backend.member.domain.service.MemberService
 import org.springframework.stereotype.Component
 
 @Component
@@ -14,8 +16,20 @@ class CoupleFacade(
     private val coupleConnectService: CoupleConnectService,
     private val anniversaryService: AnniversaryService,
     private val coupleInfoService: CoupleInfoService,
-    private val coupleService: CoupleService
+    private val coupleService: CoupleService,
+    private val memberService: MemberService,
 ) {
+
+    fun getInfo(customUserDetails: CustomUserDetails): CoupleInfoResponse {
+        val member = memberService.getById(customUserDetails.getId())
+
+        if (!member.checkIsCouple()) {
+            throw BadRequestException("saranggun.couple.not-connected")
+        }
+
+        val couple = coupleService.getById(customUserDetails.getCouple().id)
+        return CoupleInfoResponse.of(couple)
+    }
 
     fun requestCoupleCodeGeneration(customUserDetails: CustomUserDetails) =
         coupleConnectService.generateCoupleCode(customUserDetails.getId())
@@ -46,7 +60,7 @@ class CoupleFacade(
         return coupleInfoService.getDday(customUserDetails.getId())
     }
 
-    fun nickName(customUserDetails: CustomUserDetails) : NicknameResponse {
+    fun nickName(customUserDetails: CustomUserDetails): NicknameResponse {
         return coupleInfoService.getNickName(customUserDetails.getId())
     }
 
@@ -60,7 +74,10 @@ class CoupleFacade(
         coupleInfoService.updateMilitaryDate(couple, updateMilitaryDateRequest)
     }
 
-    fun updateRelationshipStartDate(customUserDetails: CustomUserDetails, updateRelationshipStartDateRequest: UpdateRelationshipStartDateRequest) {
+    fun updateRelationshipStartDate(
+        customUserDetails: CustomUserDetails,
+        updateRelationshipStartDateRequest: UpdateRelationshipStartDateRequest
+    ) {
         val couple = coupleService.getByMemberId(customUserDetails.getId())
         coupleInfoService.updateRelationshipStartDate(couple, updateRelationshipStartDateRequest)
     }
@@ -70,7 +87,10 @@ class CoupleFacade(
         return CoupleEmotionResponse.of(emotion)
     }
 
-    fun generateAnniversary(customUserDetails: CustomUserDetails, generateAnniversaryRequest: GenerateAnniversaryRequest) {
+    fun generateAnniversary(
+        customUserDetails: CustomUserDetails,
+        generateAnniversaryRequest: GenerateAnniversaryRequest
+    ) {
         anniversaryService.generateAnniversary(customUserDetails.getCouple(), generateAnniversaryRequest)
     }
 }
