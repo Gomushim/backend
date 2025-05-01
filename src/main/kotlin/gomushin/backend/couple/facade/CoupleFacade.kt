@@ -2,14 +2,14 @@ package gomushin.backend.couple.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.infrastructure.exception.BadRequestException
-import gomushin.backend.couple.domain.service.AnniversaryService
-import gomushin.backend.couple.domain.service.CoupleConnectService
-import gomushin.backend.couple.domain.service.CoupleInfoService
-import gomushin.backend.couple.domain.service.CoupleService
+import gomushin.backend.couple.domain.entity.Anniversary
+import gomushin.backend.couple.domain.entity.Couple
+import gomushin.backend.couple.domain.service.*
 import gomushin.backend.couple.dto.request.*
 import gomushin.backend.couple.dto.response.*
 import gomushin.backend.member.domain.service.MemberService
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 @Component
 class CoupleFacade(
@@ -18,6 +18,7 @@ class CoupleFacade(
     private val coupleInfoService: CoupleInfoService,
     private val coupleService: CoupleService,
     private val memberService: MemberService,
+    private val anniversaryCalculator: AnniversaryCalculator
 ) {
 
     fun getInfo(customUserDetails: CustomUserDetails): CoupleInfoResponse {
@@ -39,13 +40,37 @@ class CoupleFacade(
         request: CoupleConnectRequest
     ) = coupleConnectService.connectCouple(customUserDetails.getId(), request.coupleCode)
 
+    @Transactional
     fun registerAnniversary(
         customUserDetails: CustomUserDetails,
         request: CoupleAnniversaryRequest
-    ) = anniversaryService.registerAnniversary(
-        customUserDetails.getId(),
-        request
-    )
+    ) {
+        val couple = coupleService.getById(request.coupleId)
+        checkUserInCouple(customUserDetails.getId(), couple)
+        checkCoupleAnniversaryIsInit(couple)
+
+        couple.updateMilitary(request.military)
+
+        couple.updateAnniversary(
+            relationshipStartDate = request.relationshipStartDate,
+            militaryStartDate = request.militaryStartDate,
+            militaryEndDate = request.militaryEndDate,
+        )
+
+        val anniversaries: MutableList<Anniversary> = mutableListOf()
+
+        anniversaryCalculator.calculateInitAnniversaries(
+            couple.id,
+            request.relationshipStartDate,
+            request.militaryStartDate,
+            request.militaryEndDate,
+            anniversaries
+        )
+
+        couple.initAnniversaries()
+
+        anniversaryService.saveAll(anniversaries)
+    }
 
     fun getGradeInfo(customUserDetails: CustomUserDetails): CoupleGradeResponse {
         val grade = coupleInfoService.getGrade(customUserDetails.getId())
@@ -92,5 +117,17 @@ class CoupleFacade(
         generateAnniversaryRequest: GenerateAnniversaryRequest
     ) {
         anniversaryService.generateAnniversary(customUserDetails.getCouple(), generateAnniversaryRequest)
+    }
+
+    private fun checkUserInCouple(userId: Long, couple: Couple) {
+        if (!couple.containsUser(userId)) {
+            throw BadRequestException("sarangggun.couple.not-in-couple")
+        }
+    }
+
+    private fun checkCoupleAnniversaryIsInit(couple: Couple) {
+        if (couple.isInit) {
+            throw BadRequestException("sarangggun.couple.already-init")
+        }
     }
 }
