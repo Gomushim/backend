@@ -48,9 +48,9 @@ class ReadLetterController(
     fun getLetterListToMe(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @ParameterObject readLettersToMePaginationRequest: ReadLettersToMePaginationRequest
-    ): ApiResponse<PageResponse<LetterPreviewResponse>> {
-        val letters = readLetterFacade.getLetterListToMe(customUserDetails,readLettersToMePaginationRequest)
-        return ApiResponse.success(letters)
+    ): PageResponse<LetterPreviewResponse> {
+        val letters = readLetterFacade.getLetterListToMe(customUserDetails, readLettersToMePaginationRequest)
+        return letters
     }
 
     @GetMapping(ApiPath.LETTERS_MAIN)

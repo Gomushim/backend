@@ -15,4 +15,5 @@ object ApiPath {
     const val COUPLE_EMOJI = "/v1/couple/emotion"
     const val ANNIVERSARY_GENERATE = "/v1/couple/new-anniversary"
     const val ANNIVERSARY_MAIN = "/v1/anniversary/main"
+    const val ANNIVERSARIES = "/v1/anniversaries"
 }
