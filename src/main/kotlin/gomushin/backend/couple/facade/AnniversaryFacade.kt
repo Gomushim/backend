@@ -34,7 +34,7 @@ class AnniversaryFacade(
         val hasData = anniversaryResponses.isNotEmpty()
 
         val nextUrl = if (!isLastPage && hasData) {
-            "${baseUrl}/v1/anniversaries?key=${anniversaryResponses.last().id}&take=${readAnniversariesRequest.take}&page=${readAnniversariesRequest.take}"
+            "${baseUrl}/v1/anniversaries?key=${anniversaryResponses.last().id}&take=${readAnniversariesRequest.take}"
         } else {
             null
         }
