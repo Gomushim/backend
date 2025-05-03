@@ -53,7 +53,7 @@ class LetterService(
 
     @Transactional(readOnly = true)
     fun findByCoupleIdAndScheduleIdAndId(couple: Couple, scheduleId: Long, letterId: Long) =
-        letterRepository.findByCoupleIdAndScheduleIdAndId(couple.id, letterId, scheduleId)
+        letterRepository.findByCoupleIdAndScheduleIdAndId(couple.id, scheduleId, letterId)
 
     @Transactional(readOnly = true)
     fun findByCoupleAndSchedule(couple: Couple, schedule: Schedule) =
