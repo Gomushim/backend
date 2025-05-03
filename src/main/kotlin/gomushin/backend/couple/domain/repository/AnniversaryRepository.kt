@@ -46,6 +46,7 @@ interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
         SELECT new gomushin.backend.schedule.dto.response.DailyAnniversaryResponse(
             a.id, 
             a.title, 
+            a.emoji,
             a.anniversaryDate
         )
         FROM Anniversary a
