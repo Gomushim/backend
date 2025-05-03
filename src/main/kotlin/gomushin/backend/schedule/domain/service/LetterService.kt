@@ -42,6 +42,8 @@ class LetterService(
     @Transactional(readOnly = true)
     fun findById(id: Long) = letterRepository.findByIdOrNull(id)
 
+    @Transactional(readOnly = true)
+    fun findByCouple(couple: Couple) = letterRepository.findByCoupleId(couple.id)
 
     @Transactional(readOnly = true)
     fun getByCoupleAndScheduleAndId(

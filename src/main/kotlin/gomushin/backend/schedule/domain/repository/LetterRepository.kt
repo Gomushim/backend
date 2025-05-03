@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 
 interface LetterRepository : JpaRepository<Letter, Long> {
+    fun findByCoupleId(coupleId: Long): List<Letter>
+
     fun findByCoupleIdAndScheduleId(coupleId: Long, scheduleId: Long): List<Letter>
 
     fun findByCoupleIdAndScheduleIdAndId(coupleId: Long, scheduleId: Long, letterId: Long): Letter?
