@@ -49,9 +49,6 @@ class ReadLetterFacade(
             letterId,
         )
 
-        println("schedule = $schedule")
-        println("letter = $letter")
-
         val letterResponse = LetterResponse.of(letter)
 
         val pictures = pictureService.findAllByLetter(letter)
