@@ -19,13 +19,12 @@ class UpsertAndDeleteLetterController(
 ) {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(
-        ApiPath.LETTERS,
-        consumes = [MediaType.MULTIPART_FORM_DATA_VALUE]
+        ApiPath.LETTERS
     )
     @Operation(summary = "편지 수정하거나 추가하기", description = "upsertLetter")
     fun upsertLetter(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
-        @RequestPart("data") upsertLetterRequest: UpsertLetterRequest,
+        @RequestPart upsertLetterRequest: UpsertLetterRequest,
         @RequestPart("pictures", required = false) pictures: List<MultipartFile>?,
     ): ApiResponse<Boolean> {
         upsertAndDeleteLetterFacade.upsert(customUserDetails, upsertLetterRequest, pictures)
