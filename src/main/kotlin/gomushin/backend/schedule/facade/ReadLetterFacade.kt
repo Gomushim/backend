@@ -33,7 +33,7 @@ class ReadLetterFacade(
         )
         return letters.map { letter ->
             val picture = pictureService.findFirstByLetterId(letter.id)
-            LetterPreviewResponse.of(letter, picture)
+            LetterPreviewResponse.of(letter, schedule, picture)
         }
     }
 
@@ -79,11 +79,13 @@ class ReadLetterFacade(
             customUserDetails.getCouple().invitorId
         }
 
-        val letters = letterService.findArrivedToMe(customUserDetails.getCouple(), partnerPk, readLettersToMePaginationRequest)
+        val letters =
+            letterService.findArrivedToMe(customUserDetails.getCouple(), partnerPk, readLettersToMePaginationRequest)
 
         val letterPreviewResponses = letters.map { letter ->
             val picture = letter?.let { pictureService.findFirstByLetterId(it.id) }
-            LetterPreviewResponse.of(letter, picture)
+            val schedule = letter?.let { scheduleService.getById(it.scheduleId) }
+            LetterPreviewResponse.of(letter, schedule, picture)
         }
 
         val isLastPage = letterPreviewResponses.size < readLettersToMePaginationRequest.take
