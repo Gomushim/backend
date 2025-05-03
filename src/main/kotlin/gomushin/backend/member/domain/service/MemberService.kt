@@ -50,7 +50,7 @@ class MemberService(
     }
 
     @Transactional(readOnly = true)
-    fun getAllCoupledMember() : List<Member>{
-        return memberRepository.findCoupledMembers()
+    fun getAllCoupledMemberWithEnabledNotification() : List<Member>{
+        return memberRepository.findCoupleMembersWithEnabledNotification()
     }
 }
