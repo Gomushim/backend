@@ -21,7 +21,7 @@ interface LetterRepository : JpaRepository<Letter, Long> {
     @Query(
         """
             SELECT *
-            FROM Letter l 
+            FROM letter l 
             WHERE l.couple_id = :coupleId 
                 AND l.author_id = :partnerPk
                 AND l.id <:key
