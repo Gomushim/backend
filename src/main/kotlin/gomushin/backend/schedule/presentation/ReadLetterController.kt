@@ -43,13 +43,13 @@ class ReadLetterController(
         return ApiResponse.success(letter)
     }
 
-    @GetMapping(ApiPath.LETTERS_TO_ME)
-    @Operation(summary = "내가 받은 편지 리스트 가져오기", description = "getLetterListToMe")
+    @GetMapping(ApiPath.LETTERS)
+    @Operation(summary = "커플 전체 편지 리스트 가져오기", description = "getLetterListToMe")
     fun getLetterListToMe(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @ParameterObject readLettersToMePaginationRequest: ReadLettersToMePaginationRequest
     ): PageResponse<LetterPreviewResponse> {
-        val letters = readLetterFacade.getLetterListToMe(customUserDetails, readLettersToMePaginationRequest)
+        val letters = readLetterFacade.getLetterListToCouple(customUserDetails, readLettersToMePaginationRequest)
         return letters
     }
 

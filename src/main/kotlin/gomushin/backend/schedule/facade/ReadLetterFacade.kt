@@ -68,23 +68,16 @@ class ReadLetterFacade(
         )
     }
 
-    fun getLetterListToMe(
+    fun getLetterListToCouple(
         customUserDetails: CustomUserDetails,
         readLettersToMePaginationRequest: ReadLettersToMePaginationRequest,
     ): PageResponse<LetterPreviewResponse> {
 
-        val partnerPk = if (customUserDetails.getCouple().invitorId == customUserDetails.getId()) {
-            customUserDetails.getCouple().inviteeId
-        } else {
-            customUserDetails.getCouple().invitorId
-        }
-
-        val letters =
-            letterService.findArrivedToMe(customUserDetails.getCouple(), partnerPk, readLettersToMePaginationRequest)
+        val letters = letterService.findByCouple(customUserDetails.getCouple())
 
         val letterPreviewResponses = letters.map { letter ->
-            val picture = letter?.let { pictureService.findFirstByLetterId(it.id) }
-            val schedule = letter?.let { scheduleService.getById(it.scheduleId) }
+            val picture = letter.let { pictureService.findFirstByLetterId(it.id) }
+            val schedule = letter.let { scheduleService.getById(it.scheduleId) }
             LetterPreviewResponse.of(letter, schedule, picture)
         }
 
