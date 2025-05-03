@@ -28,14 +28,14 @@ class QuestionAlarmService (
 
     @Scheduled(cron = "0 0 19 * * *", zone = "Asia/Seoul")
     fun sendQuestionAlarms() {
-        val coupleMembers = memberService.getAllCoupledMember()
+        val coupleMembers = memberService.getAllCoupledMemberWithEnabledNotification()
         runBlocking {
             coupleMembers.map { member ->
                 async(Dispatchers.IO) {
                     try {
                         val notificationContent = questionMessages.random()
                         val (title, sendContent) = MessageParsingUtil.parse(notificationContent)
-                        log.info("질문형 메시지 전송 : 수신자 {${member.name}}, 제목 {${title}}, 내용{${sendContent}}, 전송시각{${LocalDateTime.now()}}\n")
+                        log.info("질문형 메시지 전송 : 수신자 {${member.id}}, 제목 {${title}}, 내용{${sendContent}}, 전송시각{${LocalDateTime.now()}}\n")
                         fcmService.sendMessageTo(member.fcmToken, title, sendContent)
                     } catch (e: Exception) {
                         log.error("질문형 메시지 전송오류 : 수신자 {${member.name}}, 전송시각{${LocalDateTime.now()}}\n")

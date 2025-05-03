@@ -6,6 +6,13 @@ import org.springframework.data.jpa.repository.Query
 
 interface MemberRepository : JpaRepository<Member, Long> {
     fun findByEmail(email: String): Member?
-    @Query("SELECT m FROM Member m WHERE m.isCouple = true")
-    fun findCoupledMembers(): List<Member>
+    @Query(
+        """
+    SELECT m FROM Member m
+    JOIN Notification n ON n.memberId = m.id
+    WHERE m.isCouple = true
+      AND NOT (n.dday = false AND n.partnerStatus = false)
+    """
+    )
+    fun findCoupleMembersWithEnabledNotification(): List<Member>
 }
