@@ -33,17 +33,17 @@ class AnniversaryFacade(
 
         val hasData = anniversaryResponses.isNotEmpty()
 
-        val nextUrl = if (!isLastPage && hasData) {
-            "${baseUrl}/v1/anniversaries?key=${anniversaryResponses.last().id}&take=${readAnniversariesRequest.take}"
-        } else {
-            null
-        }
+//        val nextUrl = if (!isLastPage && hasData) {
+//            "${baseUrl}/v1/anniversaries?key=${anniversaryResponses.last().id}&take=${readAnniversariesRequest.take}"
+//        } else {
+//            null
+//        }
 
         return PageResponse.of(
             data = anniversaryResponses,
             after = if (hasData) anniversaryResponses.last().id else null,
             count = anniversaryResponses.size,
-            next = nextUrl,
+//            next = nextUrl,
             isLastPage = isLastPage
         )
     }

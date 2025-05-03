@@ -9,8 +9,8 @@ data class PageResponse<T>(
     val after: Long?,
     @Schema(description = "데이터 수")
     val count: Int,
-    @Schema(description = "다음 페이지 URL")
-    val next: String?,
+//    @Schema(description = "다음 페이지 URL")
+//    val next: String?,
     @Schema(description = "마지막 페이지 여부")
     val isLastPage: Boolean,
 ) {
@@ -19,14 +19,14 @@ data class PageResponse<T>(
             data: List<T>,
             after: Long?,
             count: Int,
-            next: String?,
+//            next: String?,
             isLastPage: Boolean,
         ): PageResponse<T> {
             return PageResponse(
                 data = data,
                 after = after,
                 count = count,
-                next = next,
+//                next = next,
                 isLastPage = isLastPage
             )
         }
