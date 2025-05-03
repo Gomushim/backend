@@ -20,7 +20,7 @@ class DdayAlarmSerivce(
     private val log: Logger = LoggerFactory.getLogger(QuestionAlarmService::class.java)
     private val alarmTitle = "오늘의 디데이가 도착했어요"
     
-    @Scheduled(cron = "0 21 14 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     fun sendDdayAlarms() {
         val sendDdayAlarmContents = anniversaryService.getTodayAnniversaryMemberFcmTokens(LocalDate.now())
         log.info("전송 크기 : ${sendDdayAlarmContents.size}")
