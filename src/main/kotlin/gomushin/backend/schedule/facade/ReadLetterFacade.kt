@@ -89,17 +89,17 @@ class ReadLetterFacade(
 
         val hasData = letterPreviewResponses.isNotEmpty()
 
-        val nextUrl = if (!isLastPage && hasData) {
-            "${baseUrl}/v1/schedules/letters/to-me?key=${letterPreviewResponses.last().letterId}&orderCreatedAt=DESC&take=${readLettersToMePaginationRequest.take}"
-        } else {
-            null
-        }
+//        val nextUrl = if (!isLastPage && hasData) {
+//            "${baseUrl}/v1/schedules/letters/to-me?key=${letterPreviewResponses.last().letterId}&orderCreatedAt=DESC&take=${readLettersToMePaginationRequest.take}"
+//        } else {
+//            null
+//        }
 
         return PageResponse.of(
             data = letterPreviewResponses,
             after = if (hasData) letterPreviewResponses.last().letterId else null,
             count = letterPreviewResponses.size,
-            next = nextUrl,
+//            next = nextUrl,
             isLastPage = isLastPage
         )
     }
