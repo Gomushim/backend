@@ -39,6 +39,8 @@ class ReadLetterController(
         @PathVariable scheduleId: Long,
         @PathVariable letterId: Long,
     ): ApiResponse<LetterDetailResponse> {
+        println("scheduleId = $scheduleId")
+        println("letterId = $letterId")
         val letter = readLetterFacade.get(customUserDetails, scheduleId, letterId)
         return ApiResponse.success(letter)
     }
