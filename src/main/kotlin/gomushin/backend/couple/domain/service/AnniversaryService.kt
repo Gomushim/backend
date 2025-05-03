@@ -5,6 +5,7 @@ import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.repository.AnniversaryRepository
 import gomushin.backend.couple.dto.request.GenerateAnniversaryRequest
 import gomushin.backend.couple.dto.request.ReadAnniversariesRequest
+import gomushin.backend.couple.dto.response.AnniversaryNotificationInfo
 import gomushin.backend.couple.dto.response.MonthlyAnniversariesResponse
 import gomushin.backend.schedule.dto.response.DailyAnniversaryResponse
 import gomushin.backend.schedule.dto.response.MainAnniversariesResponse
@@ -70,5 +71,10 @@ class AnniversaryService(
     @Transactional(readOnly = true)
     fun getUpcomingTop3Anniversaries(couple: Couple): List<Anniversary> {
         return anniversaryRepository.findTop3UpcomingAnniversaries(couple.id)
+    }
+
+    @Transactional(readOnly = true)
+    fun getTodayAnniversaryMemberFcmTokens(date : LocalDate) : List<AnniversaryNotificationInfo> {
+        return anniversaryRepository.findTodayAnniversaryMemberFcmTokens(date)
     }
 }

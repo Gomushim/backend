@@ -1,6 +1,7 @@
 package gomushin.backend.couple.domain.repository
 
 import gomushin.backend.couple.domain.entity.Anniversary
+import gomushin.backend.couple.dto.response.AnniversaryNotificationInfo
 import gomushin.backend.couple.dto.response.MonthlyAnniversariesResponse
 import gomushin.backend.schedule.dto.response.DailyAnniversaryResponse
 import gomushin.backend.schedule.dto.response.MainAnniversariesResponse
@@ -108,4 +109,18 @@ interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
         @Param("key") key: Long,
         @Param("take") take: Long
     ): List<Anniversary?>
+
+    @Query(
+        """
+    SELECT a.title AS title, m.id AS memberId, m.fcm_token AS fcmToken
+    FROM anniversary a
+    JOIN couple c ON a.couple_id = c.id
+    JOIN member m ON m.id = c.invitor_id OR m.id = c.invitee_id
+    JOIN notification n ON n.member_id = m.id
+    WHERE DATE(a.anniversary_date) = :nowDate
+      AND n.dday = true
+    """,
+        nativeQuery = true
+    )
+    fun findTodayAnniversaryMemberFcmTokens(@Param("nowDate")date: LocalDate): List<AnniversaryNotificationInfo>
 }
