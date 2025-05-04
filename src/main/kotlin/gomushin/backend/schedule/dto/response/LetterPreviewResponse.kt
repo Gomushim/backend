@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 
 data class LetterPreviewResponse(
     val letterId: Long?,
+    val scheduleId: Long?,
     val scheduleTitle: String?,
     val title: String?,
     val content: String?,
@@ -29,6 +30,7 @@ data class LetterPreviewResponse(
             }
             return LetterPreviewResponse(
                 letterId = letter?.id,
+                scheduleId = schedule?.id,
                 scheduleTitle = schedule?.title,
                 title = letter?.title,
                 content = previewContent,
