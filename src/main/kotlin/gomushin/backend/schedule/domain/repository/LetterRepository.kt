@@ -25,19 +25,17 @@ interface LetterRepository : JpaRepository<Letter, Long> {
             SELECT *
             FROM letter l 
             WHERE l.couple_id = :coupleId 
-                AND l.author_id = :partnerPk
                 AND l.id <:key
             ORDER BY l.created_at DESC         
             LIMIT :take
         """,
         nativeQuery = true
     )
-    fun findByLettersToMe(
+    fun findAllToCouple(
         @Param("coupleId") coupleId: Long,
-        @Param("partnerPk") partnerPk: Long,
         @Param("key") key: Long,
         @Param("take") take: Long,
-    ): List<Letter?>
+    ): List<Letter>
 
     fun findTop5ByCoupleIdOrderByCreatedAtDesc(coupleId: Long): List<Letter>
 }
