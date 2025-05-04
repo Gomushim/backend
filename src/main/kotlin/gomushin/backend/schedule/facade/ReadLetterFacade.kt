@@ -73,7 +73,7 @@ class ReadLetterFacade(
         readLettersToMePaginationRequest: ReadLettersToMePaginationRequest,
     ): PageResponse<LetterPreviewResponse> {
 
-        val letters = letterService.findByCouple(customUserDetails.getCouple())
+        val letters = letterService.findAllToCouple(customUserDetails.getCouple(), readLettersToMePaginationRequest)
 
         val letterPreviewResponses = letters.map { letter ->
             val picture = letter.let { pictureService.findFirstByLetterId(it.id) }

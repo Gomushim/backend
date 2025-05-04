@@ -80,14 +80,12 @@ class LetterService(
     }
 
     @Transactional(readOnly = true)
-    fun findArrivedToMe(
+    fun findAllToCouple(
         couple: Couple,
-        partnerPk: Long,
         readLettersToMePaginationRequest: ReadLettersToMePaginationRequest
-    ): List<Letter?> {
-        return letterRepository.findByLettersToMe(
+    ): List<Letter> {
+        return letterRepository.findAllToCouple(
             couple.id,
-            partnerPk,
             readLettersToMePaginationRequest.key,
             readLettersToMePaginationRequest.take,
         )
