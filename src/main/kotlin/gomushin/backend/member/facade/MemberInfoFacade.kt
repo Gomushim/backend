@@ -56,8 +56,8 @@ class MemberInfoFacade(
     @Transactional
     fun updateMyNotification(customUserDetails: CustomUserDetails, updateMyNotificationRequest: UpdateMyNotificationRequest) {
         notificationService.getByMemberId(customUserDetails.getId()).apply {
-            if (updateMyNotificationRequest.dday) updateDday()
-            if (updateMyNotificationRequest.partnerStatus) updatePartnerStatus()
+            changeDday(updateMyNotificationRequest.dday)
+            changePartnerStatus(updateMyNotificationRequest.partnerStatus)
         }
     }
 }

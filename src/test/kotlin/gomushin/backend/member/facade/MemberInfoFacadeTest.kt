@@ -172,14 +172,12 @@ class MemberInfoFacadeTest {
     @Test
     fun updateNotification() {
         //given
-        val updateMyNotificationRequest = UpdateMyNotificationRequest(true, true)
+        val updateMyNotificationRequest = UpdateMyNotificationRequest(true, false)
         `when`(notificationService.getByMemberId(customUserDetails.getId())).thenReturn(notification)
-        val previousDay = notification.dday
-        val previousSuperstate = notification.partnerStatus
         //when
         val result = memberInfoFacade.updateMyNotification(customUserDetails, updateMyNotificationRequest)
         //then
-        assertEquals(notification.dday, !previousDay)
-        assertEquals(notification.partnerStatus, !previousSuperstate)
+        assertEquals(notification.dday, updateMyNotificationRequest.dday)
+        assertEquals(notification.partnerStatus, updateMyNotificationRequest.partnerStatus)
     }
 }
