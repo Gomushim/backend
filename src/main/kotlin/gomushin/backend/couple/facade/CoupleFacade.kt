@@ -130,4 +130,10 @@ class CoupleFacade(
             throw BadRequestException("sarangggun.couple.already-init")
         }
     }
+
+    fun getCoupleBirthDay(customUserDetails: CustomUserDetails): CoupleBirthDayResponse {
+        val couple = coupleInfoService.findCoupleMember(customUserDetails.getId())
+        val member = memberService.getById(customUserDetails.getId())
+        return CoupleBirthDayResponse.of(couple, member)
+    }
 }

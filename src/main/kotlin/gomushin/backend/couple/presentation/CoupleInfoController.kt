@@ -71,4 +71,14 @@ class CoupleInfoController (
     ):ApiResponse<CoupleEmotionResponse>{
         return ApiResponse.success(coupleFacade.getCoupleEmotion(customUserDetails))
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(ApiPath.COUPLE_BIRTHDAY)
+    @Operation(summary = "커플 생년월일 조회 api", description = "getCoupleBirthDay")
+    fun getCoupleBirthDay(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails
+    ) :ApiResponse<CoupleBirthDayResponse>{
+        val coupleBirthDay = coupleFacade.getCoupleBirthDay(customUserDetails)
+        return ApiResponse.success(coupleBirthDay)
+    }
 }
