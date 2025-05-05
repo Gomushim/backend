@@ -180,4 +180,16 @@ class MemberInfoFacadeTest {
         assertEquals(notification.dday, updateMyNotificationRequest.dday)
         assertEquals(notification.partnerStatus, updateMyNotificationRequest.partnerStatus)
     }
+
+    @DisplayName("알림정책 조회")
+    @Test
+    fun getMyNotification() {
+        //given
+        `when`(notificationService.getByMemberId(customUserDetails.getId())).thenReturn(notification)
+        //when
+        val result = memberInfoFacade.getMyNotification(customUserDetails)
+        //then
+        assertEquals(notification.dday, result.dday)
+        assertEquals(notification.partnerStatus, result.partnerStatus)
+    }
 }
