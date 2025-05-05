@@ -62,7 +62,7 @@ class CoupleFacadeTest {
                 name = "곰신",
                 nickname = "곰신닉네임",
                 email = "test1@test.com",
-                birthDate = null,
+                birthDate = LocalDate.of(2001, 3, 1),
                 profileImageUrl = null,
                 provider = Provider.KAKAO,
                 role = Role.MEMBER,
@@ -73,7 +73,7 @@ class CoupleFacadeTest {
                 name = "꽃신",
                 nickname = "꽃신닉네임",
                 email = "test2@test.com",
-                birthDate = null,
+                birthDate = LocalDate.of(2001, 4, 1),
                 profileImageUrl = null,
                 provider = Provider.KAKAO,
                 role = Role.MEMBER,
@@ -205,5 +205,19 @@ class CoupleFacadeTest {
         coupleFacade.generateAnniversary(customUserDetails, generateAnniversaryRequest)
         //then
         verify(anniversaryService).generateAnniversary(couple, generateAnniversaryRequest)
+    }
+
+    @DisplayName("생년월일 조회 - 정상응답")
+    @Test
+    fun getCoupleBirthDay() {
+        //given
+        `when`(memberService.getById(customUserDetails.getId())).thenReturn(member1)
+        `when`(coupleInfoService.findCoupleMember(customUserDetails.getId())).thenReturn(member2)
+        //when
+        val result = coupleFacade.getCoupleBirthDay(customUserDetails)
+        //then
+        verify(coupleInfoService).findCoupleMember(customUserDetails.getId())
+        assertEquals(result.myBirthDay, member1.birthDate)
+        assertEquals(result.coupleBirthDay, member2.birthDate)
     }
 }
