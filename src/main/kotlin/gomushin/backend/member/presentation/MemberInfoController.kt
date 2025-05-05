@@ -9,6 +9,7 @@ import gomushin.backend.member.dto.request.UpdateMyNotificationRequest
 import gomushin.backend.member.dto.response.MyEmotionResponse
 import gomushin.backend.member.facade.MemberInfoFacade
 import gomushin.backend.member.dto.response.MyInfoResponse
+import gomushin.backend.member.dto.response.MyNotificationResponse
 import gomushin.backend.member.dto.response.MyStatusMessageResponse
 import gomushin.backend.member.facade.LeaveFacade
 import io.swagger.v3.oas.annotations.Operation
@@ -111,5 +112,15 @@ class MemberInfoController(
     ) : ApiResponse<Boolean> {
         leaveFacade.leave(customUserDetails)
         return ApiResponse.success(true)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(ApiPath.MY_NOTIFICATION)
+    @Operation(summary = "나의 알림 정책 조회", description = "getMyNotification")
+    fun getMyNotification(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails
+    ) : ApiResponse<MyNotificationResponse> {
+        val myNotification = memberInfoFacade.getMyNotification(customUserDetails)
+        return ApiResponse.success(myNotification)
     }
 }
