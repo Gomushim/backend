@@ -10,4 +10,5 @@ object ApiPath {
     const val UPDATE_MY_BIRTHDAY = "/v1/member/my-birthday"
     const val UPDATE_MY_NOTIFICATION_POLICY = "/v1/member/my-notification"
     const val DELETE_ALL_MY_DATA ="/v1/member/all-my-data"
+    const val MY_NOTIFICATION = "/v1/member/my-notification"
 }

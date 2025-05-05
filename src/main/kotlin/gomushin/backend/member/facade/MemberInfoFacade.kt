@@ -11,6 +11,7 @@ import gomushin.backend.member.dto.request.UpdateMyNickNameRequest
 import gomushin.backend.member.dto.request.UpdateMyNotificationRequest
 import gomushin.backend.member.dto.response.MyEmotionResponse
 import gomushin.backend.member.dto.response.MyInfoResponse
+import gomushin.backend.member.dto.response.MyNotificationResponse
 import gomushin.backend.member.dto.response.MyStatusMessageResponse
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -59,5 +60,10 @@ class MemberInfoFacade(
             changeDday(updateMyNotificationRequest.dday)
             changePartnerStatus(updateMyNotificationRequest.partnerStatus)
         }
+    }
+
+    fun getMyNotification(customUserDetails: CustomUserDetails): MyNotificationResponse {
+        val notification = notificationService.getByMemberId(customUserDetails.getId())
+        return MyNotificationResponse.of(notification)
     }
 }
