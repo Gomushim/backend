@@ -218,6 +218,6 @@ class CoupleFacadeTest {
         //then
         verify(coupleInfoService).findCoupleMember(customUserDetails.getId())
         assertEquals(result.myBirthDay, member1.birthDate)
-        assertEquals(result.coupleBirthDay, member2.birthDate)
+        assertEquals(result.partnerBirthday, member2.birthDate)
     }
 }
