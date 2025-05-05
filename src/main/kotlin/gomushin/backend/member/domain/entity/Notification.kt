@@ -30,19 +30,11 @@ class Notification(
         }
     }
 
-    fun updateDday() {
-        this.dday = !this.dday
-    }
-
-    fun updatePartnerStatus() {
-        this.partnerStatus = !this.partnerStatus
-    }
-
-    fun changeDday(dday: Boolean) {
+    fun updateDday(dday: Boolean) {
         this.dday = dday
     }
 
-    fun changePartnerStatus(partnerStatus: Boolean) {
+    fun updatePartnerStatus(partnerStatus: Boolean) {
         this.partnerStatus = partnerStatus
     }
 }

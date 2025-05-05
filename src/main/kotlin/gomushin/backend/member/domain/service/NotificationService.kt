@@ -15,8 +15,8 @@ class NotificationService(
     fun initNotification(memberId: Long, isNotification: Boolean) {
         val notification = Notification.create(memberId)
         if (isNotification) {
-            notification.updateDday()
-            notification.updatePartnerStatus()
+            notification.updateDday(true)
+            notification.updatePartnerStatus(true)
         }
         save(notification)
     }
