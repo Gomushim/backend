@@ -1,5 +1,6 @@
-package gomushin.backend.alarm.service
+package gomushin.backend.alarm.facade
 
+import gomushin.backend.alarm.service.FCMService
 import gomushin.backend.alarm.util.MessageParsingUtil
 import gomushin.backend.core.configuration.redis.RedisService
 import gomushin.backend.member.domain.service.MemberService
@@ -14,12 +15,12 @@ import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class QuestionAlarmService (
+class QuestionAlarmFacade (
     private val fcmService: FCMService,
     private val memberService: MemberService,
     private val redisService: RedisService
 ) {
-    private val log: Logger = LoggerFactory.getLogger(QuestionAlarmService::class.java)
+    private val log: Logger = LoggerFactory.getLogger(QuestionAlarmFacade::class.java)
     private val questionMessages = listOf(
         "오늘 하루는 어땠나요?+연인에게도 안부를 전해보세요",
         "사랑은 매일 채우는 것+오늘도 연인과 한 조각 채워보세요",
