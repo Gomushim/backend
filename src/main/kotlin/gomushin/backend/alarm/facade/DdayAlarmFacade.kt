@@ -1,5 +1,6 @@
-package gomushin.backend.alarm.service
+package gomushin.backend.alarm.facade
 
+import gomushin.backend.alarm.service.FCMService
 import gomushin.backend.core.configuration.redis.RedisService
 import gomushin.backend.couple.domain.service.AnniversaryService
 import kotlinx.coroutines.Dispatchers
@@ -14,12 +15,12 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Service
-class DdayAlarmSerivce(
+class DdayAlarmFacade(
     private val fcmService: FCMService,
     private val anniversaryService: AnniversaryService,
     private val redisService: RedisService
 ) {
-    private val log: Logger = LoggerFactory.getLogger(QuestionAlarmService::class.java)
+    private val log: Logger = LoggerFactory.getLogger(QuestionAlarmFacade::class.java)
     private val alarmTitle = "오늘의 디데이가 도착했어요"
     
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
