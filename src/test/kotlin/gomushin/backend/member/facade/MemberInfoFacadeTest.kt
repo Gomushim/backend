@@ -2,6 +2,7 @@ package gomushin.backend.member.facade
 
 import gomushin.backend.alarm.service.StatusAlarmService
 import gomushin.backend.core.CustomUserDetails
+import gomushin.backend.core.configuration.redis.RedisService
 import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.entity.Notification
@@ -35,6 +36,8 @@ class MemberInfoFacadeTest {
     private lateinit var statusAlarmService: StatusAlarmService
     @Mock
     private lateinit var coupleInfoService: CoupleInfoService
+    @Mock
+    private lateinit var redisService: RedisService
 
     @InjectMocks
     private lateinit var memberInfoFacade: MemberInfoFacade
