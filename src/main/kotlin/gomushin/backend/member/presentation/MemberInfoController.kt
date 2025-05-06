@@ -1,5 +1,6 @@
 package gomushin.backend.member.presentation
 
+import gomushin.backend.alarm.dto.SaveAlarmMessage
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.response.ApiResponse
 import gomushin.backend.member.dto.request.UpdateMyBirthdayRequest
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -122,5 +124,16 @@ class MemberInfoController(
     ) : ApiResponse<MyNotificationResponse> {
         val myNotification = memberInfoFacade.getMyNotification(customUserDetails)
         return ApiResponse.success(myNotification)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(ApiPath.MY_ALARM)
+    @Operation(summary = "알림 수신 내역 조회", description = "getMyReceivedNotification")
+    fun getMyReceivedNotification(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable recentDays : Long
+    ) : ApiResponse<List<SaveAlarmMessage>>{
+        val saveAlarmMessages = memberInfoFacade.getMyReceivedNotification(customUserDetails, recentDays)
+        return ApiResponse.success(saveAlarmMessages)
     }
 }

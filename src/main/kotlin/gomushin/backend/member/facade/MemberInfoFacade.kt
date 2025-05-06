@@ -1,7 +1,9 @@
 package gomushin.backend.member.facade
 
+import gomushin.backend.alarm.dto.SaveAlarmMessage
 import gomushin.backend.alarm.service.StatusAlarmService
 import gomushin.backend.core.CustomUserDetails
+import gomushin.backend.core.configuration.redis.RedisService
 import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.member.domain.service.NotificationService
@@ -21,7 +23,8 @@ class MemberInfoFacade(
     private val memberService: MemberService,
     private val notificationService: NotificationService,
     private val statusAlarmService: StatusAlarmService,
-    private val coupleInfoService: CoupleInfoService
+    private val coupleInfoService: CoupleInfoService,
+    private val redisService: RedisService
 ) {
     fun getMemberInfo(customUserDetails: CustomUserDetails): MyInfoResponse {
         val member = memberService.getById(customUserDetails.getId())
@@ -65,5 +68,9 @@ class MemberInfoFacade(
     fun getMyNotification(customUserDetails: CustomUserDetails): MyNotificationResponse {
         val notification = notificationService.getByMemberId(customUserDetails.getId())
         return MyNotificationResponse.of(notification)
+    }
+
+    fun getMyReceivedNotification(customUserDetails: CustomUserDetails, recentDays: Long): List<SaveAlarmMessage> {
+        return redisService.getAlarms(customUserDetails.getId(), recentDays)
     }
 }
