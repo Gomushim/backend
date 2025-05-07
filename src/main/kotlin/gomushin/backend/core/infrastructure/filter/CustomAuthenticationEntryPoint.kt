@@ -11,15 +11,14 @@ import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.stereotype.Component
 
 @Component
-class CustomAuthenticationEntryPoint: AuthenticationEntryPoint {
+class CustomAuthenticationEntryPoint(private val objectMapper: ObjectMapper): AuthenticationEntryPoint {
     override fun commence(
         request: HttpServletRequest?,
         response: HttpServletResponse?,
         authException: AuthenticationException?
     ) {
-        if (response != null) {
-            if (response.isCommitted) return
-        }
+
+        if(response?.isCommitted == true) return
 
         response?.contentType = MediaType.APPLICATION_JSON_VALUE
         response?.status = HttpServletResponse.SC_UNAUTHORIZED
@@ -31,7 +30,7 @@ class CustomAuthenticationEntryPoint: AuthenticationEntryPoint {
         )
 
         response?.writer?.write(
-            ObjectMapper().writeValueAsString(exception.error)
+            objectMapper.writeValueAsString(exception.error)
         )
     }
 }

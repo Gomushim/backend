@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 
 
 @Component
-class CustomAccessDeniedHandler : AccessDeniedHandler {
+class CustomAccessDeniedHandler(private val objectMapper: ObjectMapper) : AccessDeniedHandler {
     override fun handle(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -25,23 +25,19 @@ class CustomAccessDeniedHandler : AccessDeniedHandler {
         response.characterEncoding = "UTF-8"
 
 
-        if (request.requestURI.contains("/v1/member/onboarding")) {
-            val exception = ErrorCodeResolvingApiErrorException(
-                ExtendedHttpStatus.FORBIDDEN,
-                "sarangggun.auth.guest-only"
-            )
-            response.writer.write(
-                ObjectMapper().writeValueAsString(exception.error)
-            )
+        val errorCode = if (request.requestURI.contains("/v1/member/onboarding")) {
+            "sarangggun.auth.guest-only"
         } else {
-            val exception = ErrorCodeResolvingApiErrorException(
-                ExtendedHttpStatus.FORBIDDEN,
-                "sarangggun.auth.member-only"
-            )
-            response.writer.write(
-                ObjectMapper().writeValueAsString(exception.error)
-            )
+            "sarangggun.auth.member-only"
         }
+
+        val exception = ErrorCodeResolvingApiErrorException(
+            ExtendedHttpStatus.FORBIDDEN,
+            errorCode
+        )
+        response.writer.write(
+            objectMapper.writeValueAsString(exception.error)
+        )
 
     }
 }
