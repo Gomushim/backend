@@ -1,5 +1,6 @@
 package gomushin.backend.core.configuration.security
 
+import gomushin.backend.core.infrastructure.filter.CustomAuthenticationEntryPoint
 import gomushin.backend.core.infrastructure.filter.JwtAuthenticationFilter
 import gomushin.backend.core.jwt.JwtTokenProvider
 import gomushin.backend.core.oauth.handler.CustomAccessDeniedHandler
@@ -31,7 +32,8 @@ class SecurityConfiguration(
     fun filterChain(
         http: HttpSecurity, corsConfiguration: CustomCorsConfiguration,
         customOAuth2UserService: CustomOAuth2UserService, coupleRepository: CoupleRepository,
-        customAccessDeniedHandler: CustomAccessDeniedHandler
+        customAccessDeniedHandler: CustomAccessDeniedHandler,
+        customAuthenticationEntryPoint: CustomAuthenticationEntryPoint,
     ): SecurityFilterChain {
         http
             .csrf {
@@ -68,6 +70,7 @@ class SecurityConfiguration(
             }
             .exceptionHandling {
                 it.accessDeniedHandler(customAccessDeniedHandler)
+                it.authenticationEntryPoint(customAuthenticationEntryPoint)
             }
             .authorizeHttpRequests {
                 it.requestMatchers(
