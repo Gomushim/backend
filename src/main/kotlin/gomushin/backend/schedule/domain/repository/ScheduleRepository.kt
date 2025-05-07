@@ -45,10 +45,10 @@ interface ScheduleRepository : JpaRepository<Schedule, Long> {
         )
         FROM Schedule s
         WHERE s.coupleId = :coupleId 
-        AND function('DATE', s.startDate) = :startDate
+        AND :date BETWEEN FUNCTION('DATE', s.startDate) AND FUNCTION('DATE', s.endDate)
     """
     )
-    fun findByCoupleIdAndStartDate(coupleId: Long, startDate: LocalDate): List<DailyScheduleResponse>
+    fun findByCoupleIdAndDate(coupleId: Long, date: LocalDate): List<DailyScheduleResponse>
 
     @Query(
         """
@@ -61,10 +61,11 @@ interface ScheduleRepository : JpaRepository<Schedule, Long> {
         )
         FROM Schedule s
         WHERE s.coupleId = :coupleId 
-        AND s.startDate BETWEEN :startDate AND :endDate
+        AND s.startDate <= :endDate 
+        AND s.endDate >= :startDate
     """
     )
-    fun findByCoupleIdAndStartDateBetween(
+    fun findByCoupleIdAndStartDateAndEndDateBetween(
         coupleId: Long,
         startDate: LocalDateTime,
         endDate: LocalDateTime
