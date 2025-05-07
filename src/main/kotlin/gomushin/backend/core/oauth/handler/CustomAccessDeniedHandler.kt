@@ -33,6 +33,14 @@ class CustomAccessDeniedHandler : AccessDeniedHandler {
             response.writer.write(
                 ObjectMapper().writeValueAsString(exception.error)
             )
+        } else {
+            val exception = ErrorCodeResolvingApiErrorException(
+                ExtendedHttpStatus.FORBIDDEN,
+                "sarangggun.auth.member-only"
+            )
+            response.writer.write(
+                ObjectMapper().writeValueAsString(exception.error)
+            )
         }
 
     }
