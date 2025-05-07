@@ -28,7 +28,7 @@ class ScheduleService(
         startDate: LocalDate,
         endDate: LocalDate
     ): List<MainSchedulesResponse> {
-        return scheduleRepository.findByCoupleIdAndStartDateBetween(
+        return scheduleRepository.findByCoupleIdAndStartDateAndEndDateBetween(
             couple.id,
             startDate.atStartOfDay(),
             endDate.atTime(23, 59, 59)
@@ -37,7 +37,7 @@ class ScheduleService(
 
     @Transactional(readOnly = true)
     fun findByDate(couple: Couple, date: LocalDate): List<DailyScheduleResponse> {
-        return scheduleRepository.findByCoupleIdAndStartDate(couple.id, date)
+        return scheduleRepository.findByCoupleIdAndDate(couple.id, date)
     }
 
     @Transactional
