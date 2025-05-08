@@ -96,4 +96,8 @@ class Member(
     fun updateBirthday(birthDate: LocalDate) {
         this.birthDate = birthDate
     }
+
+    fun updateIsCouple(isCouple: Boolean) {
+        this.isCouple = isCouple
+    }
 }
