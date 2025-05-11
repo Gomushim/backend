@@ -17,6 +17,16 @@ class CoupleService(
     }
 
     @Transactional(readOnly = true)
+    fun getByIdWithLock(id: Long): Couple {
+        return findByIdWithLock(id) ?: throw BadRequestException("sarangggun.couple.not-found")
+    }
+
+    @Transactional(readOnly = true)
+    fun findByIdWithLock(id: Long): Couple? {
+        return coupleRepository.findByIdWithLock(id)
+    }
+
+    @Transactional(readOnly = true)
     fun findById(id: Long): Couple? {
         return coupleRepository.findByIdOrNull(id)
     }

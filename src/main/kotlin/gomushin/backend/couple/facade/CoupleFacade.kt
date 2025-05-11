@@ -45,7 +45,7 @@ class CoupleFacade(
         customUserDetails: CustomUserDetails,
         request: CoupleAnniversaryRequest
     ) {
-        val couple = coupleService.getById(request.coupleId)
+        val couple = coupleService.getByIdWithLock(request.coupleId)
         checkUserInCouple(customUserDetails.getId(), couple)
         checkCoupleAnniversaryIsInit(couple)
 
