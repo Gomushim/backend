@@ -4,11 +4,12 @@ import gomushin.backend.couple.domain.entity.Anniversary
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.repository.AnniversaryRepository
 import gomushin.backend.couple.dto.request.GenerateAnniversaryRequest
-import gomushin.backend.couple.dto.request.ReadAnniversariesRequest
 import gomushin.backend.couple.dto.response.AnniversaryNotificationInfo
 import gomushin.backend.couple.dto.response.MonthlyAnniversariesResponse
 import gomushin.backend.schedule.dto.response.DailyAnniversaryResponse
 import gomushin.backend.schedule.dto.response.MainAnniversariesResponse
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -19,11 +20,10 @@ class AnniversaryService(
 ) {
 
     @Transactional(readOnly = true)
-    fun findAnniversaries(couple: Couple, readAnniversariesRequest: ReadAnniversariesRequest): List<Anniversary?> {
+    fun findAnniversaries(couple: Couple, pageRequest: PageRequest): Page<Anniversary> {
         return anniversaryRepository.findAnniversaries(
             couple.id,
-            readAnniversariesRequest.key,
-            readAnniversariesRequest.take,
+            pageRequest
         )
     }
 
@@ -74,7 +74,7 @@ class AnniversaryService(
     }
 
     @Transactional(readOnly = true)
-    fun getTodayAnniversaryMemberFcmTokens(date : LocalDate) : List<AnniversaryNotificationInfo> {
+    fun getTodayAnniversaryMemberFcmTokens(date: LocalDate): List<AnniversaryNotificationInfo> {
         return anniversaryRepository.findTodayAnniversaryMemberFcmTokens(date)
     }
 }

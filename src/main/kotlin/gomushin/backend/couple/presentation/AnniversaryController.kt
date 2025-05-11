@@ -4,14 +4,12 @@ import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.PageResponse
 import gomushin.backend.core.common.web.response.ApiResponse
 import gomushin.backend.couple.dto.request.GenerateAnniversaryRequest
-import gomushin.backend.couple.dto.request.ReadAnniversariesRequest
 import gomushin.backend.couple.dto.response.MainAnniversaryResponse
 import gomushin.backend.couple.dto.response.TotalAnniversaryResponse
 import gomushin.backend.couple.facade.AnniversaryFacade
 import gomushin.backend.couple.facade.CoupleFacade
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springdoc.core.annotations.ParameterObject
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -55,9 +53,10 @@ class AnniversaryController(
     )
     fun getAnniversaryList(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
-        @ParameterObject readAnniversariesRequest: ReadAnniversariesRequest,
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int,
     ): PageResponse<TotalAnniversaryResponse> {
-        val anniversaries = anniversaryFacade.getAnniversaryList(customUserDetails, readAnniversariesRequest)
+        val anniversaries = anniversaryFacade.getAnniversaryList(customUserDetails, page, size)
         return anniversaries
     }
 }

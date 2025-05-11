@@ -5,8 +5,9 @@ import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.schedule.domain.entity.Letter
 import gomushin.backend.schedule.domain.entity.Schedule
 import gomushin.backend.schedule.domain.repository.LetterRepository
-import gomushin.backend.schedule.dto.request.ReadLettersToMePaginationRequest
 import gomushin.backend.schedule.dto.request.UpsertLetterRequest
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -82,12 +83,11 @@ class LetterService(
     @Transactional(readOnly = true)
     fun findAllToCouple(
         couple: Couple,
-        readLettersToMePaginationRequest: ReadLettersToMePaginationRequest
-    ): List<Letter> {
+        pageable: Pageable
+    ): Page<Letter> {
         return letterRepository.findAllToCouple(
             couple.id,
-            readLettersToMePaginationRequest.key,
-            readLettersToMePaginationRequest.take,
+            pageable
         )
     }
 

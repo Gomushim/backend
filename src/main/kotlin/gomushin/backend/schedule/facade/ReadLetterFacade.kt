@@ -6,9 +6,9 @@ import gomushin.backend.schedule.domain.service.CommentService
 import gomushin.backend.schedule.domain.service.LetterService
 import gomushin.backend.schedule.domain.service.PictureService
 import gomushin.backend.schedule.domain.service.ScheduleService
-import gomushin.backend.schedule.dto.request.ReadLettersToMePaginationRequest
 import gomushin.backend.schedule.dto.response.*
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 
 @Component
@@ -70,10 +70,11 @@ class ReadLetterFacade(
 
     fun getLetterListToCouple(
         customUserDetails: CustomUserDetails,
-        readLettersToMePaginationRequest: ReadLettersToMePaginationRequest,
+        page: Int,
+        size: Int,
     ): PageResponse<LetterPreviewResponse> {
-
-        val letters = letterService.findAllToCouple(customUserDetails.getCouple(), readLettersToMePaginationRequest)
+        val pageRequest = PageRequest.of(page, size)
+        val letters = letterService.findAllToCouple(customUserDetails.getCouple(), pageRequest)
 
         val letterPreviewResponses = letters.map { letter ->
             val picture = letter.let { pictureService.findFirstByLetterId(it.id) }
@@ -81,23 +82,7 @@ class ReadLetterFacade(
             LetterPreviewResponse.of(letter, schedule, picture)
         }
 
-        val isLastPage = letterPreviewResponses.size < readLettersToMePaginationRequest.take
-
-        val hasData = letterPreviewResponses.isNotEmpty()
-
-//        val nextUrl = if (!isLastPage && hasData) {
-//            "${baseUrl}/v1/schedules/letters/to-me?key=${letterPreviewResponses.last().letterId}&orderCreatedAt=DESC&take=${readLettersToMePaginationRequest.take}"
-//        } else {
-//            null
-//        }
-
-        return PageResponse.of(
-            data = letterPreviewResponses,
-            after = if (hasData) letterPreviewResponses.last().letterId else null,
-            count = letterPreviewResponses.size,
-//            next = nextUrl,
-            isLastPage = isLastPage
-        )
+        return PageResponse.from(letterPreviewResponses)
     }
 
     fun getLetterListMain(
