@@ -3,10 +3,10 @@ package gomushin.backend.couple.facade
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.PageResponse
 import gomushin.backend.couple.domain.service.AnniversaryService
-import gomushin.backend.couple.dto.request.ReadAnniversariesRequest
 import gomushin.backend.couple.dto.response.MainAnniversaryResponse
 import gomushin.backend.couple.dto.response.TotalAnniversaryResponse
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 
 @Component
@@ -22,29 +22,16 @@ class AnniversaryFacade(
 
     fun getAnniversaryList(
         customUserDetails: CustomUserDetails,
-        readAnniversariesRequest: ReadAnniversariesRequest,
+        page: Int,
+        size: Int,
     ): PageResponse<TotalAnniversaryResponse> {
+        val pageRequest = PageRequest.of(page, size)
         val anniversaries =
-            anniversaryService.findAnniversaries(customUserDetails.getCouple(), readAnniversariesRequest)
+            anniversaryService.findAnniversaries(customUserDetails.getCouple(), pageRequest)
         val anniversaryResponses = anniversaries.map { anniversary ->
             TotalAnniversaryResponse.of(anniversary)
         }
-        val isLastPage = anniversaryResponses.size < readAnniversariesRequest.take
 
-        val hasData = anniversaryResponses.isNotEmpty()
-
-//        val nextUrl = if (!isLastPage && hasData) {
-//            "${baseUrl}/v1/anniversaries?key=${anniversaryResponses.last().id}&take=${readAnniversariesRequest.take}"
-//        } else {
-//            null
-//        }
-
-        return PageResponse.of(
-            data = anniversaryResponses,
-            after = if (hasData) anniversaryResponses.last().id else null,
-            count = anniversaryResponses.size,
-//            next = nextUrl,
-            isLastPage = isLastPage
-        )
+        return PageResponse.from(anniversaryResponses)
     }
 }

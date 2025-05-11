@@ -3,17 +3,16 @@ package gomushin.backend.schedule.presentation
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.PageResponse
 import gomushin.backend.core.common.web.response.ApiResponse
-import gomushin.backend.schedule.dto.request.ReadLettersToMePaginationRequest
 import gomushin.backend.schedule.dto.response.LetterDetailResponse
 import gomushin.backend.schedule.dto.response.LetterPreviewResponse
 import gomushin.backend.schedule.dto.response.MainLetterPreviewResponse
 import gomushin.backend.schedule.facade.ReadLetterFacade
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springdoc.core.annotations.ParameterObject
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -47,9 +46,10 @@ class ReadLetterController(
     @Operation(summary = "커플 전체 편지 리스트 가져오기", description = "getLetterListToMe")
     fun getLetterListToMe(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
-        @ParameterObject readLettersToMePaginationRequest: ReadLettersToMePaginationRequest
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int,
     ): PageResponse<LetterPreviewResponse> {
-        val letters = readLetterFacade.getLetterListToCouple(customUserDetails, readLettersToMePaginationRequest)
+        val letters = readLetterFacade.getLetterListToCouple(customUserDetails, page, size);
         return letters
     }
 
