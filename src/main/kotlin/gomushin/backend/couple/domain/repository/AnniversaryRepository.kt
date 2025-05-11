@@ -5,12 +5,13 @@ import gomushin.backend.couple.dto.response.AnniversaryNotificationInfo
 import gomushin.backend.couple.dto.response.MonthlyAnniversariesResponse
 import gomushin.backend.schedule.dto.response.DailyAnniversaryResponse
 import gomushin.backend.schedule.dto.response.MainAnniversariesResponse
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
     @Modifying
@@ -94,22 +95,16 @@ interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
 
 
     @Query(
-        value =
         """
-            SELECT * 
-            FROM anniversary a
-            WHERE a.couple_id = :coupleId
-                AND a.id < :key
-            ORDER BY anniversary_date DESC
-            LIMIT :take
-        """,
-        nativeQuery = true
+            SELECT a FROM Anniversary a
+            WHERE a.coupleId = :coupleId
+            ORDER BY a.anniversaryDate DESC
+        """
     )
     fun findAnniversaries(
         @Param("coupleId") coupleId: Long,
-        @Param("key") key: Long,
-        @Param("take") take: Long
-    ): List<Anniversary?>
+        pageable: Pageable
+    ): Page<Anniversary>
 
     @Query(
         """
@@ -123,5 +118,5 @@ interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
     """,
         nativeQuery = true
     )
-    fun findTodayAnniversaryMemberFcmTokens(@Param("nowDate")date: LocalDate): List<AnniversaryNotificationInfo>
+    fun findTodayAnniversaryMemberFcmTokens(@Param("nowDate") date: LocalDate): List<AnniversaryNotificationInfo>
 }
