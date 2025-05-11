@@ -14,7 +14,7 @@ class CookieService(
             .httpOnly(true)
             .secure(true)
             .sameSite("None")
-            .domain("localhost") //Todo push할때 cookie domain으로 바꾸기
+            .domain(cookieDomain)
             .maxAge(432000)
             .build()
     }
