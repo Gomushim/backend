@@ -1,6 +1,8 @@
 package gomushin.backend.schedule.domain.repository
 
 import gomushin.backend.schedule.domain.entity.Letter
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -22,20 +24,15 @@ interface LetterRepository : JpaRepository<Letter, Long> {
 
     @Query(
         """
-            SELECT *
-            FROM letter l 
-            WHERE l.couple_id = :coupleId 
-                AND l.id <:key
-            ORDER BY l.created_at DESC         
-            LIMIT :take
+        SELECT l FROM Letter l
+        WHERE l.coupleId = :coupleId
+        ORDER BY l.createdAt DESC
         """,
-        nativeQuery = true
     )
     fun findAllToCouple(
         @Param("coupleId") coupleId: Long,
-        @Param("key") key: Long,
-        @Param("take") take: Long,
-    ): List<Letter>
+        pageable: Pageable
+    ): Page<Letter>
 
     fun findTop5ByCoupleIdOrderByCreatedAtDesc(coupleId: Long): List<Letter>
 }
