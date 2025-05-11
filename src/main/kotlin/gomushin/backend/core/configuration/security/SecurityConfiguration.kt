@@ -1,5 +1,6 @@
 package gomushin.backend.core.configuration.security
 
+import gomushin.backend.core.configuration.cookie.CookieService
 import gomushin.backend.core.configuration.redis.RedisService
 import gomushin.backend.core.infrastructure.filter.CustomAuthenticationEntryPoint
 import gomushin.backend.core.infrastructure.filter.JwtAuthenticationFilter
@@ -26,8 +27,8 @@ class SecurityConfiguration(
     private val tokenService: TokenService,
     private val memberRepository: MemberRepository,
     private val redisService: RedisService,
-    @Value("\${redirect-url}") private val redirectUrl: String,
-    @Value("\${cookie.domain}") private val cookieDomain: String
+    private val cookieService: CookieService,
+    @Value("\${redirect-url}") private val redirectUrl: String
 ) {
 
     @Bean
@@ -66,7 +67,7 @@ class SecurityConfiguration(
                             tokenService,
                             memberRepository,
                             redisService,
-                            cookieDomain,
+                            cookieService,
                             redirectUrl,
                         )
                     )
