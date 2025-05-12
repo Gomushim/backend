@@ -1,6 +1,6 @@
 package gomushin.backend.core.infrastructure.filter
 
-import gomushin.backend.core.jwt.JwtTokenProvider
+import gomushin.backend.core.jwt.infrastructure.TokenService
 import gomushin.backend.core.service.CustomUserDetailsService
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
 class JwtAuthenticationFilter(
-    private val tokenProvider: JwtTokenProvider,
+    private val tokenService: TokenService,
     private val customUserDetailsService: CustomUserDetailsService
 ) : OncePerRequestFilter() {
 
@@ -40,7 +40,7 @@ class JwtAuthenticationFilter(
         val accessToken = getCookieValue(request, AT_IN_COOKIE) ?: getAccessTokenFromHeader(request)
 
         when {
-            accessToken != null && tokenProvider.validateToken(accessToken) -> {
+            accessToken != null && tokenService.validateToken(accessToken) -> {
                 applyAuthentication(accessToken)
             }
 
@@ -54,7 +54,7 @@ class JwtAuthenticationFilter(
     }
 
     private fun applyAuthentication(token: String) {
-        val userId = tokenProvider.getMemberIdFromToken(token)
+        val userId = tokenService.getMemberIdFromToken(token)
         val userDetails = customUserDetailsService.loadUserById(userId)
 
         val auth = UsernamePasswordAuthenticationToken(
