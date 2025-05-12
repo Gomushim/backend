@@ -1,7 +1,6 @@
 package gomushin.backend.core.jwt.infrastructure
 
-import gomushin.backend.core.jwt.JwtTokenProvider
-import io.jsonwebtoken.*
+import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -9,11 +8,11 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class JwtTokenProviderImpl(
+class TokenService(
     jwtProperties: JwtProperties
-) : JwtTokenProvider {
+) {
     companion object {
-        private val logger: Logger = LogManager.getLogger(JwtTokenProviderImpl::class.java)
+        private val logger: Logger = LogManager.getLogger(TokenService::class.java)
     }
 
     val ISSUER = jwtProperties.issuer
@@ -22,16 +21,16 @@ class JwtTokenProviderImpl(
     val ACCESS_TOKEN_EXPIRATION = jwtProperties.accessTokenExpiration
     val REFRESH_TOKEN_EXPIRATION = jwtProperties.refreshTokenExpiration
 
-    override fun provideAccessToken(userId: Long, role: String): String {
+    fun provideAccessToken(userId: Long, role: String): String {
         return createToken(userId, role, ACCESS_TOKEN_EXPIRATION, Type.ACCESS)
     }
 
-    override fun getMemberIdFromToken(token: String): Long {
+    fun getMemberIdFromToken(token: String): Long {
         val subject = getSubject(token)
         return subject.toLong()
     }
 
-    override fun validateToken(token: String): Boolean {
+    fun validateToken(token: String): Boolean {
         try {
             Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token)
             return true

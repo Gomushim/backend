@@ -1,7 +1,7 @@
 package gomushin.backend.core.oauth.handler
 
 import gomushin.backend.core.infrastructure.exception.BadRequestException
-import gomushin.backend.core.jwt.JwtTokenProvider
+import gomushin.backend.core.jwt.infrastructure.TokenService
 import gomushin.backend.core.oauth.CustomOAuth2User
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.repository.MemberRepository
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class CustomSuccessHandler(
-    private val jwtTokenProvider: JwtTokenProvider,
+    private val tokenService: TokenService,
     private val memberRepository: MemberRepository,
     @Value("\${redirect-url}") private val redirectUrl: String,
     @Value("\${cookie.domain}") private val cookieDomain: String,
@@ -37,9 +37,9 @@ class CustomSuccessHandler(
 
         var accessToken = ""
         getMemberByEmail(principal.getEmail())?.let {
-            accessToken = jwtTokenProvider.provideAccessToken(it.id, it.role.name)
+            accessToken = tokenService.provideAccessToken(it.id, it.role.name)
         } ?: run {
-            accessToken = jwtTokenProvider.provideAccessToken(principal.getUserId(), principal.getRole())
+            accessToken = tokenService.provideAccessToken(principal.getUserId(), principal.getRole())
         }
 
         val cookie = createCookie("access_token", accessToken)

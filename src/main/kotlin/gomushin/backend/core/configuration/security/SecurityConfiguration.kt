@@ -2,7 +2,7 @@ package gomushin.backend.core.configuration.security
 
 import gomushin.backend.core.infrastructure.filter.CustomAuthenticationEntryPoint
 import gomushin.backend.core.infrastructure.filter.JwtAuthenticationFilter
-import gomushin.backend.core.jwt.JwtTokenProvider
+import gomushin.backend.core.jwt.infrastructure.TokenService
 import gomushin.backend.core.oauth.handler.CustomAccessDeniedHandler
 import gomushin.backend.core.oauth.handler.CustomSuccessHandler
 import gomushin.backend.core.oauth.service.CustomOAuth2UserService
@@ -22,7 +22,7 @@ import org.springframework.web.cors.CorsUtils
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration(
-    private val jwtTokenProvider: JwtTokenProvider,
+    private val tokenService: TokenService,
     private val memberRepository: MemberRepository,
     @Value("\${redirect-url}") private val redirectUrl: String,
     @Value("\${cookie.domain}") private val cookieDomain: String
@@ -61,7 +61,7 @@ class SecurityConfiguration(
                     }
                     .successHandler(
                         CustomSuccessHandler(
-                            jwtTokenProvider,
+                            tokenService,
                             memberRepository,
                             redirectUrl,
                             cookieDomain
@@ -95,7 +95,7 @@ class SecurityConfiguration(
             }
             .addFilterBefore(
                 JwtAuthenticationFilter(
-                    jwtTokenProvider,
+                    tokenService,
                     CustomUserDetailsService(
                         memberRepository,
                         coupleRepository,
