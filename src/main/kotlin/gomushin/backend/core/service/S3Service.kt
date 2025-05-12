@@ -13,8 +13,8 @@ import java.util.*
 @Service
 class S3Service(
     private val s3Client: S3Client,
-    @Value("\${aws.s3.endpoint}") val endpoint: String,
     @Value("\${aws.s3.bucket}") private val bucket: String,
+    @Value("\${aws.s3.base-url}") private val baseUrl: String,
 ) {
 
     fun uploadFile(multipartFile: MultipartFile): String {
@@ -42,7 +42,7 @@ class S3Service(
     }
 
     private fun getFileUrl(fileName: String): String {
-        val normalizedEndpoint = endpoint.removeSuffix("/")
+        val normalizedEndpoint = baseUrl.removeSuffix("/")
         return "$normalizedEndpoint/$bucket/$fileName"
     }
 
