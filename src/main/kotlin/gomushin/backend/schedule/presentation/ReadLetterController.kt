@@ -46,10 +46,10 @@ class ReadLetterController(
     @Operation(summary = "커플 전체 편지 리스트 가져오기", description = "getLetterListToMe")
     fun getLetterListToMe(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
-        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") size: Int,
     ): PageResponse<LetterPreviewResponse> {
-        val letters = readLetterFacade.getLetterListToCouple(customUserDetails, page, size);
+        val letters = readLetterFacade.getLetterListToCouple(customUserDetails, page - 1, size);
         return letters
     }
 

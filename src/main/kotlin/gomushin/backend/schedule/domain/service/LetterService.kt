@@ -38,6 +38,11 @@ class LetterService(
     }
 
     @Transactional(readOnly = true)
+    fun findByCoupleIdAndScheduleId(couple: Couple, scheduleId: Long): List<Letter> {
+        return letterRepository.findByCoupleIdAndScheduleId(couple.id, scheduleId)
+    }
+
+    @Transactional(readOnly = true)
     fun getById(id: Long) = findById(id) ?: throw BadRequestException("sarangggun.letter.not-exist")
 
     @Transactional(readOnly = true)
