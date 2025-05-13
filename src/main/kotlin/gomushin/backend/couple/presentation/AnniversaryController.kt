@@ -53,10 +53,11 @@ class AnniversaryController(
     )
     fun getAnniversaryList(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
-        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") size: Int,
     ): PageResponse<TotalAnniversaryResponse> {
-        val anniversaries = anniversaryFacade.getAnniversaryList(customUserDetails, page, size)
+        val safePage = if (page < 1) 0 else page - 1
+        val anniversaries = anniversaryFacade.getAnniversaryList(customUserDetails, safePage, size)
         return anniversaries
     }
 }

@@ -49,7 +49,8 @@ class ReadLetterController(
         @RequestParam(defaultValue = "1") page: Int,
         @RequestParam(defaultValue = "10") size: Int,
     ): PageResponse<LetterPreviewResponse> {
-        val letters = readLetterFacade.getLetterListToCouple(customUserDetails, page - 1, size);
+        val safePage = if (page < 1) 0 else page - 1
+        val letters = readLetterFacade.getLetterListToCouple(customUserDetails, safePage, size)
         return letters
     }
 
