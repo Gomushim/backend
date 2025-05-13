@@ -12,4 +12,8 @@ interface CommentRepository : JpaRepository<Comment, Long> {
     @Modifying
     @Query("DELETE FROM Comment c WHERE c.authorId = :authorId")
     fun deleteAllByAuthorId(@Param("authorId") authorId: Long)
+
+    @Modifying
+    @Query("DELETE FROM Comment c WHERE c.letterId = :letterId")
+    fun deleteAllByLetterId(letterId: Long)
 }
