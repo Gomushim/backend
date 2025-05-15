@@ -85,7 +85,7 @@ class TokenService(
     fun getRefreshTokenValue(refreshToken: String) : Long {
         val key = RedisKey.getRedisRefreshKey(refreshToken)
         val value = redisTemplate.opsForValue().get(key)
-            ?: throw BadRequestException("sarangggun.auth.unauth.refresh")
+            ?: throw BadRequestException("sarangggun.auth.invalid-refresh")
         return value.toLong()
     }
 
