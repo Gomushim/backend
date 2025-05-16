@@ -1,5 +1,6 @@
 package gomushin.backend.core.oauth.handler
 
+import gomushin.backend.core.configuration.redis.RedisService
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.core.jwt.infrastructure.TokenService
 import gomushin.backend.core.oauth.CustomOAuth2User
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component
 class CustomSuccessHandler(
     private val tokenService: TokenService,
     private val memberRepository: MemberRepository,
+    private val redisService: RedisService,
     @Value("\${redirect-url}") private val redirectUrl: String,
     @Value("\${cookie.domain}") private val cookieDomain: String,
 ) : SimpleUrlAuthenticationSuccessHandler() {
@@ -36,14 +38,17 @@ class CustomSuccessHandler(
         }
 
         var accessToken = ""
+        val refreshToken = makeRefreshToken()
         getMemberByEmail(principal.getEmail())?.let {
             accessToken = tokenService.provideAccessToken(it.id, it.role.name)
         } ?: run {
             accessToken = tokenService.provideAccessToken(principal.getUserId(), principal.getRole())
         }
 
-        val cookie = createCookie("access_token", accessToken)
-        response!!.addHeader("Set-Cookie", cookie.toString())
+        val accessCookie = createCookie("access_token", accessToken)
+        val refreshCookie = createCookie("refresh_token", refreshToken)
+        response!!.addHeader("Set-Cookie", accessCookie.toString())
+        response.addHeader("Set-Cookie", refreshCookie.toString())
         response.sendRedirect(redirectUrl)
     }
 
@@ -53,12 +58,19 @@ class CustomSuccessHandler(
             .httpOnly(true)
             .secure(true)
             .sameSite("None")
-            .domain(cookieDomain)
+            .domain("localhost") //Todo push할때 cookie domain으로 바꾸기
             .maxAge(432000)
             .build()
     }
 
     private fun getMemberByEmail(email: String): Member? {
         return memberRepository.findByEmail(email)
+    }
+
+    private fun makeRefreshToken() : String {
+        val chars = ('0'..'9') + ('a'..'z') + ('A'..'Z')
+        return (1..20)
+            .map { chars.random() }
+            .joinToString("")
     }
 }
