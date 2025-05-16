@@ -44,11 +44,11 @@ class TokenService(
         }
     }
 
-    override fun provideRefreshToken() : String {
+    fun provideRefreshToken() : String {
         return createToken(0, "", REFRESH_TOKEN_EXPIRATION, Type.REFRESH)
     }
 
-    override fun getTokenDuration(token: String): Duration {
+    fun getTokenDuration(token: String): Duration {
         val now = Date(System.currentTimeMillis())
         return Duration.between(now.toInstant(), getTokenExpiration(token).toInstant())
     }
