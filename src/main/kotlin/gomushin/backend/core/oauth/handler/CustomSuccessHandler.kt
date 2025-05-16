@@ -1,7 +1,6 @@
 package gomushin.backend.core.oauth.handler
 
 import gomushin.backend.core.configuration.cookie.CookieService
-import gomushin.backend.core.configuration.redis.RedisService
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.core.jwt.infrastructure.TokenService
 import gomushin.backend.core.oauth.CustomOAuth2User
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Component
 class CustomSuccessHandler(
     private val tokenService: TokenService,
     private val memberRepository: MemberRepository,
-    private val redisService: RedisService,
     private val cookieService: CookieService,
     @Value("\${redirect-url}") private val redirectUrl: String,
 ) : SimpleUrlAuthenticationSuccessHandler() {
@@ -41,8 +39,10 @@ class CustomSuccessHandler(
         val refreshToken = jwtTokenProvider.provideRefreshToken()
         getMemberByEmail(principal.getEmail())?.let {
             accessToken = tokenService.provideAccessToken(it.id, it.role.name)
+            tokenService.upsertRefresh(it.id, refreshToken, tokenService.getTokenDuration(refreshToken))
         } ?: run {
             accessToken = tokenService.provideAccessToken(principal.getUserId(), principal.getRole())
+            tokenService.upsertRefresh(principal.getUserId(), refreshToken, tokenService.getTokenDuration(refreshToken))
         }
 
         val accessCookie = cookieService.createCookie("access_token", accessToken)
