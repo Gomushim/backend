@@ -38,7 +38,7 @@ class CustomSuccessHandler(
         }
 
         var accessToken = ""
-        val refreshToken = makeRefreshToken()
+        val refreshToken = jwtTokenProvider.provideRefreshToken()
         getMemberByEmail(principal.getEmail())?.let {
             accessToken = tokenService.provideAccessToken(it.id, it.role.name)
         } ?: run {
@@ -67,10 +67,4 @@ class CustomSuccessHandler(
         return memberRepository.findByEmail(email)
     }
 
-    private fun makeRefreshToken() : String {
-        val chars = ('0'..'9') + ('a'..'z') + ('A'..'Z')
-        return (1..20)
-            .map { chars.random() }
-            .joinToString("")
-    }
 }

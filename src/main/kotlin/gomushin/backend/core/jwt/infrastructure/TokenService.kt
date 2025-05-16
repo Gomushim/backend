@@ -5,6 +5,7 @@ import io.jsonwebtoken.security.Keys
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.springframework.stereotype.Component
+import java.time.Duration
 import java.util.*
 
 @Component
@@ -37,6 +38,19 @@ class TokenService(
         } catch (e: Exception) {
             return false
         }
+    }
+
+    override fun provideRefreshToken() : String {
+        return createToken(0, "", REFRESH_TOKEN_EXPIRATION, Type.REFRESH)
+    }
+
+    override fun getTokenDuration(token: String): Duration {
+        val now = Date(System.currentTimeMillis())
+        return Duration.between(now.toInstant(), getTokenExpiration(token).toInstant())
+    }
+
+    private fun getTokenExpiration(token: String) : Date {
+        return Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).payload.expiration
     }
 
     private fun createToken(userId: Long, role: String, expiration: Long, type: Type): String {
