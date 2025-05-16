@@ -1,7 +1,6 @@
 package gomushin.backend.alarm.service
 
 import gomushin.backend.alarm.util.MessageParsingUtil
-import gomushin.backend.core.configuration.redis.RedisService
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.value.Emotion
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Service
 @Service
 class StatusAlarmService (
     private val fcmService: FCMService,
-    private val redisService: RedisService
+    private val notificationRedisService: NotificationRedisService
 ) {
     private val statusMessage: Map<Emotion, List<String>> = mapOf(
         Emotion.MISS to listOf(
@@ -56,7 +55,7 @@ class StatusAlarmService (
             content
         }
         val token = receiver.fcmToken
-        redisService.saveAlarm(title, sendContent, receiver.id)
+        notificationRedisService.saveAlarm(title, sendContent, receiver.id)
         fcmService.sendMessageTo(token, title, sendContent)
     }
 }
