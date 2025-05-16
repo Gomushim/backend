@@ -2,7 +2,7 @@ package gomushin.backend.alarm.facade
 
 import gomushin.backend.alarm.service.FCMService
 import gomushin.backend.alarm.util.MessageParsingUtil
-import gomushin.backend.core.configuration.redis.RedisService
+import gomushin.backend.alarm.service.NotificationRedisService
 import gomushin.backend.member.domain.service.MemberService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -18,7 +18,7 @@ import java.time.LocalDateTime
 class QuestionAlarmFacade (
     private val fcmService: FCMService,
     private val memberService: MemberService,
-    private val redisService: RedisService
+    private val notificationRedisService: NotificationRedisService
 ) {
     private val log: Logger = LoggerFactory.getLogger(QuestionAlarmFacade::class.java)
     private val questionMessages = listOf(
@@ -38,7 +38,7 @@ class QuestionAlarmFacade (
                         val notificationContent = questionMessages.random()
                         val (title, sendContent) = MessageParsingUtil.parse(notificationContent)
                         log.info("질문형 메시지 전송 : 수신자 {${member.id}}, 제목 {${title}}, 내용{${sendContent}}, 전송시각{${LocalDateTime.now()}}\n")
-                        redisService.saveAlarm(title, sendContent, member.id)
+                        notificationRedisService.saveAlarm(title, sendContent, member.id)
                         fcmService.sendMessageTo(member.fcmToken, title, sendContent)
                     } catch (e: Exception) {
                         log.error("질문형 메시지 전송오류 : 수신자 {${member.name}}, 전송시각{${LocalDateTime.now()}}\n")

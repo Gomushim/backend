@@ -1,14 +1,15 @@
-package gomushin.backend.core.configuration.redis
+package gomushin.backend.alarm.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import gomushin.backend.alarm.dto.SaveAlarmMessage
+import gomushin.backend.core.configuration.redis.RedisKey
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Service
-class RedisService (
+class NotificationRedisService (
     private val redisTemplate: StringRedisTemplate,
     private val objectMapper: ObjectMapper
 ) {
