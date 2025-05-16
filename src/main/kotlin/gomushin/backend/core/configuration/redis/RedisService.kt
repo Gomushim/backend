@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import gomushin.backend.alarm.dto.SaveAlarmMessage
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Service
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -43,5 +44,10 @@ class RedisService (
         }
 
         return validAlarms
+    }
+
+    fun upsertRefresh(userId : Long, refreshToken : String) {
+        val key = RedisKey.getRedisRefreshKey(refreshToken)
+        redisTemplate.opsForValue().set(key, userId.toString(), Duration.ofDays(1))
     }
 }
