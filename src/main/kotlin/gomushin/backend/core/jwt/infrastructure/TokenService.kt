@@ -1,16 +1,20 @@
 package gomushin.backend.core.jwt.infrastructure
 
+import gomushin.backend.core.configuration.redis.RedisKey
+import gomushin.backend.core.infrastructure.exception.BadRequestException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Component
 import java.time.Duration
 import java.util.*
 
 @Component
 class TokenService(
-    jwtProperties: JwtProperties
+    jwtProperties: JwtProperties,
+    private val redisTemplate: StringRedisTemplate
 ) {
     companion object {
         private val logger: Logger = LogManager.getLogger(TokenService::class.java)
@@ -71,5 +75,22 @@ class TokenService(
 
     fun getSubject(token: String): String {
         return Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).payload.subject
+    }
+
+    fun upsertRefresh(userId : Long, refreshToken : String, duration: Duration) {
+        val key = RedisKey.getRedisRefreshKey(refreshToken)
+        redisTemplate.opsForValue().set(key, userId.toString(), duration)
+    }
+
+    fun getRefreshTokenValue(refreshToken: String) : Long {
+        val key = RedisKey.getRedisRefreshKey(refreshToken)
+        val value = redisTemplate.opsForValue().get(key)
+            ?: throw BadRequestException("sarangggun.auth.unauth.refresh")
+        return value.toLong()
+    }
+
+    fun deleteRefreshToken(refreshToken: String) {
+        val key = RedisKey.getRedisRefreshKey(refreshToken)
+        redisTemplate.delete(key)
     }
 }

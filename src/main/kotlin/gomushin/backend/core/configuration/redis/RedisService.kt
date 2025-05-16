@@ -2,10 +2,8 @@ package gomushin.backend.core.configuration.redis
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import gomushin.backend.alarm.dto.SaveAlarmMessage
-import gomushin.backend.core.infrastructure.exception.BadRequestException
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Service
-import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -45,22 +43,5 @@ class RedisService (
         }
 
         return validAlarms
-    }
-
-    fun upsertRefresh(userId : Long, refreshToken : String, duration: Duration) {
-        val key = RedisKey.getRedisRefreshKey(refreshToken)
-        redisTemplate.opsForValue().set(key, userId.toString(), duration)
-    }
-
-    fun getRefreshTokenValue(refreshToken: String) : Long {
-        val key = RedisKey.getRedisRefreshKey(refreshToken)
-        val value = redisTemplate.opsForValue().get(key)
-            ?: throw BadRequestException("sarangggun.auth.unauth.refresh")
-        return value.toLong()
-    }
-
-    fun deleteRefreshToken(refreshToken: String) {
-        val key = RedisKey.getRedisRefreshKey(refreshToken)
-        redisTemplate.delete(key)
     }
 }

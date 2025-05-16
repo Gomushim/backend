@@ -1,7 +1,6 @@
 package gomushin.backend.core.configuration.security
 
 import gomushin.backend.core.configuration.cookie.CookieService
-import gomushin.backend.core.configuration.redis.RedisService
 import gomushin.backend.core.infrastructure.filter.CustomAuthenticationEntryPoint
 import gomushin.backend.core.infrastructure.filter.JwtAuthenticationFilter
 import gomushin.backend.core.jwt.infrastructure.TokenService
@@ -26,7 +25,6 @@ import org.springframework.web.cors.CorsUtils
 class SecurityConfiguration(
     private val tokenService: TokenService,
     private val memberRepository: MemberRepository,
-    private val redisService: RedisService,
     private val cookieService: CookieService,
     @Value("\${redirect-url}") private val redirectUrl: String
 ) {
@@ -66,7 +64,6 @@ class SecurityConfiguration(
                         CustomSuccessHandler(
                             tokenService,
                             memberRepository,
-                            redisService,
                             cookieService,
                             redirectUrl,
                         )
