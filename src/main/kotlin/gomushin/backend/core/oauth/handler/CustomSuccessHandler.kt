@@ -36,7 +36,7 @@ class CustomSuccessHandler(
         }
 
         var accessToken = ""
-        val refreshToken = jwtTokenProvider.provideRefreshToken()
+        val refreshToken = tokenService.provideRefreshToken()
         getMemberByEmail(principal.getEmail())?.let {
             accessToken = tokenService.provideAccessToken(it.id, it.role.name)
             tokenService.upsertRefresh(it.id, refreshToken, tokenService.getTokenDuration(refreshToken))
