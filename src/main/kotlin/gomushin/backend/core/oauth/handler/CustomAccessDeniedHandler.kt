@@ -26,7 +26,6 @@ class CustomAccessDeniedHandler(private val objectMapper: ObjectMapper) : Access
         response.status = HttpServletResponse.SC_FORBIDDEN
         response.characterEncoding = "UTF-8"
 
-        // 정확히 어떤 이유로 발생한 에러인지 보려면 어떻게 해야하나
         logger.error("Access Denied: ${accessDeniedException.message}")
 
         val errorCode = if (request.requestURI.contains("/v1/member/onboarding")) {
