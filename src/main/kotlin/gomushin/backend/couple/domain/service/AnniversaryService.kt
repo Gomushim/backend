@@ -28,7 +28,7 @@ class AnniversaryService(
     }
 
     @Transactional(readOnly = true)
-    fun findByCoupleIdAndDateBetween(
+    fun findByCoupleAndDateBetween(
         couple: Couple,
         startDate: LocalDate,
         endDate: LocalDate
@@ -37,12 +37,12 @@ class AnniversaryService(
     }
 
     @Transactional(readOnly = true)
-    fun findByCoupleIdAndYearAndMonth(couple: Couple, year: Int, month: Int): List<MonthlyAnniversariesResponse> {
+    fun findByCoupleAndYearAndMonth(couple: Couple, year: Int, month: Int): List<MonthlyAnniversariesResponse> {
         return anniversaryRepository.findByCoupleIdAndYearAndMonth(couple.id, year, month)
     }
 
     @Transactional(readOnly = true)
-    fun findByDate(couple: Couple, date: LocalDate): List<DailyAnniversaryResponse> {
+    fun findByCoupleAndDate(couple: Couple, date: LocalDate): List<DailyAnniversaryResponse> {
         return anniversaryRepository.findByCoupleIdAndDate(couple.id, date)
     }
 

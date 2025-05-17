@@ -61,13 +61,13 @@ class ReadScheduleFacadeTest {
         // when
         `when`(scheduleService.findByCoupleIdAndYearAndMonth(customUserDetails.getCouple(), year, month))
             .thenReturn(listOf(monthlySchedulesResponse))
-        `when`(anniversaryService.findByCoupleIdAndYearAndMonth(customUserDetails.getCouple(), year, month))
+        `when`(anniversaryService.findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month))
             .thenReturn(listOf(monthlyAnniversariesResponse))
         readScheduleFacade.getList(customUserDetails, year, month)
 
         // then
         verify(scheduleService, times(1)).findByCoupleIdAndYearAndMonth(customUserDetails.getCouple(), year, month)
-        verify(anniversaryService, times(1)).findByCoupleIdAndYearAndMonth(customUserDetails.getCouple(), year, month)
+        verify(anniversaryService, times(1)).findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month)
     }
 
     @DisplayName("get - 성공")

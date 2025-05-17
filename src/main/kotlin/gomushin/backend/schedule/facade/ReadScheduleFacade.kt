@@ -24,13 +24,13 @@ class ReadScheduleFacade(
     ): MonthlySchedulesAndAnniversariesResponse {
         val monthlySchedules = scheduleService.findByCoupleIdAndYearAndMonth(customUserDetails.getCouple(), year, month)
         val monthlyAnniversaries =
-            anniversaryService.findByCoupleIdAndYearAndMonth(customUserDetails.getCouple(), year, month)
+            anniversaryService.findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month)
         return MonthlySchedulesAndAnniversariesResponse.of(monthlySchedules, monthlyAnniversaries)
     }
 
     fun get(customUserDetails: CustomUserDetails, date: LocalDate): DailySchedulesAndAnniversariesResponse {
         val dailySchedules = scheduleService.findByDate(customUserDetails.getCouple(), date)
-        val dailyAnniversaries = anniversaryService.findByDate(customUserDetails.getCouple(), date)
+        val dailyAnniversaries = anniversaryService.findByCoupleAndDate(customUserDetails.getCouple(), date)
         return DailySchedulesAndAnniversariesResponse.of(dailySchedules, dailyAnniversaries)
     }
 
@@ -53,7 +53,7 @@ class ReadScheduleFacade(
             today,
             today.plusDays(6)
         )
-        val anniversaries = anniversaryService.findByCoupleIdAndDateBetween(
+        val anniversaries = anniversaryService.findByCoupleAndDateBetween(
             customUserDetails.getCouple(),
             today,
             today.plusDays(6)
