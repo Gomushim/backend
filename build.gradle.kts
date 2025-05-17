@@ -10,6 +10,8 @@ plugins {
 group = "gomushin"
 version = "0.0.1-SNAPSHOT"
 
+val mockkVersion = "1.13.10"
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -83,6 +85,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    testImplementation("io.mockk:mockk:${mockkVersion}")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
