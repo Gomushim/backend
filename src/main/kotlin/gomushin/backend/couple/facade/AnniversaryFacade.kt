@@ -5,15 +5,12 @@ import gomushin.backend.core.common.web.PageResponse
 import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.couple.dto.response.MainAnniversaryResponse
 import gomushin.backend.couple.dto.response.TotalAnniversaryResponse
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Component
 
 @Component
 class AnniversaryFacade(
     private val anniversaryService: AnniversaryService,
-    @Value("\${server.url}")
-    private val baseUrl: String,
 ) {
     fun getAnniversaryListMain(customUserDetails: CustomUserDetails): List<MainAnniversaryResponse> {
         val anniversaries = anniversaryService.getUpcomingTop3Anniversaries(customUserDetails.getCouple())
