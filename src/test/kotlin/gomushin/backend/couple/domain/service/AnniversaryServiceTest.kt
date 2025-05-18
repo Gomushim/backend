@@ -18,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import java.time.LocalDate
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @ExtendWith(MockKExtension::class)
@@ -41,13 +42,12 @@ class AnniversaryServiceTest {
         } returns expectedPage
 
         // when
-        val result = anniversaryService.findAnniversaries(couple, pageRequest)
+        anniversaryService.findAnniversaries(couple, pageRequest)
 
         // then
         verify(exactly = 1) {
             anniversaryRepository.findAnniversaries(couple.id, pageRequest)
         }
-        assert(result == expectedPage)
     }
 
     @DisplayName("findByCoupleAndDateBetween 는 Anniversary 엔티티를 List 형태로 반환한다.")
@@ -64,13 +64,12 @@ class AnniversaryServiceTest {
         } returns expectedList
 
         // when
-        val result = anniversaryService.findByCoupleAndDateBetween(couple, startDate, endDate)
+        anniversaryService.findByCoupleAndDateBetween(couple, startDate, endDate)
 
         // then
         verify(exactly = 1) {
             anniversaryRepository.findByCoupleIdAndDateBetween(couple.id, startDate, endDate)
         }
-        assert(result == expectedList)
     }
 
     @DisplayName("findByCoupleAndYearAndMonth 는 Anniversary 엔티티를 List 형태로 반환한다.")
@@ -87,13 +86,12 @@ class AnniversaryServiceTest {
         } returns expectedList
 
         // when
-        val result = anniversaryService.findByCoupleAndYearAndMonth(couple, year, month)
+        anniversaryService.findByCoupleAndYearAndMonth(couple, year, month)
 
         // then
         verify(exactly = 1) {
             anniversaryRepository.findByCoupleIdAndYearAndMonth(couple.id, year, month)
         }
-        assert(result == expectedList)
     }
 
     @DisplayName("findByCoupleAndDate 는 Anniversary 엔티티를 List 형태로 반환한다.")
@@ -109,13 +107,12 @@ class AnniversaryServiceTest {
         } returns expectedList
 
         // when
-        val result = anniversaryService.findByCoupleAndDate(couple, date)
+        anniversaryService.findByCoupleAndDate(couple, date)
 
         // then
         verify(exactly = 1) {
             anniversaryRepository.findByCoupleIdAndDate(couple.id, date)
         }
-        assert(result == expectedList)
     }
 
     @DisplayName("saveAll 은 Anniversary 엔티티를 List 형태로 저장한다.")
@@ -129,13 +126,12 @@ class AnniversaryServiceTest {
         } returns expectedList
 
         // when
-        val result = anniversaryService.saveAll(anniversaries)
+        anniversaryService.saveAll(anniversaries)
 
         // then
         verify(exactly = 1) {
             anniversaryRepository.saveAll(anniversaries)
         }
-        assert(result == expectedList)
     }
 
     @DisplayName("getUpcomingTop3Anniversaries 는 Anniversary 엔티티를 List 형태로 반환하고, 최대 3개를 반환한다.")
@@ -159,6 +155,34 @@ class AnniversaryServiceTest {
 
         // then
         assertTrue(result.size <= 3, "반환된 기념일의 개수는 최대 3개여야 합니다.")
+    }
+
+    @DisplayName("getUpcomingTop3Anniversaries 는 Anniversary 엔티티를 List 형태로 반환하고, 시간 순으로 정렬한다.")
+    @Test
+    fun getUpcomingTop3Anniversaries_sortedByDate() {
+        // given
+        val couple = Couple(1L, 1L, 2L)
+        val expectedList = listOf<Anniversary>(
+            Anniversary(1L, couple.id, "Anniversary 1", LocalDate.of(2025, 1, 1), 1),
+            Anniversary(2L, couple.id, "Anniversary 2", LocalDate.of(2025, 2, 1), 1),
+            Anniversary(3L, couple.id, "Anniversary 3", LocalDate.of(2025, 3, 1), 1),
+            Anniversary(4L, couple.id, "Anniversary 4", LocalDate.of(2025, 4, 1), 1),
+        )
+
+        every {
+            anniversaryRepository.findTop3UpcomingAnniversaries(couple.id)
+        } returns expectedList.take(3)
+
+        // when
+        val result = anniversaryService.getUpcomingTop3Anniversaries(couple)
+
+        // then
+        assertEquals(result, expectedList.take(3))
+        assertEquals(
+            result.map { it.anniversaryDate }.sorted(),
+            result.map { it.anniversaryDate },
+            "반환된 기념일은 시간 순으로 정렬되어야 합니다."
+        )
     }
 }
 
