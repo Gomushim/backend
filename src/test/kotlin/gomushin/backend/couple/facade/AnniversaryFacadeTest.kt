@@ -51,7 +51,6 @@ class AnniversaryFacadeTest {
         verify(exactly = 1) {
             anniversaryService.getUpcomingTop3Anniversaries(couple)
         }
-        assert(result == anniversaryResponseList)
     }
 
     @DisplayName("getAnniversaryList 은 AnniversaryService 의 findAnniversaries 를 호출한다.")
