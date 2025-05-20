@@ -59,7 +59,7 @@ class CoupleInfoService(
                 ?: throw BadRequestException("saranggun.couple.not-connected")
         val today = LocalDate.now()
         val sinceLove: Int? = couple.relationshipStartDate?.let { startLove ->
-            computeDday(startLove, today)
+            computeDday(startLove, today) + 1
         }
         val sinceMilitaryStart : Int? = couple.militaryStartDate?.let { startMilitary ->
             computeDday(startMilitary, today)

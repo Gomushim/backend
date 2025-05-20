@@ -216,7 +216,7 @@ class CoupleInfoServiceTest {
         //then
         assertEquals(coupleInfoService.computeDday(militaryStartDate, today), response.sinceMilitaryStart)
         assertEquals(coupleInfoService.computeDday(militaryEndDate, today), response.militaryEndLeft)
-        assertEquals(coupleInfoService.computeDday(relationshipStartDate, today), response.sinceLove)
+        assertEquals(coupleInfoService.computeDday(relationshipStartDate, today) + 1, response.sinceLove)
     }
 
     @DisplayName("nickName-성공")
