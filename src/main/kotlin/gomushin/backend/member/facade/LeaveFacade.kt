@@ -1,7 +1,7 @@
 package gomushin.backend.member.facade
 
 import gomushin.backend.core.CustomUserDetails
-import gomushin.backend.core.service.S3Service
+import gomushin.backend.core.event.dto.S3DeleteEvent
 import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.couple.domain.service.CoupleInfoService
 import gomushin.backend.couple.domain.service.CoupleService
@@ -11,6 +11,7 @@ import gomushin.backend.schedule.domain.service.CommentService
 import gomushin.backend.schedule.domain.service.LetterService
 import gomushin.backend.schedule.domain.service.PictureService
 import gomushin.backend.schedule.domain.service.ScheduleService
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -24,8 +25,8 @@ class LeaveFacade(
     private val notificationService: NotificationService,
     private val pictureService: PictureService,
     private val scheduleService: ScheduleService,
-    private val s3Service: S3Service,
-    private val coupleInfoService: CoupleInfoService
+    private val coupleInfoService: CoupleInfoService,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
     @Transactional
     fun leave(customUserDetails: CustomUserDetails) {
@@ -39,10 +40,11 @@ class LeaveFacade(
         scheduleService.deleteAllByMemberId(memberId)
 
         val letters = letterService.findAllByAuthorId(memberId)
+        val pictureUrlsToDelete = mutableListOf<String>()
         pictureService.findAllByLetterIds(letters)
             .takeIf { it.isNotEmpty() }
             ?.forEach { picture ->
-                s3Service.deleteFile(picture.pictureUrl)
+                pictureUrlsToDelete.add(picture.pictureUrl)
             }
 
         pictureService.deleteAllByLetterIds(letters)
@@ -50,5 +52,12 @@ class LeaveFacade(
         memberService.deleteMember(memberId)
 
         partner.updateIsCouple(false)
+        if (pictureUrlsToDelete.isNotEmpty()) {
+            applicationEventPublisher.publishEvent(
+                S3DeleteEvent(
+                    pictureUrls = pictureUrlsToDelete
+                )
+            )
+        }
     }
 }
