@@ -36,7 +36,7 @@ class LeaveFacade(
         commentService.deleteAllByMemberId(memberId)
         coupleService.deleteByMemberId(memberId)
         notificationService.deleteAllByMember(memberId)
-        scheduleService.deleteAllByMember(memberId)
+        scheduleService.deleteAllByMemberId(memberId)
 
         val letters = letterService.findAllByAuthorId(memberId)
         pictureService.findAllByLetterIds(letters)

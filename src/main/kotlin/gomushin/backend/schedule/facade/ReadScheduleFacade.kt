@@ -22,7 +22,7 @@ class ReadScheduleFacade(
         year: Int,
         month: Int
     ): MonthlySchedulesAndAnniversariesResponse {
-        val monthlySchedules = scheduleService.findByCoupleIdAndYearAndMonth(customUserDetails.getCouple(), year, month)
+        val monthlySchedules = scheduleService.findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month)
         val monthlyAnniversaries =
             anniversaryService.findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month)
         return MonthlySchedulesAndAnniversariesResponse.of(monthlySchedules, monthlyAnniversaries)
@@ -34,7 +34,7 @@ class ReadScheduleFacade(
         return DailySchedulesAndAnniversariesResponse.of(dailySchedules, dailyAnniversaries)
     }
 
-    fun getScheduleDetail(customUserDetails: CustomUserDetails, scheduleId: Long): ScheduleDetailResponse {
+    fun getDetail(customUserDetails: CustomUserDetails, scheduleId: Long): ScheduleDetailResponse {
         val schedule = scheduleService.getById(scheduleId)
         val letters = letterService.findByCoupleAndSchedule(customUserDetails.getCouple(), schedule)
         val letterIds = letters.map { it.id }
@@ -48,7 +48,7 @@ class ReadScheduleFacade(
 
     fun getListByWeek(customUserDetails: CustomUserDetails): MainSchedulesAndAnniversariesResponse {
         val today = LocalDate.now()
-        val schedules = scheduleService.findByCoupleIdAndDateBetween(
+        val schedules = scheduleService.findByCoupleAndDateBetween(
             customUserDetails.getCouple(),
             today,
             today.plusDays(6)

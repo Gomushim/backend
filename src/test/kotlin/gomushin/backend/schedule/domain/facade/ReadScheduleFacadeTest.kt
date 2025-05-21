@@ -59,14 +59,14 @@ class ReadScheduleFacadeTest {
         val monthlyAnniversariesResponse = mock(MonthlyAnniversariesResponse::class.java)
 
         // when
-        `when`(scheduleService.findByCoupleIdAndYearAndMonth(customUserDetails.getCouple(), year, month))
+        `when`(scheduleService.findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month))
             .thenReturn(listOf(monthlySchedulesResponse))
         `when`(anniversaryService.findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month))
             .thenReturn(listOf(monthlyAnniversariesResponse))
         readScheduleFacade.getList(customUserDetails, year, month)
 
         // then
-        verify(scheduleService, times(1)).findByCoupleIdAndYearAndMonth(customUserDetails.getCouple(), year, month)
+        verify(scheduleService, times(1)).findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month)
         verify(anniversaryService, times(1)).findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month)
     }
 
@@ -85,9 +85,9 @@ class ReadScheduleFacadeTest {
         verify(scheduleService, times(1)).findByDate(customUserDetails.getCouple(), date)
     }
 
-    @DisplayName("getScheduleDetail - 성공")
+    @DisplayName("getDetail - 성공")
     @Test
-    fun getScheduleDetail_success() {
+    fun getDetail_success() {
         //given
         val scheduleId = 1L
         val letterId = 2L
@@ -109,7 +109,7 @@ class ReadScheduleFacadeTest {
         `when`(letterService.findByCoupleAndSchedule(customUserDetails.getCouple(), schedule)).thenReturn(listOf(mockLetter))
         `when`(pictureService.findAllByLetterIds(listOf(letterId))).thenReturn(listOf(mockPicture))
 
-        readScheduleFacade.getScheduleDetail(customUserDetails, scheduleId)
+        readScheduleFacade.getDetail(customUserDetails, scheduleId)
 
         //then
         verify(scheduleService).getById(scheduleId)
