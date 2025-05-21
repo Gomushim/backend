@@ -50,17 +50,17 @@ class ReadScheduleFacade(
         return ScheduleDetailResponse.of(schedule, letterPreviews)
     }
 
-    fun getListByWeek(customUserDetails: CustomUserDetails): MainSchedulesAndAnniversariesResponse {
-        val today = LocalDate.now()
+    fun getListByWeek(customUserDetails: CustomUserDetails, baseDate : LocalDate = LocalDate.now()): MainSchedulesAndAnniversariesResponse {
+        val endDate = baseDate.plusDays(WEEK_DAYS)
         val schedules = scheduleService.findByCoupleAndDateBetween(
             customUserDetails.getCouple(),
-            today,
-            today.plusDays(WEEK_DAYS)
+            baseDate,
+            endDate
         )
         val anniversaries = anniversaryService.findByCoupleAndDateBetween(
             customUserDetails.getCouple(),
-            today,
-            today.plusDays(WEEK_DAYS)
+            baseDate,
+            endDate
         )
 
         return MainSchedulesAndAnniversariesResponse.of(
