@@ -98,15 +98,19 @@ class ReadScheduleFacadeTest {
             id = scheduleId,
             title = "일정 제목",
             fatigue = "VERT_TIRED",
-            startDate = LocalDateTime.of(2025, 5, 1, 7, 0,0),
-            endDate = LocalDateTime.of(2025, 5, 2,20,0,0)
+            startDate = LocalDateTime.of(2025, 5, 1, 7, 0, 0),
+            endDate = LocalDateTime.of(2025, 5, 2, 20, 0, 0)
         )
 
         //when
         `when`(mockLetter.id).thenReturn(letterId)
         `when`(mockPicture.letterId).thenReturn(letterId)
         `when`(scheduleService.getById(scheduleId)).thenReturn(schedule)
-        `when`(letterService.findByCoupleAndSchedule(customUserDetails.getCouple(), schedule)).thenReturn(listOf(mockLetter))
+        `when`(letterService.findByCoupleAndSchedule(customUserDetails.getCouple(), schedule)).thenReturn(
+            listOf(
+                mockLetter
+            )
+        )
         `when`(pictureService.findAllByLetterIds(listOf(letterId))).thenReturn(listOf(mockPicture))
 
         readScheduleFacade.getDetail(customUserDetails, scheduleId)
@@ -116,5 +120,4 @@ class ReadScheduleFacadeTest {
         verify(letterService).findByCoupleAndSchedule(customUserDetails.getCouple(), schedule)
         verify(pictureService).findAllByLetterIds(listOf(letterId))
     }
-
 }
