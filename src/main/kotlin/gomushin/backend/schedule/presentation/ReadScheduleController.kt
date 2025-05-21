@@ -44,12 +44,12 @@ class ReadScheduleController(
     }
 
     @GetMapping(ApiPath.SCHEDULE_DETAIL)
-    @Operation(summary = "특정 스케쥴 상세조회", description = "getScheduleDetail")
+    @Operation(summary = "특정 스케쥴 상세조회", description = "getDetail")
     fun getScheduleDetail(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
         @PathVariable scheduleId: Long
     ): ApiResponse<ScheduleDetailResponse> {
-        val scheduleDetails = readScheduleFacade.getScheduleDetail(customUserDetails, scheduleId)
+        val scheduleDetails = readScheduleFacade.getDetail(customUserDetails, scheduleId)
         return ApiResponse.success(scheduleDetails)
     }
 
