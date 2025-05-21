@@ -17,6 +17,10 @@ class ReadScheduleFacade(
     private val pictureService: PictureService
 ) {
 
+    companion object {
+        const val WEEK_DAYS = 6L
+    }
+
     fun getList(
         customUserDetails: CustomUserDetails,
         year: Int,
@@ -51,12 +55,12 @@ class ReadScheduleFacade(
         val schedules = scheduleService.findByCoupleAndDateBetween(
             customUserDetails.getCouple(),
             today,
-            today.plusDays(6)
+            today.plusDays(WEEK_DAYS)
         )
         val anniversaries = anniversaryService.findByCoupleAndDateBetween(
             customUserDetails.getCouple(),
             today,
-            today.plusDays(6)
+            today.plusDays(WEEK_DAYS)
         )
 
         return MainSchedulesAndAnniversariesResponse.of(
