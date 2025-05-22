@@ -16,5 +16,6 @@ object ApiPath {
     const val ANNIVERSARY_GENERATE = "/v1/couple/new-anniversary"
     const val ANNIVERSARY_MAIN = "/v1/anniversary/main"
     const val ANNIVERSARIES = "/v1/anniversaries"
+    const val ANNIVERSARY = "/v1/anniversary/{anniversaryId}"
     const val COUPLE_BIRTHDAY = "/v1/couple/birthday"
 }
