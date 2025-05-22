@@ -1,5 +1,6 @@
 package gomushin.backend.couple.domain.service
 
+import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.couple.domain.entity.Anniversary
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.repository.AnniversaryRepository
@@ -10,6 +11,7 @@ import gomushin.backend.schedule.dto.response.DailyAnniversaryResponse
 import gomushin.backend.schedule.dto.response.MainAnniversariesResponse
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
@@ -18,6 +20,14 @@ import java.time.LocalDate
 class AnniversaryService(
     private val anniversaryRepository: AnniversaryRepository,
 ) {
+
+    @Transactional(readOnly = true)
+    fun getById(id: Long): Anniversary {
+        return findById(id) ?: throw BadRequestException("sarangggun.anniversary.not-found")
+    }
+
+    @Transactional(readOnly = true)
+    fun findById(id: Long) = anniversaryRepository.findByIdOrNull(id)
 
     @Transactional(readOnly = true)
     fun findAnniversaries(couple: Couple, pageRequest: PageRequest): Page<Anniversary> {
@@ -76,5 +86,14 @@ class AnniversaryService(
     @Transactional(readOnly = true)
     fun getTodayAnniversaryMemberFcmTokens(date: LocalDate): List<AnniversaryNotificationInfo> {
         return anniversaryRepository.findTodayAnniversaryMemberFcmTokens(date)
+    }
+
+    @Transactional
+    fun delete(couple: Couple, anniversaryId: Long) {
+        val anniversary = getById(anniversaryId)
+        if (anniversary.coupleId != couple.id) {
+            throw BadRequestException("sarangggun.anniversary.unauthorized")
+        }
+        anniversaryRepository.deleteById(anniversaryId)
     }
 }

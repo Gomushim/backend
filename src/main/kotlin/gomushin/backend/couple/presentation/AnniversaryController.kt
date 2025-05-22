@@ -35,6 +35,20 @@ class AnniversaryController(
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping(ApiPath.ANNIVERSARY)
+    @Operation(
+        summary = "기념일 삭제",
+        description = "deleteAnniversary"
+    )
+    fun deleteAnniversary(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable anniversaryId: Long
+    ): ApiResponse<Boolean> {
+        anniversaryFacade.delete(customUserDetails, anniversaryId)
+        return ApiResponse.success(true)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(ApiPath.ANNIVERSARY_MAIN)
     @Operation(
         summary = "메인 - 가까운 3개의 기념일 조회",

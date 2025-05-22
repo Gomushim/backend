@@ -31,4 +31,8 @@ class AnniversaryFacade(
 
         return PageResponse.from(anniversaryResponses)
     }
+
+    fun delete(customUserDetails: CustomUserDetails, anniversaryId: Long) {
+        anniversaryService.delete(customUserDetails.getCouple(), anniversaryId)
+    }
 }
