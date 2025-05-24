@@ -27,6 +27,7 @@ class CustomAccessDeniedHandler(private val objectMapper: ObjectMapper) : Access
         response.characterEncoding = "UTF-8"
 
         logger.error("Access Denied: ${accessDeniedException.message}")
+        accessDeniedException.printStackTrace()
 
         val errorCode = if (request.requestURI.contains("/v1/member/onboarding")) {
             "sarangggun.auth.guest-only"

@@ -78,6 +78,7 @@ class SecurityConfiguration(
             .authorizeHttpRequests {
                 it.requestMatchers(
                     "/",
+                    "/v1/member/my-info",
                     "/v1/auth/**",
                     "/v1/oauth/**",
                     "/oauth2/**",
@@ -90,9 +91,9 @@ class SecurityConfiguration(
                     "/health",
                     "/swagger-ui/index.html",
                     "/favicon.ico",
-                    "/error"
+                    "/error",
                 ).permitAll()
-                it.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                it.requestMatchers(CorsUtils::isPreFlightRequest,).permitAll()
                 it.requestMatchers("/v1/member/onboarding").hasRole("GUEST")
                 it.anyRequest().hasRole("MEMBER")
             }

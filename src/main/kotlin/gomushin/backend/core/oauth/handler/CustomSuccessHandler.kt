@@ -39,6 +39,7 @@ class CustomSuccessHandler(
 
         var accessToken = ""
         val refreshToken = tokenService.provideRefreshToken()
+
         getMemberByEmail(principal.getEmail())?.let {
             accessToken = tokenService.provideAccessToken(it.id, it.role.name)
             tokenService.upsertRefresh(it.id, refreshToken, tokenService.getTokenDuration(refreshToken))
@@ -47,28 +48,11 @@ class CustomSuccessHandler(
             tokenService.upsertRefresh(principal.getUserId(), refreshToken, tokenService.getTokenDuration(refreshToken))
         }
 
-        val member = getMemberByEmail(principal.getEmail())
-
-        println("member: ${member?.name}")
-        println("member.role: ${member?.role}")
-
-        when {
-            member == null -> {
-                response!!.sendRedirect(guestRedirectUrl)
-            }
-
-            member.role == Role.GUEST -> {
-                response!!.sendRedirect(guestRedirectUrl)
-            }
-
-            else -> {
-                val accessCookie = cookieService.createCookie("access_token", accessToken)
-                val refreshCookie = cookieService.createCookie("refresh_token", refreshToken)
-                response!!.addHeader("Set-Cookie", accessCookie.toString())
-                response.addHeader("Set-Cookie", refreshCookie.toString())
-                response.sendRedirect(memberRedirectUrl)
-            }
-        }
+        val accessCookie = cookieService.createCookie("access_token", accessToken)
+        val refreshCookie = cookieService.createCookie("refresh_token", refreshToken)
+        response!!.addHeader("Set-Cookie", accessCookie.toString())
+        response.addHeader("Set-Cookie", refreshCookie.toString())
+        response.sendRedirect(memberRedirectUrl)
     }
 
     private fun getMemberByEmail(email: String): Member? {
