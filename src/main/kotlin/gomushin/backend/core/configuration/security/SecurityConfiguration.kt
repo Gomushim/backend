@@ -26,7 +26,8 @@ class SecurityConfiguration(
     private val tokenService: TokenService,
     private val memberRepository: MemberRepository,
     private val cookieService: CookieService,
-    @Value("\${redirect-url}") private val redirectUrl: String
+    @Value("\${member-redirect-url}") private val memberRedirectUrl: String,
+    @Value("\${guest-redirect-url}") private val guestRedirectUrl: String,
 ) {
 
     @Bean
@@ -65,7 +66,8 @@ class SecurityConfiguration(
                             tokenService,
                             memberRepository,
                             cookieService,
-                            redirectUrl,
+                            memberRedirectUrl,
+                            guestRedirectUrl,
                         )
                     )
             }
