@@ -18,12 +18,12 @@ class ScheduleService(
     private val scheduleRepository: ScheduleRepository,
 ) {
     @Transactional(readOnly = true)
-    fun findByCoupleIdAndYearAndMonth(couple: Couple, year: Int, month: Int): List<MonthlySchedulesResponse> {
+    fun findByCoupleAndYearAndMonth(couple: Couple, year: Int, month: Int): List<MonthlySchedulesResponse> {
         return scheduleRepository.findByCoupleIdAndYearAndMonth(couple.id, year, month)
     }
 
     @Transactional(readOnly = true)
-    fun findByCoupleIdAndDateBetween(
+    fun findByCoupleAndDateBetween(
         couple: Couple,
         startDate: LocalDate,
         endDate: LocalDate
@@ -72,7 +72,7 @@ class ScheduleService(
     }
 
     @Transactional
-    fun deleteAllByMember(memberId: Long) {
+    fun deleteAllByMemberId(memberId: Long) {
         scheduleRepository.deleteAllByUserId(memberId)
     }
 }

@@ -1,12 +1,13 @@
 package gomushin.backend.schedule.facade
 
 import gomushin.backend.core.CustomUserDetails
-import gomushin.backend.core.service.S3Service
+import gomushin.backend.core.event.dto.S3DeleteEvent
 import gomushin.backend.schedule.domain.service.CommentService
 import gomushin.backend.schedule.domain.service.LetterService
 import gomushin.backend.schedule.domain.service.PictureService
 import gomushin.backend.schedule.domain.service.ScheduleService
 import gomushin.backend.schedule.dto.request.UpsertScheduleRequest
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
@@ -16,7 +17,7 @@ class UpsertAndDeleteScheduleFacade(
     private val letterService: LetterService,
     private val commentService: CommentService,
     private val pictureService: PictureService,
-    private val s3Service: S3Service,
+    private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
 
     fun upsert(customUserDetails: CustomUserDetails, upsertScheduleRequest: UpsertScheduleRequest) {
@@ -31,17 +32,25 @@ class UpsertAndDeleteScheduleFacade(
     @Transactional
     fun delete(customUserDetails: CustomUserDetails, scheduleId: Long) {
         val schedule = scheduleService.getById(scheduleId)
+        val pictureUrlsToDelete = mutableListOf<String>()
         letterService.findByCoupleAndSchedule(customUserDetails.getCouple(), schedule).forEach { letter ->
-            // TODO: S3 삭제 로직 트랜잭션 커밋 이후로 분리 + 이벤트 발행으로 처리하기
             pictureService.findAllByLetter(letter)
                 .takeIf { it.isNotEmpty() }
                 ?.forEach { picture ->
-                    s3Service.deleteFile(picture.pictureUrl)
+                    pictureUrlsToDelete.add(picture.pictureUrl)
                 }
             pictureService.deleteAllByLetterId(letter.id)
             commentService.deleteAllByLetterId(letter.id)
             letterService.delete(letter.id)
         }
         scheduleService.delete(customUserDetails.getCouple().id, customUserDetails.getId(), scheduleId)
+
+        if (pictureUrlsToDelete.isNotEmpty()) {
+            applicationEventPublisher.publishEvent(
+                S3DeleteEvent(
+                    pictureUrls = pictureUrlsToDelete
+                )
+            )
+        }
     }
 }

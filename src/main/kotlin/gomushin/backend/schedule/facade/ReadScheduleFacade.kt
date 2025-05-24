@@ -17,12 +17,16 @@ class ReadScheduleFacade(
     private val pictureService: PictureService
 ) {
 
+    companion object {
+        const val WEEK_DAYS = 6L
+    }
+
     fun getList(
         customUserDetails: CustomUserDetails,
         year: Int,
         month: Int
     ): MonthlySchedulesAndAnniversariesResponse {
-        val monthlySchedules = scheduleService.findByCoupleIdAndYearAndMonth(customUserDetails.getCouple(), year, month)
+        val monthlySchedules = scheduleService.findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month)
         val monthlyAnniversaries =
             anniversaryService.findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month)
         return MonthlySchedulesAndAnniversariesResponse.of(monthlySchedules, monthlyAnniversaries)
@@ -34,7 +38,7 @@ class ReadScheduleFacade(
         return DailySchedulesAndAnniversariesResponse.of(dailySchedules, dailyAnniversaries)
     }
 
-    fun getScheduleDetail(customUserDetails: CustomUserDetails, scheduleId: Long): ScheduleDetailResponse {
+    fun getDetail(customUserDetails: CustomUserDetails, scheduleId: Long): ScheduleDetailResponse {
         val schedule = scheduleService.getById(scheduleId)
         val letters = letterService.findByCoupleAndSchedule(customUserDetails.getCouple(), schedule)
         val letterIds = letters.map { it.id }
@@ -46,17 +50,17 @@ class ReadScheduleFacade(
         return ScheduleDetailResponse.of(schedule, letterPreviews)
     }
 
-    fun getListByWeek(customUserDetails: CustomUserDetails): MainSchedulesAndAnniversariesResponse {
-        val today = LocalDate.now()
-        val schedules = scheduleService.findByCoupleIdAndDateBetween(
+    fun getListByWeek(customUserDetails: CustomUserDetails, baseDate : LocalDate = LocalDate.now()): MainSchedulesAndAnniversariesResponse {
+        val endDate = baseDate.plusDays(WEEK_DAYS)
+        val schedules = scheduleService.findByCoupleAndDateBetween(
             customUserDetails.getCouple(),
-            today,
-            today.plusDays(6)
+            baseDate,
+            endDate
         )
         val anniversaries = anniversaryService.findByCoupleAndDateBetween(
             customUserDetails.getCouple(),
-            today,
-            today.plusDays(6)
+            baseDate,
+            endDate
         )
 
         return MainSchedulesAndAnniversariesResponse.of(
