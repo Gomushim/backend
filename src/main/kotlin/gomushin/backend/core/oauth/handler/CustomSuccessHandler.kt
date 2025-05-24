@@ -22,7 +22,6 @@ class CustomSuccessHandler(
     private val memberRepository: MemberRepository,
     private val cookieService: CookieService,
     @Value("\${member-redirect-url}") private val memberRedirectUrl: String,
-    @Value("\${guest-redirect-url}") private val guestRedirectUrl: String,
 ) : SimpleUrlAuthenticationSuccessHandler() {
 
     @Throws(IOException::class, ServletException::class)
@@ -50,6 +49,7 @@ class CustomSuccessHandler(
 
         val accessCookie = cookieService.createCookie("access_token", accessToken)
         val refreshCookie = cookieService.createCookie("refresh_token", refreshToken)
+
         response!!.addHeader("Set-Cookie", accessCookie.toString())
         response.addHeader("Set-Cookie", refreshCookie.toString())
         response.sendRedirect(memberRedirectUrl)
