@@ -6,6 +6,7 @@ import gomushin.backend.core.jwt.infrastructure.TokenService
 import gomushin.backend.core.oauth.CustomOAuth2User
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.repository.MemberRepository
+import gomushin.backend.member.domain.value.Role
 import io.jsonwebtoken.io.IOException
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
@@ -20,7 +21,8 @@ class CustomSuccessHandler(
     private val tokenService: TokenService,
     private val memberRepository: MemberRepository,
     private val cookieService: CookieService,
-    @Value("\${redirect-url}") private val redirectUrl: String,
+    @Value("\${member-redirect-url}") private val memberRedirectUrl: String,
+    @Value("\${guest-redirect-url}") private val guestRedirectUrl: String,
 ) : SimpleUrlAuthenticationSuccessHandler() {
 
     @Throws(IOException::class, ServletException::class)
@@ -45,11 +47,25 @@ class CustomSuccessHandler(
             tokenService.upsertRefresh(principal.getUserId(), refreshToken, tokenService.getTokenDuration(refreshToken))
         }
 
-        val accessCookie = cookieService.createCookie("access_token", accessToken)
-        val refreshCookie = cookieService.createCookie("refresh_token", refreshToken)
-        response!!.addHeader("Set-Cookie", accessCookie.toString())
-        response.addHeader("Set-Cookie", refreshCookie.toString())
-        response.sendRedirect(redirectUrl)
+        val member = getMemberByEmail(principal.getEmail())
+
+        when {
+            member == null -> {
+                response!!.sendRedirect(guestRedirectUrl)
+            }
+
+            member.role == Role.GUEST -> {
+                response!!.sendRedirect(guestRedirectUrl)
+            }
+
+            else -> {
+                val accessCookie = cookieService.createCookie("access_token", accessToken)
+                val refreshCookie = cookieService.createCookie("refresh_token", refreshToken)
+                response!!.addHeader("Set-Cookie", accessCookie.toString())
+                response.addHeader("Set-Cookie", refreshCookie.toString())
+                response.sendRedirect(memberRedirectUrl)
+            }
+        }
     }
 
     private fun getMemberByEmail(email: String): Member? {
