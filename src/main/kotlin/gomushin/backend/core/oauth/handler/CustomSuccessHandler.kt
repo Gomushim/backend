@@ -49,6 +49,9 @@ class CustomSuccessHandler(
 
         val member = getMemberByEmail(principal.getEmail())
 
+        println("member: ${member?.name}")
+        println("member.role: ${member?.role}")
+
         when {
             member == null -> {
                 response!!.sendRedirect(guestRedirectUrl)
