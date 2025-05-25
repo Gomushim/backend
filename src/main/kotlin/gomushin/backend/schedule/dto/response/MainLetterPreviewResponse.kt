@@ -11,6 +11,7 @@ data class MainLetterPreviewResponse(
     val content: String?,
     val pictureUrl: String?,
     val schedule: String?,
+    val scheduleId : Long?,
     val createdAt: LocalDateTime?,
 ) {
     companion object {
@@ -33,6 +34,7 @@ data class MainLetterPreviewResponse(
                 content = previewContent,
                 pictureUrl = picture?.pictureUrl,
                 schedule = schedule?.title,
+                scheduleId = schedule?.id,
                 createdAt = letter?.createdAt
             )
         }
