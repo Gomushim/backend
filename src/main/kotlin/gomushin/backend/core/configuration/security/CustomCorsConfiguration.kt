@@ -22,6 +22,7 @@ class CustomCorsConfiguration {
                 "https://sarang-backend.o-r.kr",
                 "https://www.sarangkkun.site",
                 "https://sarangkkun.site",
+                "https://vite.sarangkkun.site:5173",
             )
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
         configuration.allowedHeaders = listOf("*")
