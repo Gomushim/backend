@@ -94,6 +94,7 @@ class CoupleFacade(
         return StatusMessageResponse.of(statusMessage)
     }
 
+    @Transactional
     fun updateMilitaryDate(customUserDetails: CustomUserDetails, updateMilitaryDateRequest: UpdateMilitaryDateRequest) {
         val couple = coupleService.getByMemberId(customUserDetails.getId())
         anniversaryService.deleteAllByCoupleAndAutoInsert(couple)
