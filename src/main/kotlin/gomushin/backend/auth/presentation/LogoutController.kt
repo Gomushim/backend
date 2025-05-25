@@ -18,7 +18,7 @@ class LogoutController(
 ) {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping
+    @PostMapping(ApiPath.LOGOUT)
     @Operation(summary = "로그아웃", description = "logout")
     fun logout(
         request: HttpServletRequest,
