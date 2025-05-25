@@ -8,15 +8,17 @@ data class LetterResponse(
     val title: String,
     val content: String,
     val author: String,
+    val isWrittenByMe : Boolean,
     val createdAt: LocalDateTime,
 ) {
     companion object {
-        fun of(letter: Letter): LetterResponse {
+        fun of(letter: Letter, memberId : Long): LetterResponse {
             return LetterResponse(
                 id = letter.id,
                 title = letter.title,
                 content = letter.content,
                 author = letter.author,
+                isWrittenByMe = letter.authorId == memberId,
                 createdAt = letter.createdAt,
             )
         }

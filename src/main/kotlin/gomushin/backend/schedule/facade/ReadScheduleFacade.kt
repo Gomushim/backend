@@ -44,8 +44,9 @@ class ReadScheduleFacade(
         val letterIds = letters.map { it.id }
         val picturesByLetterId = pictureService.findAllByLetterIds(letterIds)
             .associateBy { it.letterId }
+        val memberId = customUserDetails.getId()
         val letterPreviews = letters.map { letter ->
-            LetterPreviewResponse.of(letter, schedule, picturesByLetterId[letter.id])
+            LetterPreviewResponse.of(letter, schedule, picturesByLetterId[letter.id], memberId)
         }
         return ScheduleDetailResponse.of(schedule, letterPreviews)
     }
