@@ -1,4 +1,4 @@
-package gomushin.backend.auth
+package gomushin.backend.auth.facade
 
 import gomushin.backend.core.configuration.cookie.CookieService
 import gomushin.backend.core.jwt.infrastructure.TokenService
