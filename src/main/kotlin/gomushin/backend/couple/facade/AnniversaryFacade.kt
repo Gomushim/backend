@@ -4,6 +4,7 @@ import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.PageResponse
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.couple.domain.service.AnniversaryService
+import gomushin.backend.couple.dto.request.UpdateAnniversaryRequest
 import gomushin.backend.couple.dto.response.AnniversaryDetailResponse
 import gomushin.backend.couple.dto.response.MainAnniversaryResponse
 import gomushin.backend.couple.dto.response.TotalAnniversaryResponse
@@ -46,5 +47,11 @@ class AnniversaryFacade(
         anniversaryService.delete(customUserDetails.getCouple(), anniversaryId)
     }
 
-
+    fun updateAnniversary(
+        customUserDetails: CustomUserDetails,
+        anniversaryId: Long,
+        updateAnniversaryRequest: UpdateAnniversaryRequest,
+    ) {
+        anniversaryService.update(customUserDetails.getCouple(), anniversaryId, updateAnniversaryRequest)
+    }
 }
