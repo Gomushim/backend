@@ -28,7 +28,7 @@ class QuestionAlarmFacade (
         "매일 사랑이 자라요+가벼운 전화통화 어때요?"
     )
 
-    @Scheduled(cron = "0 0 19 * * *", zone = "Asia/Seoul")
+    @Scheduled(cron = "\${scheduling.cron.question}", zone = "\${scheduling.zone.seoul}")
     fun sendQuestionAlarms() {
         val coupleMembers = memberService.getAllCoupledMemberWithEnabledNotification()
         runBlocking {
