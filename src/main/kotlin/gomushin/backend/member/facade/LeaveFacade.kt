@@ -37,7 +37,6 @@ class LeaveFacade(
         commentService.deleteAllByMemberId(memberId)
         commentService.deleteAllByMemberId(partner.id)
         coupleService.deleteByMemberId(memberId)
-        coupleService.deleteByMemberId(partner.id)
         notificationService.deleteAllByMember(memberId)
         notificationService.deleteAllByMember(partner.id)
         scheduleService.deleteAllByMemberId(memberId)
@@ -54,8 +53,8 @@ class LeaveFacade(
         pictureService.deleteAllByLetterIds(letters)
         letterService.deleteAllByMemberId(memberId)
         letterService.deleteAllByMemberId(partner.id)
-        memberService.deleteMember(memberId)
         partner.updateIsCouple(false)
+        memberService.deleteMember(memberId)
         if (pictureUrlsToDelete.isNotEmpty()) {
             applicationEventPublisher.publishEvent(
                 S3DeleteEvent(
