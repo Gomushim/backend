@@ -35,9 +35,13 @@ class LeaveFacade(
         val partner = coupleInfoService.findCoupleMember(memberId)
         anniversaryService.deleteAllByCoupleId(coupleId)
         commentService.deleteAllByMemberId(memberId)
+        commentService.deleteAllByMemberId(partner.id)
         coupleService.deleteByMemberId(memberId)
+        coupleService.deleteByMemberId(partner.id)
         notificationService.deleteAllByMember(memberId)
+        notificationService.deleteAllByMember(partner.id)
         scheduleService.deleteAllByMemberId(memberId)
+        scheduleService.deleteAllByMemberId(partner.id)
 
         val letters = letterService.findAllByAuthorId(memberId)
         val pictureUrlsToDelete = mutableListOf<String>()
@@ -49,8 +53,8 @@ class LeaveFacade(
 
         pictureService.deleteAllByLetterIds(letters)
         letterService.deleteAllByMemberId(memberId)
+        letterService.deleteAllByMemberId(partner.id)
         memberService.deleteMember(memberId)
-
         partner.updateIsCouple(false)
         if (pictureUrlsToDelete.isNotEmpty()) {
             applicationEventPublisher.publishEvent(
@@ -61,3 +65,4 @@ class LeaveFacade(
         }
     }
 }
+
