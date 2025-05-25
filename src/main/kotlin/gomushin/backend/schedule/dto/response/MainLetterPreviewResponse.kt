@@ -12,6 +12,7 @@ data class MainLetterPreviewResponse(
     val pictureUrl: String?,
     val schedule: String?,
     val scheduleId : Long?,
+    val isWrittenByMe : Boolean?,
     val createdAt: LocalDateTime?,
 ) {
     companion object {
@@ -22,6 +23,7 @@ data class MainLetterPreviewResponse(
             letter: Letter?,
             picture: Picture?,
             schedule: Schedule?,
+            memberId : Long?
         ): MainLetterPreviewResponse {
             val previewContent = if (letter?.content != null && letter.content.length > MAX_CONTENT_LENGTH) {
                 letter.content.take(PREVIEW_CONTENT_LENGTH) + "..."
@@ -35,6 +37,7 @@ data class MainLetterPreviewResponse(
                 pictureUrl = picture?.pictureUrl,
                 schedule = schedule?.title,
                 scheduleId = schedule?.id,
+                isWrittenByMe = memberId == letter?.authorId,
                 createdAt = letter?.createdAt
             )
         }
