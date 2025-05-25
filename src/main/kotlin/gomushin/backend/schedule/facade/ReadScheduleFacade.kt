@@ -2,10 +2,12 @@ package gomushin.backend.schedule.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.couple.domain.service.AnniversaryService
+import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.schedule.domain.service.LetterService
 import gomushin.backend.schedule.domain.service.PictureService
 import gomushin.backend.schedule.domain.service.ScheduleService
 import gomushin.backend.schedule.dto.response.*
+import kotlinx.coroutines.flow.merge
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 
@@ -14,7 +16,8 @@ class ReadScheduleFacade(
     private val scheduleService: ScheduleService,
     private val anniversaryService: AnniversaryService,
     private val letterService: LetterService,
-    private val pictureService: PictureService
+    private val pictureService: PictureService,
+    private val memberService: MemberService,
 ) {
 
     companion object {
@@ -44,9 +47,9 @@ class ReadScheduleFacade(
         val letterIds = letters.map { it.id }
         val picturesByLetterId = pictureService.findAllByLetterIds(letterIds)
             .associateBy { it.letterId }
-        val memberId = customUserDetails.getId()
+        val member = memberService.getById(customUserDetails.getId())
         val letterPreviews = letters.map { letter ->
-            LetterPreviewResponse.of(letter, schedule, picturesByLetterId[letter.id], memberId)
+            LetterPreviewResponse.of(letter, schedule, picturesByLetterId[letter.id], member)
         }
         return ScheduleDetailResponse.of(schedule, letterPreviews)
     }

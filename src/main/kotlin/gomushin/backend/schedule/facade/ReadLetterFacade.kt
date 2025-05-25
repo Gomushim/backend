@@ -2,6 +2,7 @@ package gomushin.backend.schedule.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.PageResponse
+import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.schedule.domain.service.CommentService
 import gomushin.backend.schedule.domain.service.LetterService
 import gomushin.backend.schedule.domain.service.PictureService
@@ -17,6 +18,7 @@ class ReadLetterFacade(
     private val scheduleService: ScheduleService,
     private val pictureService: PictureService,
     private val commentService: CommentService,
+    private val memberService: MemberService,
     @Value("\${server.url}")
     private val baseUrl: String,
 ) {
@@ -26,7 +28,7 @@ class ReadLetterFacade(
         customUserDetails: CustomUserDetails,
         scheduleId: Long,
     ): List<LetterPreviewResponse> {
-        val memberId = customUserDetails.getId()
+        val member = memberService.getById(customUserDetails.getId())
         val schedule = scheduleService.getById(scheduleId)
         val letters = letterService.findByCoupleAndSchedule(
             customUserDetails.getCouple(),
@@ -34,7 +36,7 @@ class ReadLetterFacade(
         )
         return letters.map { letter ->
             val picture = pictureService.findFirstByLetterId(letter.id)
-            LetterPreviewResponse.of(letter, schedule, picture, memberId)
+            LetterPreviewResponse.of(letter, schedule, picture, member)
         }
     }
 
@@ -76,13 +78,13 @@ class ReadLetterFacade(
         size: Int,
     ): PageResponse<LetterPreviewResponse> {
         val pageRequest = PageRequest.of(page, size)
-        val memberId = customUserDetails.getId()
+        val member = memberService.getById(customUserDetails.getId())
         val letters = letterService.findAllToCouple(customUserDetails.getCouple(), pageRequest)
 
         val letterPreviewResponses = letters.map { letter ->
             val picture = letter.let { pictureService.findFirstByLetterId(it.id) }
             val schedule = letter.let { scheduleService.getById(it.scheduleId) }
-            LetterPreviewResponse.of(letter, schedule, picture, memberId)
+            LetterPreviewResponse.of(letter, schedule, picture, member)
         }
 
         return PageResponse.from(letterPreviewResponses)
@@ -92,11 +94,11 @@ class ReadLetterFacade(
         customUserDetails: CustomUserDetails,
     ): List<MainLetterPreviewResponse> {
         val letters = letterService.findTop5ByCreatedDateDesc(customUserDetails.getCouple())
-        val memberId = customUserDetails.getId()
+        val member = memberService.getById(customUserDetails.getId())
         return letters.map { letter ->
             val picture = pictureService.findFirstByLetterId(letter.id)
             val schedule = scheduleService.findById(letter.scheduleId)
-            MainLetterPreviewResponse.of(letter, picture, schedule, memberId)
+            MainLetterPreviewResponse.of(letter, picture, schedule, member)
         }
     }
 }

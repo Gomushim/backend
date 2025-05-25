@@ -2,6 +2,7 @@ package gomushin.backend.schedule.domain.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.couple.domain.entity.Couple
+import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.schedule.domain.entity.Letter
 import gomushin.backend.schedule.domain.entity.Picture
 import gomushin.backend.schedule.domain.entity.Schedule
@@ -33,6 +34,9 @@ class ReadLetterFacadeTest {
     @Mock
     lateinit var pictureService: PictureService
 
+    @Mock
+    lateinit var memberService: MemberService
+
     private lateinit var readLetterFacade: ReadLetterFacade
 
 
@@ -44,6 +48,7 @@ class ReadLetterFacadeTest {
             scheduleService,
             pictureService,
             commentService,
+            memberService,
             baseUrl
         )
     }

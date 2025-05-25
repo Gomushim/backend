@@ -4,6 +4,7 @@ import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.couple.dto.response.MonthlyAnniversariesResponse
+import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.schedule.domain.entity.Letter
 import gomushin.backend.schedule.domain.entity.Picture
 import gomushin.backend.schedule.domain.entity.Schedule
@@ -38,6 +39,9 @@ class ReadScheduleFacadeTest {
 
     @Mock
     private lateinit var pictureService: PictureService
+
+    @Mock
+    private lateinit var memberService: MemberService
 
     @InjectMocks
     private lateinit var readScheduleFacade: ReadScheduleFacade

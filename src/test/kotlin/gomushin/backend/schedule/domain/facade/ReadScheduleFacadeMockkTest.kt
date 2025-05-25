@@ -4,6 +4,7 @@ import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.service.AnniversaryService
 import gomushin.backend.couple.dto.response.MonthlyAnniversariesResponse
+import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.schedule.domain.service.LetterService
 import gomushin.backend.schedule.domain.service.PictureService
 import gomushin.backend.schedule.domain.service.ScheduleService
@@ -18,6 +19,7 @@ import io.mockk.verify
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.Mock
 import java.time.LocalDate
 
 @ExtendWith(MockKExtension::class)
@@ -34,6 +36,9 @@ class ReadScheduleFacadeMockkTest {
 
     @MockK
     lateinit var pictureService: PictureService
+
+    @MockK
+    lateinit var memberService: MemberService
 
     @InjectMockKs
     lateinit var readScheduleFacade: ReadScheduleFacade
