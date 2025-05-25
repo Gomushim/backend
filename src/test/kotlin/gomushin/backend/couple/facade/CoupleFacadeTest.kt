@@ -165,7 +165,7 @@ class CoupleFacadeTest {
         )
         val result = coupleFacade.updateMilitaryDate(customUserDetails, updateMilitaryDateRequest)
         verify(coupleInfoService).updateMilitaryDate(customUserDetails.getCouple(), updateMilitaryDateRequest)
-        verify(anniversaryService).deleteAllByCoupleIdAndAutoInsert(customUserDetails.getCouple())
+        verify(anniversaryService).deleteAllByCoupleAndAutoInsert(customUserDetails.getCouple())
     }
 
     @DisplayName("만난날 수정 - 정상응답")
