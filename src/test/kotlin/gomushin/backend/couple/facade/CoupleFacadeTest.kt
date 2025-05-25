@@ -113,20 +113,22 @@ class CoupleFacadeTest {
     @DisplayName("디데이 조회 - 정상응답")
     @Test
     fun getDday(){
+        val expectedResponse = DdayResponse.of(100, 200,-345)
         `when`(customUserDetails.getId()).thenReturn(1L)
-        `when`(coupleInfoService.getDday(customUserDetails.getId())).thenReturn(DdayResponse(100, 200, -345))
+        `when`(coupleInfoService.getDday(customUserDetails.getId())).thenReturn(expectedResponse)
         val result = coupleFacade.getDday(customUserDetails)
         verify(coupleInfoService).getDday(1L)
-        assertEquals(100, result.sinceLove)
-        assertEquals(200, result.sinceMilitaryStart)
-        assertEquals(-345, result.militaryEndLeft)
+        assertEquals(expectedResponse.sinceLove, result.sinceLove)
+        assertEquals(expectedResponse.sinceMilitaryStart, result.sinceMilitaryStart)
+        assertEquals(expectedResponse.militaryEndLeft, result.militaryEndLeft)
     }
 
     @DisplayName("디데이 조회 - 날짜 정보 안 들어갔을 때")
     @Test
     fun getDdayNull(){
+        val expectedResponse = DdayResponse.of(null, null,null)
         `when`(customUserDetails.getId()).thenReturn(1L)
-        `when`(coupleInfoService.getDday(customUserDetails.getId())).thenReturn(DdayResponse(null, null, null))
+        `when`(coupleInfoService.getDday(customUserDetails.getId())).thenReturn(expectedResponse)
         val result = coupleFacade.getDday(customUserDetails)
         verify(coupleInfoService).getDday(1L)
         assertEquals(null, result.sinceLove)
