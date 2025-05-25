@@ -192,7 +192,7 @@ class AnniversaryServiceTest {
             anniversaryRepository.deleteAllByCoupleIdAndAutoInsertTrue(couple.id)
         } just Runs
         //when
-        anniversaryService.deleteAllByCoupleIdAndAutoInsert(couple)
+        anniversaryService.deleteAllByCoupleAndAutoInsert(couple)
         //then
         verify(exactly = 1) {
             anniversaryRepository.deleteAllByCoupleIdAndAutoInsertTrue(couple.id)

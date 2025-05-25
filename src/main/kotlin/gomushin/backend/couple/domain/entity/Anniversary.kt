@@ -29,7 +29,7 @@ class Anniversary(
     var emoji: AnniversaryEmoji? = null,
 
     @Column(name = "is_auto_insert")
-    var isAutoInsert: Boolean = false
+    var isAutoInsert: Boolean = false,
 ) : BaseEntity() {
     companion object {
         fun autoCreate(coupleId: Long, title: String, anniversaryDate: LocalDate): Anniversary {
@@ -39,7 +39,7 @@ class Anniversary(
                 anniversaryDate = anniversaryDate,
                 anniversaryProperty = 0,
                 emoji = AnniversaryEmoji.HEART,
-                isAutoInsert = true
+                isAutoInsert = true,
             )
         }
 
