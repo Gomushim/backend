@@ -6,6 +6,7 @@ import gomushin.backend.couple.domain.repository.AnniversaryRepository
 import gomushin.backend.couple.domain.repository.CoupleRepository
 import gomushin.backend.couple.dto.request.UpdateMilitaryDateRequest
 import gomushin.backend.couple.dto.request.UpdateRelationshipStartDateRequest
+import gomushin.backend.couple.dto.response.DdayResponse
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.repository.MemberRepository
 import gomushin.backend.member.domain.value.Emotion
@@ -208,15 +209,21 @@ class CoupleInfoServiceTest {
         val militaryStartDate = couple.militaryStartDate!!
         val militaryEndDate = couple.militaryEndDate!!
         val relationshipStartDate = couple.relationshipStartDate!!
+        val expectedResponse = DdayResponse.of(
+            coupleInfoService.computeDday(relationshipStartDate, today) + 1,
+            coupleInfoService.computeDday(militaryStartDate, today),
+            coupleInfoService.computeDday(militaryEndDate, today),
+        )
+
         `when`(coupleRepository.findByMemberId(invitorId)).thenReturn(couple)
 
         //when
         val response = coupleInfoService.getDday(invitorId)
 
         //then
-        assertEquals(coupleInfoService.computeDday(militaryStartDate, today), response.sinceMilitaryStart)
-        assertEquals(coupleInfoService.computeDday(militaryEndDate, today), response.militaryEndLeft)
-        assertEquals(coupleInfoService.computeDday(relationshipStartDate, today) + 1, response.sinceLove)
+        assertEquals(expectedResponse.sinceMilitaryStart, response.sinceMilitaryStart)
+        assertEquals(expectedResponse.militaryEndLeft, response.militaryEndLeft)
+        assertEquals(expectedResponse.sinceLove, response.sinceLove)
     }
 
     @DisplayName("nickName-성공")
