@@ -1,5 +1,6 @@
 package gomushin.backend.schedule.dto.response
 
+import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.schedule.domain.entity.Letter
 import gomushin.backend.schedule.domain.entity.Picture
 import gomushin.backend.schedule.domain.entity.Schedule
@@ -23,7 +24,7 @@ data class LetterPreviewResponse(
             letter: Letter?,
             schedule: Schedule?,
             picture: Picture?,
-            memberId : Long?
+            member : Member?,
         ): LetterPreviewResponse {
             val previewContent = if (letter?.content != null && letter.content.length > MAX_CONTENT_LENGTH) {
                 letter.content.take(PREVIEW_CONTENT_LENGTH) + "..."
@@ -37,7 +38,7 @@ data class LetterPreviewResponse(
                 title = letter?.title,
                 content = previewContent,
                 pictureUrl = picture?.pictureUrl,
-                isWrittenByMe = memberId == letter?.authorId,
+                isWrittenByMe = member?.id == letter?.authorId,
                 createdAt = letter?.createdAt
             )
         }
