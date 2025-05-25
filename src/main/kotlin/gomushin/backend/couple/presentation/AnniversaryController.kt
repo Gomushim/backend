@@ -4,6 +4,7 @@ import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.PageResponse
 import gomushin.backend.core.common.web.response.ApiResponse
 import gomushin.backend.couple.dto.request.GenerateAnniversaryRequest
+import gomushin.backend.couple.dto.response.AnniversaryDetailResponse
 import gomushin.backend.couple.dto.response.MainAnniversaryResponse
 import gomushin.backend.couple.dto.response.TotalAnniversaryResponse
 import gomushin.backend.couple.facade.AnniversaryFacade
@@ -15,7 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Tag(name = "기념일 생성", description = "AnniversaryController")
+@Tag(name = "기념일", description = "AnniversaryController")
 class AnniversaryController(
     private val coupleFacade: CoupleFacade,
     private val anniversaryFacade: AnniversaryFacade
@@ -74,4 +75,20 @@ class AnniversaryController(
         val anniversaries = anniversaryFacade.getAnniversaryList(customUserDetails, safePage, size)
         return anniversaries
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(ApiPath.ANNIVERSARY)
+    @Operation(
+        summary = "기념일 상세 조회",
+        description = "getAnniversary"
+    )
+    fun getAnniversary(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable anniversaryId: Long
+    ): ApiResponse<AnniversaryDetailResponse> {
+        val anniversary = anniversaryFacade.get(customUserDetails, anniversaryId)
+        return ApiResponse.success(anniversary)
+    }
+
+
 }
