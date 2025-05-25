@@ -3,11 +3,11 @@ package gomushin.backend.schedule.domain.facade
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.service.AnniversaryService
+import gomushin.backend.couple.dto.response.MonthlyAnniversariesResponse
 import gomushin.backend.schedule.domain.service.LetterService
 import gomushin.backend.schedule.domain.service.PictureService
 import gomushin.backend.schedule.domain.service.ScheduleService
-import gomushin.backend.schedule.dto.response.MainAnniversariesResponse
-import gomushin.backend.schedule.dto.response.MainSchedulesResponse
+import gomushin.backend.schedule.dto.response.*
 import gomushin.backend.schedule.facade.ReadScheduleFacade
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
@@ -45,6 +45,40 @@ class ReadScheduleFacadeMockkTest {
     init {
         every { customUserDetails.getCouple() } returns couple
         every { customUserDetails.getId() } returns 1L
+    }
+
+    @DisplayName("getList - 성공")
+    @Test
+    fun getList_success() {
+        // given
+        val year = 2025
+        val month = 4
+        val monthlySchedulesResponse = mockk<MonthlySchedulesResponse>()
+        val monthlyAnniversariesResponse = mockk<MonthlyAnniversariesResponse>()
+
+        // when
+        every {
+            scheduleService.findByCoupleAndYearAndMonth(
+                couple,
+                year,
+                month
+            )
+        } returns listOf(monthlySchedulesResponse)
+
+        every {
+            anniversaryService.findByCoupleAndYearAndMonth(
+                couple,
+                year,
+                month
+            )
+        } returns listOf(monthlyAnniversariesResponse)
+        readScheduleFacade.getList(customUserDetails, year, month)
+
+        // then
+        verify(exactly = 1) {
+            scheduleService.findByCoupleAndYearAndMonth(couple, year, month)
+            anniversaryService.findByCoupleAndYearAndMonth(couple, year, month)
+        }
     }
 
     @DisplayName("getListByWeek - 성공")
@@ -87,6 +121,26 @@ class ReadScheduleFacadeMockkTest {
                 date,
                 date.plusDays(6)
             )
+        }
+    }
+
+    @DisplayName("get - 성공")
+    @Test
+    fun get_success() {
+        // given
+        val date = LocalDate.of(2025, 4, 1)
+        val mockSchedules = listOf(mockk<DailyScheduleResponse>())
+        val mockAnniversaries = listOf(mockk<DailyAnniversaryResponse>())
+
+        // when
+        every { scheduleService.findByDate(couple, date) } returns mockSchedules
+        every { anniversaryService.findByCoupleAndDate(couple, date) } returns mockAnniversaries
+        readScheduleFacade.get(customUserDetails, date)
+
+        // then
+        verify(exactly = 1) {
+            scheduleService.findByDate(couple, date)
+            anniversaryService.findByCoupleAndDate(couple, date)
         }
     }
 }

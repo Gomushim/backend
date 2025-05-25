@@ -49,42 +49,6 @@ class ReadScheduleFacadeTest {
         `when`(customUserDetails.getCouple()).thenReturn(mock(Couple::class.java))
     }
 
-    @DisplayName("getList - 성공")
-    @Test
-    fun getList_success() {
-        // given
-        val year = 2025
-        val month = 4
-        val monthlySchedulesResponse = mock(MonthlySchedulesResponse::class.java)
-        val monthlyAnniversariesResponse = mock(MonthlyAnniversariesResponse::class.java)
-
-        // when
-        `when`(scheduleService.findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month))
-            .thenReturn(listOf(monthlySchedulesResponse))
-        `when`(anniversaryService.findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month))
-            .thenReturn(listOf(monthlyAnniversariesResponse))
-        readScheduleFacade.getList(customUserDetails, year, month)
-
-        // then
-        verify(scheduleService, times(1)).findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month)
-        verify(anniversaryService, times(1)).findByCoupleAndYearAndMonth(customUserDetails.getCouple(), year, month)
-    }
-
-    @DisplayName("get - 성공")
-    @Test
-    fun get_success() {
-        // given
-        val date = LocalDate.of(2025, 4, 1)
-        val mockSchedules = listOf(mock(DailyScheduleResponse::class.java))
-
-        // when
-        `when`(scheduleService.findByDate(customUserDetails.getCouple(), date)).thenReturn(mockSchedules)
-        readScheduleFacade.get(customUserDetails, date)
-
-        // then
-        verify(scheduleService, times(1)).findByDate(customUserDetails.getCouple(), date)
-    }
-
     @DisplayName("getDetail - 성공")
     @Test
     fun getDetail_success() {
