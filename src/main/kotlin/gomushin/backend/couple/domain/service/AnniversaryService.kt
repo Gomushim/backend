@@ -96,4 +96,9 @@ class AnniversaryService(
         }
         anniversaryRepository.deleteById(anniversaryId)
     }
+
+    @Transactional
+    fun deleteAllByCoupleIdAndAutoInsert(couple: Couple) {
+        return anniversaryRepository.deleteAllByCoupleIdAndAutoInsertTrue(couple.id)
+    }
 }

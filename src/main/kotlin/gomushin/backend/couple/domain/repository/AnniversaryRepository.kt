@@ -119,4 +119,8 @@ interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
         nativeQuery = true
     )
     fun findTodayAnniversaryMemberFcmTokens(@Param("nowDate") date: LocalDate): List<AnniversaryNotificationInfo>
+
+    @Modifying
+    @Query("DELETE FROM Anniversary a WHERE a.coupleId = :coupleId AND a.isAutoInsert = true")
+    fun deleteAllByCoupleIdAndAutoInsertTrue(@Param("coupleId") coupleId: Long)
 }
