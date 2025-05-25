@@ -96,6 +96,7 @@ class CoupleFacade(
 
     fun updateMilitaryDate(customUserDetails: CustomUserDetails, updateMilitaryDateRequest: UpdateMilitaryDateRequest) {
         val couple = coupleService.getByMemberId(customUserDetails.getId())
+        anniversaryService.deleteAllByCoupleIdAndAutoInsert(customUserDetails.getCouple())
         coupleInfoService.updateMilitaryDate(couple, updateMilitaryDateRequest)
     }
 
