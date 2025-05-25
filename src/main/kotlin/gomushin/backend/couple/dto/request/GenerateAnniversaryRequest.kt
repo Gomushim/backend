@@ -10,5 +10,5 @@ data class GenerateAnniversaryRequest(
     @Schema(description = "이모지", example = "HEART, CALENDAR, CAKE, TRAVEL")
     val emoji : AnniversaryEmoji,
     @Schema(description = "날짜", example = "2025-05-01")
-    val date : LocalDate
+    val date : LocalDate,
 )
