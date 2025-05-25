@@ -2,7 +2,9 @@ package gomushin.backend.couple.facade
 
 import gomushin.backend.core.CustomUserDetails
 import gomushin.backend.core.common.web.PageResponse
+import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.couple.domain.service.AnniversaryService
+import gomushin.backend.couple.dto.response.AnniversaryDetailResponse
 import gomushin.backend.couple.dto.response.MainAnniversaryResponse
 import gomushin.backend.couple.dto.response.TotalAnniversaryResponse
 import org.springframework.data.domain.PageRequest
@@ -32,7 +34,17 @@ class AnniversaryFacade(
         return PageResponse.from(anniversaryResponses)
     }
 
+    fun get(customUserDetails: CustomUserDetails, anniversaryId: Long): AnniversaryDetailResponse {
+        val anniversary = anniversaryService.getById(anniversaryId)
+        if (anniversary.coupleId != customUserDetails.getCouple().id) {
+            throw BadRequestException("sarangggun.anniversary.unauthorized")
+        }
+        return AnniversaryDetailResponse.of(anniversary)
+    }
+
     fun delete(customUserDetails: CustomUserDetails, anniversaryId: Long) {
         anniversaryService.delete(customUserDetails.getCouple(), anniversaryId)
     }
+
+
 }
