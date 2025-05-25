@@ -6,12 +6,10 @@ import gomushin.backend.couple.domain.repository.AnniversaryRepository
 import gomushin.backend.couple.dto.response.MonthlyAnniversariesResponse
 import gomushin.backend.schedule.dto.response.DailyAnniversaryResponse
 import gomushin.backend.schedule.dto.response.MainAnniversariesResponse
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import io.mockk.mockk
-import io.mockk.verify
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -183,6 +181,22 @@ class AnniversaryServiceTest {
             result.map { it.anniversaryDate },
             "반환된 기념일은 시간 순으로 정렬되어야 합니다."
         )
+    }
+
+    @DisplayName("deleteAllByCoupleIdAndAutoInsert는 anniversaryRepository의 deleteAllByCoupleIdAndAutoInsertTrue메서드 호출")
+    @Test
+    fun deleteAllByCoupleIdAndAutoInsert() {
+        //given
+        val couple = Couple(1L, 1L, 2L)
+        every {
+            anniversaryRepository.deleteAllByCoupleIdAndAutoInsertTrue(couple.id)
+        } just Runs
+        //when
+        anniversaryService.deleteAllByCoupleIdAndAutoInsert(couple)
+        //then
+        verify(exactly = 1) {
+            anniversaryRepository.deleteAllByCoupleIdAndAutoInsertTrue(couple.id)
+        }
     }
 }
 
