@@ -42,18 +42,26 @@ class LeaveFacade(
         scheduleService.deleteAllByMemberId(memberId)
         scheduleService.deleteAllByMemberId(partner.id)
 
-        val letters = letterService.findAllByAuthorId(memberId)
-        val pictureUrlsToDelete = mutableListOf<String>()
-        pictureService.findAllByLetterIds(letters)
-            .takeIf { it.isNotEmpty() }
-            ?.forEach { picture ->
-                pictureUrlsToDelete.add(picture.pictureUrl)
-            }
+        val memberLetters = letterService.findAllByAuthorId(memberId)
+        val partnerLetters = letterService.findAllByAuthorId(partner.id)
 
-        pictureService.deleteAllByLetterIds(letters)
+        val pictureUrlsToDelete = mutableListOf<String>()
+
+        pictureService.findAllByLetterIds(memberLetters)
+            .takeIf { it.isNotEmpty() }
+            ?.forEach { picture -> pictureUrlsToDelete.add(picture.pictureUrl) }
+        pictureService.findAllByLetterIds(partnerLetters)
+            .takeIf { it.isNotEmpty() }
+            ?.forEach { picture -> pictureUrlsToDelete.add(picture.pictureUrl) }
+
+        pictureService.deleteAllByLetterIds(memberLetters)
+        pictureService.deleteAllByLetterIds(partnerLetters)
+
         letterService.deleteAllByMemberId(memberId)
         letterService.deleteAllByMemberId(partner.id)
+
         partner.updateIsCouple(false)
+
         memberService.deleteMember(memberId)
         if (pictureUrlsToDelete.isNotEmpty()) {
             applicationEventPublisher.publishEvent(
