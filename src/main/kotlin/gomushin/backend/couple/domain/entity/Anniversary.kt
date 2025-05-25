@@ -57,6 +57,11 @@ class Anniversary(
                 emoji = emoji
             )
         }
+    }
 
+    fun update(title: String?, anniversaryDate: LocalDate?, emoji: AnniversaryEmoji?) {
+        title?.let { this.title = it }
+        anniversaryDate?.let { this.anniversaryDate = it }
+        emoji?.let { this.emoji = it }
     }
 }
