@@ -4,7 +4,9 @@ import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.couple.domain.entity.Anniversary
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.couple.domain.repository.AnniversaryRepository
+import gomushin.backend.couple.domain.value.AnniversaryEmoji
 import gomushin.backend.couple.dto.request.GenerateAnniversaryRequest
+import gomushin.backend.couple.dto.request.UpdateAnniversaryRequest
 import gomushin.backend.couple.dto.response.AnniversaryNotificationInfo
 import gomushin.backend.couple.dto.response.MonthlyAnniversariesResponse
 import gomushin.backend.schedule.dto.response.DailyAnniversaryResponse
@@ -100,5 +102,18 @@ class AnniversaryService(
     @Transactional
     fun deleteAllByCoupleAndAutoInsert(couple: Couple) {
         return anniversaryRepository.deleteAllByCoupleIdAndAutoInsertTrue(couple.id)
+    }
+
+    @Transactional
+    fun update(couple: Couple, anniversaryId: Long, updateAnniversaryRequest: UpdateAnniversaryRequest) {
+        val anniversary = getById(anniversaryId)
+        if (anniversary.coupleId != couple.id) {
+            throw BadRequestException("sarangggun.anniversary.unauthorized")
+        }
+        anniversary.update(
+            title = updateAnniversaryRequest.title,
+            anniversaryDate = updateAnniversaryRequest.anniversaryDate,
+            emoji = AnniversaryEmoji.getByName(updateAnniversaryRequest.emoji)
+        )
     }
 }

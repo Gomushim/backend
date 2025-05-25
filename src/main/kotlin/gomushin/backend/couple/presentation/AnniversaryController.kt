@@ -5,6 +5,7 @@ import gomushin.backend.core.common.web.PageResponse
 import gomushin.backend.core.common.web.response.ApiResponse
 import gomushin.backend.couple.dto.request.GenerateAnniversaryRequest
 import gomushin.backend.couple.dto.response.AnniversaryDetailResponse
+import gomushin.backend.couple.dto.request.UpdateAnniversaryRequest
 import gomushin.backend.couple.dto.response.MainAnniversaryResponse
 import gomushin.backend.couple.dto.response.TotalAnniversaryResponse
 import gomushin.backend.couple.facade.AnniversaryFacade
@@ -32,6 +33,21 @@ class AnniversaryController(
         @RequestBody generateAnniversaryRequest: GenerateAnniversaryRequest
     ): ApiResponse<Boolean> {
         coupleFacade.generateAnniversary(customUserDetails, generateAnniversaryRequest)
+        return ApiResponse.success(true)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping(ApiPath.ANNIVERSARY)
+    @Operation(
+        summary = "기념일 수정",
+        description = "updateAnniversary"
+    )
+    fun updateAnniversary(
+        @AuthenticationPrincipal customUserDetails: CustomUserDetails,
+        @PathVariable anniversaryId: Long,
+        @RequestBody updateAnniversaryRequest: UpdateAnniversaryRequest,
+    ): ApiResponse<Boolean> {
+        anniversaryFacade.updateAnniversary(customUserDetails, anniversaryId, updateAnniversaryRequest)
         return ApiResponse.success(true)
     }
 
