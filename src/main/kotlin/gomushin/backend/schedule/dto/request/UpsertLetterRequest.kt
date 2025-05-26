@@ -11,4 +11,6 @@ data class UpsertLetterRequest(
     val title: String,
     @Schema(description = "편지 내용", example = "화이팅")
     val content: String,
+    @Schema(description = "편지 사진 URL 목록", example = "[\"https://example.com/picture1.jpg\", \"https://example.com/picture2.jpg\"]")
+    val pictureUrls : List<String> = emptyList(),
 )

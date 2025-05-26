@@ -23,6 +23,11 @@ class PictureService(
     }
 
     @Transactional(readOnly = true)
+    fun findAllByLetterId(letterId: Long): List<Picture> {
+        return pictureRepository.findAllByLetterId(letterId)
+    }
+
+    @Transactional(readOnly = true)
     fun findFirstByLetterId(letterId: Long): Picture? {
         return pictureRepository.findFirstByLetterIdOrderByIdAsc(letterId)
     }
@@ -43,12 +48,17 @@ class PictureService(
     }
 
     @Transactional(readOnly = true)
-    fun findAllByLetterIds(letterIds : List<Long>) : List<Picture> {
+    fun findAllByLetterIds(letterIds: List<Long>): List<Picture> {
         return pictureRepository.findAllByLetterIdIn(letterIds)
     }
 
     @Transactional
     fun deleteAllByLetterIds(letterIds: List<Long>) {
         pictureRepository.deleteAllByLetterIdIn(letterIds)
+    }
+
+    @Transactional
+    fun deleteAll(pictures: List<Picture>) {
+        pictureRepository.deleteAll(pictures)
     }
 }
