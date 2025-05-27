@@ -33,8 +33,8 @@ class FCMService(
         private val client: OkHttpClient = OkHttpClient()
     }
     @Throws(IOException::class)
-    fun sendMessageTo(targetToken: String, title: String, body: String) {
-        val message = makeMessage(targetToken, title, body)
+    fun sendMessageTo(targetToken: String, title: String, body: String, link: String?) {
+        val message = makeMessage(targetToken, title, body, link)
 
         val requestBody = message
             .toRequestBody("application/json; charset=utf-8".toMediaType())
@@ -52,7 +52,7 @@ class FCMService(
     }
 
     @Throws(JsonProcessingException::class)
-    private fun makeMessage(targetToken: String, title: String, body: String): String {
+    private fun makeMessage(targetToken: String, title: String, body: String, link:String?): String {
         val fcmMessage = FCMMessage(
             validateOnly = false,
             message = FCMMessage.Message(
@@ -61,6 +61,9 @@ class FCMService(
                     title = title,
                     body = body,
                     image = null
+                ),
+                webpush = FCMMessage.Webpush(
+                    FCMMessage.Fcm_options(link)
                 )
             )
         )

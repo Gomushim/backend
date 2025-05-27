@@ -1,9 +1,11 @@
 package gomushin.backend.alarm.service
 
 import gomushin.backend.alarm.util.MessageParsingUtil
+import gomushin.backend.alarm.value.RedirectURL
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.value.Emotion
+import org.springframework.data.redis.core.script.RedisScript
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 
@@ -56,6 +58,6 @@ class StatusAlarmService (
         }
         val token = receiver.fcmToken
         notificationRedisService.saveAlarm(title, sendContent, receiver.id)
-        fcmService.sendMessageTo(token, title, sendContent)
+        fcmService.sendMessageTo(token, title, sendContent, RedirectURL.MAIN)
     }
 }

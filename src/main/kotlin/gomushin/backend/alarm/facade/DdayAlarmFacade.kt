@@ -2,6 +2,7 @@ package gomushin.backend.alarm.facade
 
 import gomushin.backend.alarm.service.FCMService
 import gomushin.backend.alarm.service.NotificationRedisService
+import gomushin.backend.alarm.value.RedirectURL
 import gomushin.backend.couple.domain.service.AnniversaryService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -33,7 +34,7 @@ class DdayAlarmFacade(
                     try {
                         log.info("디데이 메시지 전송 : 수신자 {${content.memberId}}, 제목 {${alarmTitle}}, 내용{${content.title}}, 전송시각{${LocalDateTime.now()}}\n")
                         notificationRedisService.saveAlarm(alarmTitle, content.title, content.memberId)
-                        fcmService.sendMessageTo(content.fcmToken, alarmTitle, content.title)
+                        fcmService.sendMessageTo(content.fcmToken, alarmTitle, content.title, RedirectURL.DDAY)
                     } catch (e: Exception) {
                         log.error("디데이 메시지 전송오류 : 수신자 {${content.memberId}}, 전송시각{${LocalDateTime.now()}}\n")
                     }

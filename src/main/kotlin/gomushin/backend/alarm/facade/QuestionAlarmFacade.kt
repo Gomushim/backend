@@ -3,6 +3,7 @@ package gomushin.backend.alarm.facade
 import gomushin.backend.alarm.service.FCMService
 import gomushin.backend.alarm.util.MessageParsingUtil
 import gomushin.backend.alarm.service.NotificationRedisService
+import gomushin.backend.alarm.value.RedirectURL
 import gomushin.backend.member.domain.service.MemberService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -39,7 +40,7 @@ class QuestionAlarmFacade (
                         val (title, sendContent) = MessageParsingUtil.parse(notificationContent)
                         log.info("질문형 메시지 전송 : 수신자 {${member.id}}, 제목 {${title}}, 내용{${sendContent}}, 전송시각{${LocalDateTime.now()}}\n")
                         notificationRedisService.saveAlarm(title, sendContent, member.id)
-                        fcmService.sendMessageTo(member.fcmToken, title, sendContent)
+                        fcmService.sendMessageTo(member.fcmToken, title, sendContent, RedirectURL.MAIN)
                     } catch (e: Exception) {
                         log.error("질문형 메시지 전송오류 : 수신자 {${member.name}}, 전송시각{${LocalDateTime.now()}}\n")
                     }
