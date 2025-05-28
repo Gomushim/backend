@@ -1,5 +1,8 @@
 package gomushin.backend.alarm.dto
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 data class FCMMessage(
     val validateOnly: Boolean,
     val message: Message
@@ -15,12 +18,14 @@ data class FCMMessage(
         val body: String,
         val image: String?
     )
-
+    @Serializable
     data class Webpush(
-        val fcm_options : Fcm_options?
+        @SerialName("fcm_options")
+        val fcmOptions : FcmOptions?
     )
 
-    data class Fcm_options(
+    @Serializable
+    data class FcmOptions(
         val link : String?
     )
 }
