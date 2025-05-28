@@ -5,14 +5,14 @@ import gomushin.backend.alarm.value.RedirectURL
 import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.member.domain.entity.Member
 import gomushin.backend.member.domain.value.Emotion
-import org.springframework.data.redis.core.script.RedisScript
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 
 @Service
 class StatusAlarmService (
     private val fcmService: FCMService,
-    private val notificationRedisService: NotificationRedisService
+    private val notificationRedisService: NotificationRedisService,
+    private val redirectURL: RedirectURL
 ) {
     private val statusMessage: Map<Emotion, List<String>> = mapOf(
         Emotion.MISS to listOf(
@@ -58,6 +58,6 @@ class StatusAlarmService (
         }
         val token = receiver.fcmToken
         notificationRedisService.saveAlarm(title, sendContent, receiver.id)
-        fcmService.sendMessageTo(token, title, sendContent, RedirectURL.MAIN)
+        fcmService.sendMessageTo(token, title, sendContent, redirectURL.main)
     }
 }

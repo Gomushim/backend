@@ -1,6 +1,11 @@
 package gomushin.backend.alarm.value
 
-object RedirectURL {
-    const val MAIN = "https://www.sarangkkun.site"
-    const val DDAY = "https://www.sarangkkun.site/calendar/dday"
-}
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.stereotype.Component
+
+@Component
+@ConfigurationProperties(prefix = "fcm.redirect")
+data class RedirectURL (
+    var main: String = "",
+    var dday: String = ""
+)

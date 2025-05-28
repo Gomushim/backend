@@ -19,7 +19,8 @@ import java.time.LocalDateTime
 class QuestionAlarmFacade (
     private val fcmService: FCMService,
     private val memberService: MemberService,
-    private val notificationRedisService: NotificationRedisService
+    private val notificationRedisService: NotificationRedisService,
+    private val redirectURL: RedirectURL
 ) {
     private val log: Logger = LoggerFactory.getLogger(QuestionAlarmFacade::class.java)
     private val questionMessages = listOf(
@@ -40,7 +41,7 @@ class QuestionAlarmFacade (
                         val (title, sendContent) = MessageParsingUtil.parse(notificationContent)
                         log.info("질문형 메시지 전송 : 수신자 {${member.id}}, 제목 {${title}}, 내용{${sendContent}}, 전송시각{${LocalDateTime.now()}}\n")
                         notificationRedisService.saveAlarm(title, sendContent, member.id)
-                        fcmService.sendMessageTo(member.fcmToken, title, sendContent, RedirectURL.MAIN)
+                        fcmService.sendMessageTo(member.fcmToken, title, sendContent, redirectURL.main)
                     } catch (e: Exception) {
                         log.error("질문형 메시지 전송오류 : 수신자 {${member.name}}, 전송시각{${LocalDateTime.now()}}\n")
                     }
