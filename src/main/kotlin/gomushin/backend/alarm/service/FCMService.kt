@@ -63,7 +63,7 @@ class FCMService(
                     image = null
                 ),
                 webpush = FCMMessage.Webpush(
-                    FCMMessage.Fcm_options(link)
+                    FCMMessage.FcmOptions(link)
                 )
             )
         )
