@@ -39,8 +39,8 @@ class CommentService(
     }
 
     @Transactional(readOnly = true)
-    fun findAllByLetter(letter: Letter): List<Comment> {
-        return commentRepository.findAllByLetterId(letter.id)
+    fun findAllByLetterId(id: Long): List<Comment> {
+        return commentRepository.findAllByLetterId(id)
     }
 
     @Transactional(readOnly = true)
