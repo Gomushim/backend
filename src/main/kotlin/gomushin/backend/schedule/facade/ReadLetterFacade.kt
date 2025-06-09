@@ -60,7 +60,7 @@ class ReadLetterFacade(
             PictureResponse.of(picture)
         }
 
-        val comments = commentService.findAllByLetter(letter)
+        val comments = commentService.findAllByLetterId(letter.id)
         val commentResponses = comments.map { comment ->
             CommentResponse.of(comment)
         }
