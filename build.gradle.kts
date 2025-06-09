@@ -12,6 +12,7 @@ group = "gomushin"
 version = "0.0.1-SNAPSHOT"
 
 val mockkVersion = "1.13.10"
+val kotestVersion = "5.5.4"
 
 java {
     toolchain {
@@ -90,6 +91,8 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("io.mockk:mockk:${mockkVersion}")
+    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
