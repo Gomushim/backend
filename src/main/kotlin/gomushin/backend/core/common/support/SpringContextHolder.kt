@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 @Component
 object SpringContextHolder : ApplicationContextAware {
-    private lateinit var context: ApplicationContext
+    lateinit var context: ApplicationContext
 
     override fun setApplicationContext(applicationContext: ApplicationContext) {
         context = applicationContext
