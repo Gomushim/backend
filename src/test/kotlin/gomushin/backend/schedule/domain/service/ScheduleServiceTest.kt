@@ -6,14 +6,24 @@ import gomushin.backend.core.infrastructure.exception.BadRequestException
 import gomushin.backend.schedule.domain.entity.Schedule
 import gomushin.backend.schedule.domain.repository.ScheduleRepository
 import gomushin.backend.schedule.dto.request.UpsertScheduleRequest
-import io.mockk.*
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.shouldBe
+import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import org.junit.jupiter.api.*
+import io.mockk.justRun
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.context.ApplicationContext
 import org.springframework.data.repository.findByIdOrNull
 import java.time.LocalDateTime
-import kotlin.test.assertEquals
+
 
 @ExtendWith(MockKExtension::class)
 class ScheduleServiceTest {
@@ -21,22 +31,21 @@ class ScheduleServiceTest {
     @MockK
     lateinit var scheduleRepository: ScheduleRepository
 
-    private lateinit var scheduleService: ScheduleService
+    @MockK(relaxed = true)
+    private lateinit var mockAppEnv: AppEnv
+
+    @MockK
+    private lateinit var mockApplicationContext: ApplicationContext
+
+
+    @InjectMockKs
+    lateinit var scheduleService: ScheduleService
 
     @BeforeEach
-    fun setUp() {
-        // 확장함수 모킹
-        mockkStatic("org.springframework.data.repository.CrudRepositoryExtensionsKt")
-
-        // 서비스 인스턴스 직접 생성
-        // 확장함수를 사용하는 경우, @InjectMockks가 아닌 직접 생성해야 함
-        scheduleService = ScheduleService(scheduleRepository)
-
-        // SpringContextHolder 모킹
-        mockkObject(SpringContextHolder)
-        val mockAppEnv = mockk<AppEnv>()
-        every { SpringContextHolder.getBean(AppEnv::class.java) } returns mockAppEnv
-        every { mockAppEnv.getId() } returns "test"
+    fun setup() {
+        SpringContextHolder.context = mockApplicationContext
+        every { mockApplicationContext.getBean(AppEnv::class.java) } returns mockAppEnv
+        every { mockAppEnv.getId() } returns "test-env"
     }
 
     @Nested
@@ -102,22 +111,17 @@ class ScheduleServiceTest {
 
     @Nested
     inner class ReadTest {
-        @DisplayName("getById() 경우, 존재하지 않는 id로 조회 시 BadRequestException 발생")
+        @DisplayName("존재하지 않는 ID로 검색 시 예외 발생")
         @Test
         fun getById_notExistId_throwBadRequestException() {
             // given
-            val id = 1L
-            every {
-                scheduleRepository.findByIdOrNull(id)
-            } returns null
+            every { scheduleRepository.findByIdOrNull(any()) } returns null
 
             // when & then
-            val exception = assertThrows<BadRequestException> {
-                scheduleService.getById(id)
+            val exception = shouldThrow<BadRequestException> {
+                scheduleService.getById(1L)
             }
-            val errorMessage = exception.error.element.message.resolved
-
-            assertEquals("해당 일정이 존재하지 않아요.", errorMessage)
+            exception.error.element.message.resolved shouldBe "해당 일정이 존재하지 않아요."
         }
     }
 
@@ -150,6 +154,5 @@ class ScheduleServiceTest {
             // then
             verify { scheduleRepository.deleteById(scheduleId) }
         }
-
     }
 }
