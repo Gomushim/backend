@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import gomushin.backend.core.common.web.response.exception.ApiError
+import io.swagger.v3.oas.annotations.media.Schema
 import java.util.concurrent.CompletableFuture
 import java.util.function.Function
 import java.util.function.Supplier
@@ -20,6 +21,7 @@ data class ApiResponse<T>(
     val result: T? = null,
 
     @get:JsonProperty("error")
+    @Schema(hidden = true)
     val error: ApiError? = null,
 ) {
     init {
