@@ -63,7 +63,7 @@ class CommentServiceTest {
             commentService.upsert(null, letterId, authorId, nickname, upsertCommentRequest)
 
             // then
-            verify { commentService.save(any()) }
+            verify { commentRepository.save(any()) }
         }
 
         @DisplayName("id로 찾은 댓글의 작성자와 수정하려는 authorId가 다른 경우, 에러를 반환한다.")
