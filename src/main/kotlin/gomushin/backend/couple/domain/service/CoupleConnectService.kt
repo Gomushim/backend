@@ -1,9 +1,11 @@
 package gomushin.backend.couple.domain.service
 
 import gomushin.backend.core.infrastructure.exception.BadRequestException
+import gomushin.backend.core.infrastructure.filter.logging.LoggingFilter
 import gomushin.backend.couple.domain.entity.Couple
 import gomushin.backend.member.domain.service.MemberService
 import gomushin.backend.member.util.CoupleCodeGeneratorUtil
+import org.slf4j.LoggerFactory
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -15,7 +17,7 @@ class CoupleConnectService(
     private val coupleService: CoupleService,
     private val memberService: MemberService,
 ) {
-
+    private val log = LoggerFactory.getLogger(LoggingFilter::class.java)
     companion object {
         private val COUPLE_CODE_DURATION = Duration.ofMinutes(60)
         private const val COUPLE_CODE_PREFIX = "COUPLE_CODE:"
@@ -25,6 +27,7 @@ class CoupleConnectService(
         val coupleCode = CoupleCodeGeneratorUtil.generateCoupleCode()
         val key = getCoupleCodeKey(coupleCode)
         redisTemplate.opsForValue().set(key, userId.toString(), COUPLE_CODE_DURATION)
+        log.info("[GenerateCoupleCode] generator_userId : {}, code : {}", userId, coupleCode)
         return coupleCode
     }
 
@@ -36,7 +39,7 @@ class CoupleConnectService(
         if (invitorId == inviteeId) {
             throw BadRequestException("sarangggun.couple.couple-code-same")
         }
-
+        log.info("[ConnectCouple] invitorId : {}, inviteeId : {}", invitorId, inviteeId)
         val couple = Couple.of(
             invitorId,
             inviteeId,
@@ -48,7 +51,7 @@ class CoupleConnectService(
 
         val savedCouple = save(couple)
         delete(key)
-
+        log.info("[ConnectCouple] invitorId : {}, inviteeId : {} - connect Succeed!", invitorId, inviteeId)
         return savedCouple
     }
 
