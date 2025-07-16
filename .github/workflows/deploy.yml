@@ -97,8 +97,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           port: ${{ secrets.EC2_PORT }}
           script: |
-            export DOCKER_CONTAINER_REGISTRY=${{ secrets.DOCKERHUB_USERNAME }}
-            export DOCKERHUB_PASSWORD=${{secrets.DOCKERHUB_PASSWORD}}
-            export GITHUB_SHA=${{ github.sha }}
+            export DOCKER_CONTAINER_REGISTRY=${{ secrets.DOCKERHUB_USERNAME }} >> .env
+            export DOCKERHUB_PASSWORD=${{secrets.DOCKERHUB_PASSWORD}} >> .env
+            export GITHUB_SHA=${{ github.sha }} >> .env
             sudo chmod +x ./deploy.sh
             ./deploy.sh
