@@ -17,7 +17,7 @@ class CoupleConnectService(
     private val coupleService: CoupleService,
     private val memberService: MemberService,
 ) {
-    private val log = LoggerFactory.getLogger(LoggingFilter::class.java)
+    private val log = LoggerFactory.getLogger(CoupleConnectService::class.java)
     companion object {
         private val COUPLE_CODE_DURATION = Duration.ofMinutes(60)
         private const val COUPLE_CODE_PREFIX = "COUPLE_CODE:"
@@ -27,7 +27,7 @@ class CoupleConnectService(
         val coupleCode = CoupleCodeGeneratorUtil.generateCoupleCode()
         val key = getCoupleCodeKey(coupleCode)
         redisTemplate.opsForValue().set(key, userId.toString(), COUPLE_CODE_DURATION)
-        log.info("[GenerateCoupleCode] generator_userId : {}, code : {}", userId, coupleCode)
+        log.debug("[GenerateCoupleCode] generator_userId : {}, code : {}", userId, coupleCode)
         return coupleCode
     }
 
@@ -39,7 +39,7 @@ class CoupleConnectService(
         if (invitorId == inviteeId) {
             throw BadRequestException("sarangggun.couple.couple-code-same")
         }
-        log.info("[ConnectCouple] invitorId : {}, inviteeId : {}", invitorId, inviteeId)
+        log.debug("[ConnectCouple] invitorId : {}, inviteeId : {}", invitorId, inviteeId)
         val couple = Couple.of(
             invitorId,
             inviteeId,
@@ -51,7 +51,7 @@ class CoupleConnectService(
 
         val savedCouple = save(couple)
         delete(key)
-        log.info("[ConnectCouple] invitorId : {}, inviteeId : {} - connect Succeed!", invitorId, inviteeId)
+        log.debug("[ConnectCouple] invitorId : {}, inviteeId : {} - connect Succeed!", invitorId, inviteeId)
         return savedCouple
     }
 
