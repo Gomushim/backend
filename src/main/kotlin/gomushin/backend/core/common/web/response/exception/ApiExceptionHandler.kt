@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class ApiExceptionHandler {
-    private val log = LoggerFactory.getLogger(LoggingFilter::class.java)
+    private val log = LoggerFactory.getLogger(ApiExceptionHandler::class.java)
     @ExceptionHandler(ApiErrorException::class)
     fun handleApiErrorExtention(ex: ApiErrorException): ResponseEntity<ApiResponse<Nothing>> {
         val status = ex.error.element.status
