@@ -97,8 +97,12 @@ jobs:
           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           port: ${{ secrets.EC2_PORT }}
           script: |
-            export DOCKER_CONTAINER_REGISTRY=${{ secrets.DOCKERHUB_USERNAME }}
-            export DOCKERHUB_PASSWORD=${{secrets.DOCKERHUB_PASSWORD}}
-            export GITHUB_SHA=${{ github.sha }}
+            echo "DOCKER_CONTAINER_REGISTRY=${{ secrets.DOCKERHUB_USERNAME }}" > .env
+            echo "DOCKERHUB_PASSWORD=${{secrets.DOCKERHUB_PASSWORD}}" >> .env
+            echo "GITHUB_SHA=${{ github.sha }}" >> .env
+            echo "MINIO_ROOT_USER=${{secrets.MINIO_ROOT_USER}}" >> .env
+            echo "MINIO_ROOT_PASSWORD=${{secrets.MINIO_ROOT_PASSWORD}}" >> .env
+            echo "MINIO_SERVER_URL=${{secrets.MINIO_SERVER_URL}}" >> .env
+            echo "MINIO_BROWSER_REDIRECT_URL=${{secrets.MINIO_BROWSER_REDIRECT_URL}}" >> .env
             sudo chmod +x ./deploy.sh
             ./deploy.sh
