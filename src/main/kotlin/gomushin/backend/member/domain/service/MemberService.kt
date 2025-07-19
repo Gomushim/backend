@@ -53,4 +53,10 @@ class MemberService(
     fun getAllCoupledMemberWithEnabledNotification() : List<Member>{
         return memberRepository.findCoupleMembersWithEnabledNotification()
     }
+
+    @Transactional
+    fun clearMemberStatusMessage(id: Long) {
+        val member = getById(id)
+        member.clearStatusMessage()
+    }
 }

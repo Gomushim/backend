@@ -52,6 +52,8 @@ class Member(
 
     ) : BaseEntity() {
     companion object {
+        private const val EMPTY_STATUS_MESSAGE = ""
+        
         fun create(
             name: String,
             nickname: String?,
@@ -99,5 +101,9 @@ class Member(
 
     fun updateIsCouple(isCouple: Boolean) {
         this.isCouple = isCouple
+    }
+
+    fun clearStatusMessage() {
+        this.statusMessage = EMPTY_STATUS_MESSAGE
     }
 }
