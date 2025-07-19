@@ -34,17 +34,13 @@ class LeaveFacade(
         val coupleId = customUserDetails.getCouple().id
         val partner = coupleInfoService.findCoupleMember(memberId)
         anniversaryService.deleteAllByCoupleId(coupleId)
-        commentService.deleteAllByMemberId(memberId)
-        commentService.deleteAllByMemberId(partner.id)
+        deleteComments(memberId, partner.id)
         coupleService.deleteByMemberId(memberId)
-        notificationService.deleteAllByMember(memberId)
-        notificationService.deleteAllByMember(partner.id)
-        scheduleService.deleteAllByMemberId(memberId)
-        scheduleService.deleteAllByMemberId(partner.id)
+        deleteNotifications(memberId, partner.id)
+        deleteSchedules(memberId, partner.id)
 
         val memberLetters = letterService.findAllByAuthorId(memberId)
         val partnerLetters = letterService.findAllByAuthorId(partner.id)
-
         val pictureUrlsToDelete = mutableListOf<String>()
 
         pictureService.findAllByLetterIds(memberLetters)
@@ -54,15 +50,15 @@ class LeaveFacade(
             .takeIf { it.isNotEmpty() }
             ?.forEach { picture -> pictureUrlsToDelete.add(picture.pictureUrl) }
 
-        pictureService.deleteAllByLetterIds(memberLetters)
-        pictureService.deleteAllByLetterIds(partnerLetters)
+        deleteAllPictures(memberLetters, partnerLetters)
+        deleteAllLetters(memberId, partner.id)
 
-        letterService.deleteAllByMemberId(memberId)
-        letterService.deleteAllByMemberId(partner.id)
+        clearCoupleStatusMessages(memberId, partner.id)
 
         partner.updateIsCouple(false)
 
         memberService.deleteMember(memberId)
+
         if (pictureUrlsToDelete.isNotEmpty()) {
             applicationEventPublisher.publishEvent(
                 S3DeleteEvent(
@@ -70,6 +66,36 @@ class LeaveFacade(
                 )
             )
         }
+    }
+
+    private fun deleteComments(memberId: Long, partnerId: Long) {
+        commentService.deleteAllByMemberId(memberId)
+        commentService.deleteAllByMemberId(partnerId)
+    }
+
+    private fun deleteNotifications(memberId: Long, partnerId: Long) {
+        notificationService.deleteAllByMember(memberId)
+        notificationService.deleteAllByMember(partnerId)
+    }
+
+    private fun deleteSchedules(memberId: Long, partnerId: Long) {
+        scheduleService.deleteAllByMemberId(memberId)
+        scheduleService.deleteAllByMemberId(partnerId)
+    }
+
+    private fun deleteAllPictures(memberLetterIds: List<Long>, partnerLetterIds: List<Long>) {
+        pictureService.deleteAllByLetterIds(memberLetterIds)
+        pictureService.deleteAllByLetterIds(partnerLetterIds)
+    }
+
+    private fun deleteAllLetters(memberId: Long, partnerId: Long) {
+        letterService.deleteAllByMemberId(memberId)
+        letterService.deleteAllByMemberId(partnerId)
+    }
+
+    private fun clearCoupleStatusMessages(memberId: Long, partnerId: Long) {
+        memberService.clearMemberStatusMessage(memberId)
+        memberService.clearMemberStatusMessage(partnerId)
     }
 }
 
