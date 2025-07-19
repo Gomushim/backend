@@ -27,7 +27,7 @@ class CoupleConnectService(
         val coupleCode = CoupleCodeGeneratorUtil.generateCoupleCode()
         val key = getCoupleCodeKey(coupleCode)
         redisTemplate.opsForValue().set(key, userId.toString(), COUPLE_CODE_DURATION)
-        log.debug("[GenerateCoupleCode] generator_userId : {}, code : {}", userId, coupleCode)
+        log.info("[GenerateCoupleCode] generator_userId : {}, code : {}", userId, coupleCode)
         return coupleCode
     }
 
@@ -39,7 +39,7 @@ class CoupleConnectService(
         if (invitorId == inviteeId) {
             throw BadRequestException("sarangggun.couple.couple-code-same")
         }
-        log.debug("[ConnectCouple] invitorId : {}, inviteeId : {}", invitorId, inviteeId)
+        log.info("[ConnectCouple] invitorId : {}, inviteeId : {}", invitorId, inviteeId)
         val couple = Couple.of(
             invitorId,
             inviteeId,
@@ -51,7 +51,7 @@ class CoupleConnectService(
 
         val savedCouple = save(couple)
         delete(key)
-        log.debug("[ConnectCouple] invitorId : {}, inviteeId : {} - connect Succeed!", invitorId, inviteeId)
+        log.info("[ConnectCouple] invitorId : {}, inviteeId : {} - connect Succeed!", invitorId, inviteeId)
         return savedCouple
     }
 
