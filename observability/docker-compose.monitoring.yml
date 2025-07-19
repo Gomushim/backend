@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+      - "9096:9096"
+    volumes:
+      - ./loki:/etc/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    restart: unless-stopped
+    networks:
+      - sarang-backend-network
+
+  promtail:
+    image: grafana/promtail:2.9.0
+    volumes:
+      - ./promtail/config.yaml:/etc/promtail/config.yaml:ro
+      - /home/ubuntu/my/logs:/var/my/logs:ro     # 호스트 로그 → 컨테이너 안 경로
+    restart: unless-stopped
+    networks:
+      - sarang-backend-network
+    depends_on:
+      - loki
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    restart: unless-stopped
+    networks:
+      - sarang-backend-network
+    depends_on:
+      - loki
+
+
+networks:
+  sarang-backend-network:
+    driver: bridge

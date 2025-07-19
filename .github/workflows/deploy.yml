@@ -88,6 +88,9 @@ jobs:
       - name: Docker Compose 파일 EC2 서버로 전송
         run: scp -o StrictHostKeyChecking=no -P ${{ secrets.EC2_PORT }} docker-compose.yml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:./
 
+      - name: Docker Compose Mornitoring 파일 EC2 서버로 전송
+        run: scp -o StrictHostKeyChecking=no -P ${{ secrets.EC2_PORT }} ./observability/docker-compose.monitoring.yml ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:~/observability/
+
       - name: EC2 접속 후 이미지 다운로드 및 배포
         if: success()
         uses: appleboy/ssh-action@master
