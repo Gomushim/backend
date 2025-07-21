@@ -27,8 +27,12 @@ interface ScheduleRepository : JpaRepository<Schedule, Long> {
         )
         FROM Schedule s
         WHERE s.coupleId = :coupleId 
-        AND function('YEAR', s.startDate) = :year 
-        AND function('MONTH', s.startDate) = :month
+        AND (
+          (function('YEAR', s.startDate) = :year AND function('MONTH', s.startDate) = :month)
+          OR 
+          (function('YEAR', s.endDate) = :year AND function('MONTH', s.endDate) = :month)
+        ) 
+        
     """
     )
     fun findByCoupleIdAndYearAndMonth(coupleId: Long, year: Int, month: Int): List<MonthlySchedulesResponse>
