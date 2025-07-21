@@ -24,7 +24,7 @@ class UpsertAndDeleteLetterController(
     @Operation(summary = "편지 수정하거나 추가하기", description = "upsertLetter")
     fun upsertLetter(
         @AuthenticationPrincipal customUserDetails: CustomUserDetails,
-        @RequestPart upsertLetterRequest: UpsertLetterRequest,
+        @RequestPart("upsertLetterRequest") upsertLetterRequest: UpsertLetterRequest,
         @RequestPart("pictures", required = false) pictures: List<MultipartFile>?,
     ): ApiResponse<Boolean> {
         upsertAndDeleteLetterFacade.upsert(customUserDetails, upsertLetterRequest, pictures)
