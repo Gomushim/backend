@@ -78,7 +78,7 @@ class ScheduleRepositoryTest @Autowired constructor(
             responseList.stream().allMatch { i: MonthlySchedulesResponse ->
                 (i.startDate.year == 2025 && i.endDate.year == 2025)
                         &&
-                        (i.startDate.month == Month.JULY || i.endDate.month == Month.JULY)
+                        (i.startDate.month == Month.AUGUST || i.endDate.month == Month.AUGUST)
             }
         )
         val actualContents: List<String> = responseList.map { it.title }
