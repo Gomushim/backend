@@ -20,6 +20,7 @@ class LoggingFilter : Filter {
         if (request is HttpServletRequest) {
             if(request.contentType?.startsWith("multipart/") == true) {
                 chain.doFilter(request, response)
+                return
             }
             val wrappedRequest = CachedBodyHttpServletRequest(request)
 
