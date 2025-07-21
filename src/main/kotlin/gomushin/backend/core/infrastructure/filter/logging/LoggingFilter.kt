@@ -18,6 +18,9 @@ class LoggingFilter : Filter {
 
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         if (request is HttpServletRequest) {
+            if(request.contentType?.startsWith("multipart/") == true) {
+                chain.doFilter(request, response)
+            }
             val wrappedRequest = CachedBodyHttpServletRequest(request)
 
             val url = wrappedRequest.requestURI
