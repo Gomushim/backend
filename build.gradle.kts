@@ -86,6 +86,9 @@ dependencies {
     //serializable
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 
+    //logback-encoder
+    implementation ("net.logstash.logback:logstash-logback-encoder:7.4")
+
     implementation("org.springframework.boot:spring-boot-starter-validation")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
