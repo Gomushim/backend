@@ -50,10 +50,13 @@ class Member(
     @Column(name = "fcm_token", nullable = false)
     var fcmToken: String = "",
 
+    @Column(name = "terms_agreed", nullable = false)
+    var isTermsAgreed: Boolean = false,
+
     ) : BaseEntity() {
     companion object {
         private const val EMPTY_STATUS_MESSAGE = ""
-        
+
         fun create(
             name: String,
             nickname: String?,
