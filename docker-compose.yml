@@ -9,7 +9,7 @@ services:
     ports:
       - '8080:8080'
     volumes:
-      - /home/ubuntu/my/logs:/my/logs
+      - ${HOST_LOG_DIR:-./logs}:/my/logs
     depends_on:
       - redis
       - minio
@@ -24,7 +24,7 @@ services:
     ports:
       - '8081:8080'
     volumes:
-      - /home/ubuntu/my/logs:/my/logs
+      - ${HOST_LOG_DIR:-./logs}:/my/logs
     depends_on:
       - redis
       - minio

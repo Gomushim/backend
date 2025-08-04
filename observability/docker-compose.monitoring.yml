@@ -16,8 +16,8 @@ services:
   promtail:
     image: grafana/promtail:2.9.0
     volumes:
-      - ./promtail/config.yaml:/etc/promtail/config.yaml:ro
-      - /home/ubuntu/my/logs:/var/my/logs:ro     # 호스트 로그 → 컨테이너 안 경로
+      - ./promtail/promtail-config.yaml:/etc/promtail/config.yaml:ro
+      - ${HOST_LOG_DIR:-./logs}:/var/my/logs:ro     # 호스트 로그 → 컨테이너 안 경로
     restart: unless-stopped
     networks:
       - sarang-backend-network
