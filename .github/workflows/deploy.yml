@@ -107,5 +107,6 @@ jobs:
             echo "MINIO_ROOT_PASSWORD=${{secrets.MINIO_ROOT_PASSWORD}}" >> .env
             echo "MINIO_SERVER_URL=${{secrets.MINIO_SERVER_URL}}" >> .env
             echo "MINIO_BROWSER_REDIRECT_URL=${{secrets.MINIO_BROWSER_REDIRECT_URL}}" >> .env
+            echo "GF_SECURITY_ADMIN_PASSWORD=${{secrets.GF_SECURITY_ADMIN_PASSWORD}}" >> .env
             sudo chmod +x ./deploy.sh
             ./deploy.sh
