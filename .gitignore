@@ -48,3 +48,4 @@ src/test/resources/application-test.yml
 .env
 
 api-error-messages.properties
+.json
