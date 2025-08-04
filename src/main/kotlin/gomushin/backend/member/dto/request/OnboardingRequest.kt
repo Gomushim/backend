@@ -15,4 +15,7 @@ data class OnboardingRequest(
 
     @Schema(description = "알림 설정 여부", example = "false")
     val isNotification: Boolean,
+
+    @Schema(description = "약관 동의 여부", example = "true")
+    val isTermsAgreed: Boolean
 )

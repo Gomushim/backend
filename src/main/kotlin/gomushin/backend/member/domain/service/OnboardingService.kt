@@ -20,6 +20,7 @@ class OnboardingService(
         member.birthDate = onboardingRequest.birthDate
         member.role = Role.MEMBER
         member.fcmToken = onboardingRequest.fcmToken
+        member.isTermsAgreed = onboardingRequest.isTermsAgreed
     }
 
     @Transactional(readOnly = true)
